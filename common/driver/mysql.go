@@ -15,7 +15,7 @@ var GormDb *gorm.DB
 var GormDbErr error
 
 func init() {
-	// get db config
+	//  get db config
 	config.Init()
 	dbDSN := fmt.Sprintf("%s:%s@tcp(%s:%s)/%s?charset=%s&parseTime=true",
 		viper.GetString("mysql.user"),
