@@ -1,0 +1,12 @@
+mysql:
+  host: 127.0.0.1
+  port: 13306
+  name: admin
+  user: root
+  pwd: oh_my_ody!
+  charset: utf8
+  pool:
+    max_open_conns: 20 # 连接池最大连接数
+    max_idle_conns: 10 # 连接池最大空闲数
+    max_lifetime_conns: 7200 # 连接池链接最长生命周期
+
