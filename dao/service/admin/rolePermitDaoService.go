@@ -4,6 +4,8 @@ import (
 	"AdminPro/dao/model/adminDao"
 )
 
+//role 對應 permit 中間表
+
 func GetRolePermitByRoleIds(roleIds []string) (rolePermits []adminDao.RolePermitDAO, err error) {
 	dao := adminDao.RolePermitDAO{}
 	permits, err := dao.GetRolePermitByRoleIds(roleIds)

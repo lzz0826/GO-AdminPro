@@ -23,9 +23,9 @@ func TestGetPermitByAdminId(t *testing.T) {
 
 func TestGetPermitsByRoleId(t *testing.T) {
 	roleIds := []string{"0", "1"}
-	permits, err := service.GetPermitsByRoleId(roleIds)
+	permits, err := service.GetPermitsByRoleIds(roleIds)
 	if err != nil {
-		t.Fatalf("GetPermitsByRoleId：%v", err)
+		t.Fatalf("GetPermitsByRoleIds：%v", err)
 	}
 	for _, r := range permits {
 		fmt.Printf("%+v\n", r)

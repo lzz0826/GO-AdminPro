@@ -2,14 +2,13 @@ package service
 
 import (
 	"AdminPro/dao/model/adminDao"
-	"AdminPro/dao/service/admin"
 	_ "fmt"
 )
 
 // key = adminId
 var permissionMap = make(map[string]map[string]adminDao.PermitDAO)
 
-// key = permitKey
+// SetPermissionByAdminId key = permitKey
 func SetPermissionByAdminId(adminId string) {
 	var permissionSet = make(map[string]adminDao.PermitDAO)
 	permits, _ := GetAllPermitByAdminId(adminId)
@@ -22,7 +21,7 @@ func SetPermissionByAdminId(adminId string) {
 	permissionMap[adminId] = permissionSet
 }
 
-// key = adminId
+// GetPermitKeyListByAdminId key = adminId
 func GetPermitKeyListByAdminId(adminId string) []string {
 	var permitKeyList []string
 	userPermissions, exists := permissionMap[adminId]
@@ -62,62 +61,11 @@ func GetAllPermitByAdminId(adminId string) (permits []adminDao.PermitDAO, err er
 	}
 
 	// 获取角色的权限
-	roledPermits, err := GetPermitsByRoleId(roleIds)
+	roledPermits, err := GetPermitsByRoleIds(roleIds)
 	permits = append(permits, roledPermits...)
 
 	// 获取额外的权限
 	adminPermits, err := GetPermitsByAdminId(adminId)
 	permits = append(permits, adminPermits...)
 	return
-}
-
-func GetRoleByAdminId(adminId string) (role []adminDao.RoleDAO, err error) {
-	var roleIdList []string
-	adminRoles, err := admin.GetAdminRoleByAdminId(adminId)
-	if err != nil {
-		return
-	}
-	for _, role := range adminRoles {
-		roleID := role.RoleID
-		roleIdList = append(roleIdList, roleID)
-	}
-	roles, err := admin.GetRoleByIDs(roleIdList)
-	if err != nil {
-		return
-	}
-	return roles, nil
-}
-
-func GetPermitsByAdminId(adminId string) (permits []adminDao.PermitDAO, err error) {
-	var permitIdList []string
-
-	adminPermitDAO, err := admin.GetAdminPermitListByAdminID(adminId)
-	if err != nil {
-		return
-	}
-	for _, permit := range adminPermitDAO {
-		permitId := permit.PermitID
-		permitIdList = append(permitIdList, permitId)
-	}
-	permitDAOList, err := admin.GetPermitByByIds(permitIdList)
-	if err != nil {
-		return
-	}
-	return permitDAOList, nil
-}
-
-func GetPermitsByRoleId(roleIds []string) (permits []adminDao.PermitDAO, err error) {
-	var permitIdList []string
-	rolePermits, err := admin.GetRolePermitByRoleIds(roleIds)
-	if err != nil {
-		return
-	}
-	for _, rolePermit := range rolePermits {
-		permitIdList = append(permitIdList, rolePermit.PermitID)
-	}
-	permitDAOList, err := admin.GetPermitByByIds(permitIdList)
-	if err != nil {
-		return
-	}
-	return permitDAOList, nil
 }

@@ -8,6 +8,7 @@ import (
 	"time"
 )
 
+// AddRolePermits 為角色添加權限
 func AddRolePermits(roleId string, permitIds []string, currentAdminId string) error {
 
 	role, err := admin.GetRoleByID(roleId)
@@ -40,4 +41,22 @@ func AddRolePermits(roleId string, permitIds []string, currentAdminId string) er
 	}
 
 	return nil
+}
+
+// GetRoleByAdminId 查詢指定 adminId 包含的角色
+func GetRoleByAdminId(adminId string) (role []adminDao.RoleDAO, err error) {
+	var roleIdList []string
+	adminRoles, err := admin.GetAdminRoleByAdminId(adminId)
+	if err != nil {
+		return
+	}
+	for _, role := range adminRoles {
+		roleID := role.RoleID
+		roleIdList = append(roleIdList, roleID)
+	}
+	roles, err := admin.GetRoleByIDs(roleIdList)
+	if err != nil {
+		return
+	}
+	return roles, nil
 }

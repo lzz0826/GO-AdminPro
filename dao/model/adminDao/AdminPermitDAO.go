@@ -6,6 +6,7 @@ import (
 	"time"
 )
 
+// admin 對應 permit 中間表
 type AdminPermitDAO struct {
 	ID         string    `gorm:"column:id;type:varchar(40);primary_key;comment:'id'" json:"id"`
 	AdminID    string    `gorm:"column:admin_id;type:varchar(40);not null;comment:'adminVo id'" json:"admin_id"`

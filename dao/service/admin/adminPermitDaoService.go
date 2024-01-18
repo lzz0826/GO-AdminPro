@@ -4,6 +4,7 @@ import (
 	"AdminPro/dao/model/adminDao"
 )
 
+// admin 對應 permit 中間表
 func GetAdminPermitsByAdminID(adminId string) (adminPermit adminDao.AdminPermitDAO, err error) {
 	dao := adminDao.AdminPermitDAO{}
 	permit, err := dao.GetAdminPermitByAdminID(adminId)

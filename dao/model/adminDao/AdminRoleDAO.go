@@ -6,6 +6,7 @@ import (
 	"time"
 )
 
+// admin 對應 role 中間表
 type AdminRoleDAO struct {
 	ID         string    `gorm:"column:id;type:varchar(40);primary_key;comment:'id'" json:"id"`
 	AdminID    string    `gorm:"column:admin_id;type:varchar(40);not null;comment:'對應的admin id'" json:"admin_id"`

@@ -6,6 +6,8 @@ import (
 	"time"
 )
 
+//role 對應 permit 中間表
+
 type RolePermitDAO struct {
 	ID         string    `gorm:"column:id;type:varchar(40);primary_key;comment:'id'" json:"id"`
 	RoleID     string    `gorm:"column:role_id;type:varchar(40);not null;comment:'腳色id'" json:"role_id"`
