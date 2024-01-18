@@ -16,6 +16,8 @@ var statusList = []Status{
 	AddRolePermitsFail,
 	NotFindRole,
 	NotFinPermit,
+	AddAdminRolesFail,
+	NotFindAdmin,
 }
 
 // 添加狀態 上面statusList也需要添加 才能收尋到
@@ -36,7 +38,11 @@ var (
 
 	//API 3000
 	SelectFail         = Status{Code: 3000, Msg: "查詢失敗"}
-	AddRolePermitsFail = Status{Code: 3001, Msg: "角色添加權限失敗"}
+	AddRolePermitsFail = Status{Code: 3001, Msg: "角色添添加權限失敗"}
+	AddAdminRolesFail  = Status{Code: 3002, Msg: "管理員添加角色失敗"}
+
+	//管理員 4000
+	NotFindAdmin = Status{Code: 4000, Msg: "找不到管理員"}
 )
 
 func GetStatusByCode(code int) Status {

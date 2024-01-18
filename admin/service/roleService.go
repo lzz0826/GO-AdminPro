@@ -16,6 +16,8 @@ func AddRolePermits(roleId string, permitIds []string, currentAdminId string) er
 		return errors.New(tool.NotFindRole.Msg)
 	}
 
+	//TODO 去掉原來已有的權限
+
 	permits, err := admin.GetPermitByByIds(permitIds)
 	if err != nil {
 		return errors.New(tool.NotFinPermit.Msg)
@@ -37,17 +39,59 @@ func AddRolePermits(roleId string, permitIds []string, currentAdminId string) er
 	}
 	err = admin.InsertRolePermits(rolePermits)
 	if err != nil {
-		return err
+		return errors.New(tool.AddRolePermitsFail.Msg)
 	}
 
 	return nil
 }
 
-//TODO
-//func AddAdminRoles(adminId string, roleIds []string, currentAdminId string) error {
-//
-//	err := admin.InsertAdminRoles()
-//}
+// AddAdminRoles 為管理員添加角色
+func AddAdminRoles(adminId string, roleIds []string, currentAdminId string) error {
+
+	_, err := admin.GetAdminById(adminId)
+	if err != nil {
+		return errors.New(tool.NotFindAdmin.Msg)
+	}
+
+	roles, err := admin.GetRoleByIDs(roleIds)
+	if err != nil || len(roleIds) != len(roles) {
+		return errors.New(tool.NotFindRole.Msg)
+	}
+
+	//去掉原來已有的 角色
+	originalRoles, _ := GetRoleByAdminId(adminId)
+	if originalRoles != nil {
+
+		remainingRoles := make([]adminDao.RoleDAO, 0)
+		for _, r := range roles {
+
+			if !containsRole(originalRoles, r) {
+				remainingRoles = append(remainingRoles, r)
+			}
+		}
+		roles = remainingRoles
+	}
+
+	var adminRoles []adminDao.AdminRoleDAO
+
+	for _, role := range roles {
+		dao := adminDao.AdminRoleDAO{
+			AdminID:    adminId,
+			RoleID:     role.ID,
+			CreatorID:  currentAdminId,
+			UpdaterID:  currentAdminId,
+			CreateTime: time.Now(),
+			UpdateTime: time.Now(),
+		}
+		adminRoles = append(adminRoles, dao)
+	}
+	err = admin.InsertAdminRoles(adminRoles)
+
+	if err != nil {
+		return errors.New(tool.AddAdminRolesFail.Msg)
+	}
+	return nil
+}
 
 // GetRoleByAdminId 查詢指定 adminId 包含的角色
 func GetRoleByAdminId(adminId string) (role []adminDao.RoleDAO, err error) {
@@ -65,4 +109,13 @@ func GetRoleByAdminId(adminId string) (role []adminDao.RoleDAO, err error) {
 		return
 	}
 	return roles, nil
+}
+
+func containsRole(s []adminDao.RoleDAO, role adminDao.RoleDAO) bool {
+	for _, r := range s {
+		if r.ID == role.ID {
+			return true
+		}
+	}
+	return false
 }

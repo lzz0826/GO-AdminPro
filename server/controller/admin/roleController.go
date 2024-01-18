@@ -80,12 +80,29 @@ func AddRolePermits(ctx *gin.Context) {
 
 }
 
-//TODO
-//func AddAdminRoles(ctx *gin.Context) {
-//	var request struct {
-//		AdminId string   `json:"adminId" binding:"required"`
-//		RoleIds []string `json:"roleIds" binding:"required"`
-//	}
-//	println(request)
-//
-//}
+// AddAdminRoles 為管理員添加腳色
+func AddAdminRoles(ctx *gin.Context) {
+	var request struct {
+		AdminId string   `json:"adminId" binding:"required"`
+		RoleIds []string `json:"roleIds" binding:"required"`
+	}
+
+	if err := ctx.ShouldBindJSON(&request); err != nil {
+		ctx.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
+		return
+	}
+
+	adminId := request.AdminId
+	roleIds := request.RoleIds
+
+	currentAdminId := service.GetCurrentAdminId(ctx)
+
+	err := service.AddAdminRoles(adminId, roleIds, currentAdminId)
+
+	if err != nil {
+		ctx.JSON(http.StatusOK, tool.GetResponseForError(err))
+		return
+	}
+	ctx.JSON(http.StatusOK, tool.RespOk(tool.Success.Msg))
+
+}

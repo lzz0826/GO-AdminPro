@@ -22,6 +22,10 @@ func InsertRolePermit(dao adminDao.RolePermitDAO) error {
 }
 
 func InsertRolePermits(rolePermits []adminDao.RolePermitDAO) error {
+	if len(rolePermits) == 0 {
+		return nil
+	}
+
 	err := rolePermits[0].InsertRolePermits(rolePermits)
 	if err != nil {
 		return err
