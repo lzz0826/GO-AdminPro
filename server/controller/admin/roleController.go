@@ -25,6 +25,7 @@ func GetAllRoleList(ctx *gin.Context) {
 	ctx.JSON(http.StatusOK, tool.RespOk(vo))
 }
 
+// AddRole 添加角色
 func AddRole(ctx *gin.Context) {
 	var role adminDao.RoleDAO
 	// 綁定JSON參數到結構體
@@ -48,7 +49,7 @@ func AddRole(ctx *gin.Context) {
 	ctx.JSON(http.StatusOK, tool.RespOk(tool.Success.Msg))
 }
 
-// 為角色添加新權限
+// AddRolePermits 為角色添加新權限
 func AddRolePermits(ctx *gin.Context) {
 	// 創建結構體，用於存放 JSON 資料
 	var request struct {
@@ -78,3 +79,13 @@ func AddRolePermits(ctx *gin.Context) {
 	ctx.JSON(http.StatusOK, tool.RespOk(tool.Success.Msg))
 
 }
+
+//TODO
+//func AddAdminRoles(ctx *gin.Context) {
+//	var request struct {
+//		AdminId string   `json:"adminId" binding:"required"`
+//		RoleIds []string `json:"roleIds" binding:"required"`
+//	}
+//	println(request)
+//
+//}

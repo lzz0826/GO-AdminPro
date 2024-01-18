@@ -43,6 +43,12 @@ func AddRolePermits(roleId string, permitIds []string, currentAdminId string) er
 	return nil
 }
 
+//TODO
+//func AddAdminRoles(adminId string, roleIds []string, currentAdminId string) error {
+//
+//	err := admin.InsertAdminRoles()
+//}
+
 // GetRoleByAdminId 查詢指定 adminId 包含的角色
 func GetRoleByAdminId(adminId string) (role []adminDao.RoleDAO, err error) {
 	var roleIdList []string

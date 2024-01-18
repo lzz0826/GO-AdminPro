@@ -33,8 +33,8 @@ func (rp *RolePermitDAO) InsertRolePermit() (err error) {
 }
 
 // InsertRolePermits 插入多筆 RolePermitDAO 資料
-func (rp *RolePermitDAO) InsertRolePermits(roles []RolePermitDAO) error {
-	err := driver.GormDb.Table(roles[0].TableName()).Omit("id").Create(&roles).Error
+func (rp *RolePermitDAO) InsertRolePermits(rolePermits []RolePermitDAO) error {
+	err := driver.GormDb.Table(rolePermits[0].TableName()).Omit("id").Create(&rolePermits).Error
 	if err != nil {
 		log.Println("InsertRolePermits error:", err.Error())
 		return err

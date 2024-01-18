@@ -21,8 +21,8 @@ func InsertRolePermit(dao adminDao.RolePermitDAO) error {
 
 }
 
-func InsertRolePermits(roles []adminDao.RolePermitDAO) error {
-	err := roles[0].InsertRolePermits(roles)
+func InsertRolePermits(rolePermits []adminDao.RolePermitDAO) error {
+	err := rolePermits[0].InsertRolePermits(rolePermits)
 	if err != nil {
 		return err
 	}

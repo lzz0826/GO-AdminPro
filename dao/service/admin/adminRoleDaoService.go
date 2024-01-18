@@ -17,3 +17,11 @@ func GetAllAdminRole() (adminRoles []adminDao.AdminRoleDAO, err error) {
 	roles, err := dao.GetAllAdminRole()
 	return roles, err
 }
+
+func InsertAdminRoles(adminRoles []adminDao.AdminRoleDAO) error {
+	err := adminRoles[0].InsertAdminRoles(adminRoles)
+	if err != nil {
+		return err
+	}
+	return nil
+}

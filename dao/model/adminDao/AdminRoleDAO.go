@@ -31,6 +31,15 @@ func (ar *AdminRoleDAO) InsertAdminRole() (err error) {
 	return
 }
 
+func (ar *AdminRoleDAO) InsertAdminRoles(adminRoles []AdminRoleDAO) (err error) {
+	err = driver.GormDb.Table(adminRoles[0].TableName()).Omit("id").Create(&adminRoles).Error
+	if err != nil {
+		log.Println("InsertAdminRoles error:", err.Error())
+		return
+	}
+	return
+}
+
 func (ar *AdminRoleDAO) GetAllAdminRole() (adminRole []AdminRoleDAO, err error) {
 	err = driver.GormDb.Table(ar.TableName()).Find(&adminRole).Error
 	if err != nil {
