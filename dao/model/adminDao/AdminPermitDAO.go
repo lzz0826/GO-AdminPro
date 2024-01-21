@@ -31,6 +31,15 @@ func (ap *AdminPermitDAO) InsertAdminPermit() (err error) {
 	return nil
 }
 
+func (ap *AdminPermitDAO) InsertAdminPermits(adminPermits []AdminPermitDAO) (err error) {
+	err = driver.GormDb.Table(adminPermits[0].TableName()).Omit("id").Create(&adminPermits).Error
+	if err != nil {
+		log.Println(err.Error())
+		return
+	}
+	return nil
+}
+
 // GetAdminPermitByID 根據 ID 查詢 AdminPermitDAO
 func (ap *AdminPermitDAO) GetAdminPermitByID(id string) (adminPermit AdminPermitDAO, err error) {
 	err = driver.GormDb.Table(ap.TableName()).Where("id = ?", id).First(&adminPermit).Error

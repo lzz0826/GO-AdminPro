@@ -64,7 +64,6 @@ func AddAdminRoles(adminId string, roleIds []string, currentAdminId string) erro
 
 		remainingRoles := make([]adminDao.RoleDAO, 0)
 		for _, r := range roles {
-
 			if !containsRole(originalRoles, r) {
 				remainingRoles = append(remainingRoles, r)
 			}

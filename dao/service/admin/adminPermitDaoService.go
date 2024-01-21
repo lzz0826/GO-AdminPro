@@ -16,3 +16,13 @@ func GetAdminPermitListByAdminID(adminId string) (adminPermits []adminDao.AdminP
 	permits, err := dao.GetAdminPermitListByAdminID(adminId)
 	return permits, err
 }
+func InsertAdminPermits(adminPermits []adminDao.AdminPermitDAO) error {
+	if len(adminPermits) == 0 {
+		return nil
+	}
+	err := adminPermits[0].InsertAdminPermits(adminPermits)
+	if err != nil {
+		return err
+	}
+	return nil
+}
