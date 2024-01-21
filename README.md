@@ -5,7 +5,6 @@ GO - 後台管理
 - 管理員可以自由添加或刪除對應角色<br />
 - 角色可以自由添加或刪除對應權限<br />
 - 可以單獨為某個管理員添加指定權限<br />
-- 禁言功能<br />
 ![image](https://github.com/lzz0826/GO-AdminPro/blob/main/img/005.png)
 
 ## 管理員對應角色關係圖：
