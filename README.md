@@ -16,5 +16,5 @@ GO - 後台管理
 ![image](https://github.com/lzz0826/GO-AdminPro/blob/main/img/003.png)
 
 ## 管理員對應權限關係圖：
-### 一位管理員可以對應多個權限(相當於可以開而外給予權限)
+### 一位管理員可以對應多個權限(相當於可以開額外給予權限)
 ![image](https://github.com/lzz0826/GO-AdminPro/blob/main/img/004.png)
