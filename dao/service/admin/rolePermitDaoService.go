@@ -6,6 +6,12 @@ import (
 
 //role 對應 permit 中間表
 
+func GetRolePermitByRoleId(roleIds string) (rolePermits []adminDao.RolePermitDAO, err error) {
+	dao := adminDao.RolePermitDAO{}
+	permits, err := dao.GetRolePermitByRoleId(roleIds)
+	return permits, err
+}
+
 func GetRolePermitByRoleIds(roleIds []string) (rolePermits []adminDao.RolePermitDAO, err error) {
 	dao := adminDao.RolePermitDAO{}
 	permits, err := dao.GetRolePermitByRoleIds(roleIds)
@@ -49,4 +55,14 @@ func DeleteByIds(ids []string) (err error) {
 		return err
 	}
 	return nil
+}
+
+// ContainsRolePermitByPermitId 依造permitId 檢查中間表是否重複
+func ContainsRolePermitByPermitId(s []adminDao.RolePermitDAO, permitId string) bool {
+	for _, r := range s {
+		if r.PermitID == permitId {
+			return true
+		}
+	}
+	return false
 }

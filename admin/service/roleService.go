@@ -16,15 +16,24 @@ func AddRolePermits(roleId string, permitIds []string, currentAdminId string) er
 		return errors.New(tool.NotFindRole.Msg)
 	}
 
-	//TODO 去掉原來已有的權限
-
-	permits, err := admin.GetPermitByByIds(permitIds)
+	permits, err := admin.CheckPermitIdsExist(permitIds)
 	if err != nil {
-		return errors.New(tool.NotFinPermit.Msg)
+		return errors.New(tool.GetStatusMsgFromError(err))
 	}
-	if permits == nil || len(permits) != len(permitIds) {
-		return errors.New(tool.NotFinPermit.Msg)
+
+	//去掉原來已有的權限
+	originalPermit, err := admin.GetRolePermitByRoleId(roleId)
+	if originalPermit != nil {
+		remainingPermits := make([]adminDao.PermitDAO, 0)
+
+		for _, p := range permits {
+			if !admin.ContainsRolePermitByPermitId(originalPermit, p.ID) {
+				remainingPermits = append(remainingPermits, p)
+			}
+		}
+		permits = remainingPermits
 	}
+
 	var rolePermits []adminDao.RolePermitDAO
 	for _, permit := range permits {
 		dao := adminDao.RolePermitDAO{

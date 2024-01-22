@@ -65,6 +65,15 @@ func (rp *RolePermitDAO) GetRolePermitByRoleIDAndPermitID(roleID, permitID strin
 	return rolePermit, nil
 }
 
+func (rp *RolePermitDAO) GetRolePermitByRoleId(roleId string) (rolePermits []RolePermitDAO, err error) {
+	err = driver.GormDb.Table(rp.TableName()).Where("role_id = ?", roleId).Find(&rolePermits).Error
+	if err != nil {
+		log.Println("GetRolePermitByID error:", err.Error())
+		return
+	}
+	return rolePermits, nil
+}
+
 func (rp *RolePermitDAO) GetRolePermitByRoleIds(roleIds []string) (rolePermits []RolePermitDAO, err error) {
 	err = driver.GormDb.Table(rp.TableName()).Where("role_id IN (?)", roleIds).Find(&rolePermits).Error
 	if err != nil {
