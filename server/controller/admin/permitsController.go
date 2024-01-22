@@ -10,6 +10,7 @@ import (
 	"net/http"
 )
 
+// GetAllPermitList 查詢所有權限
 func GetAllPermitList(ctx *gin.Context) {
 	pagination := utils.GeneratePaginationFromRequest(ctx)
 	permits, err := admin.GetAllPermitList(&pagination)
@@ -21,6 +22,26 @@ func GetAllPermitList(ctx *gin.Context) {
 		PermitList: permits,
 	}
 	ctx.JSON(http.StatusOK, tool.RespOk(vo))
+}
+
+// GetAdminExtraPermits 查詢管理員 額外設置 的權限
+func GetAdminExtraPermits(ctx *gin.Context) {
+	adminId := ctx.PostForm("adminId")
+	if adminId == "" {
+		ctx.JSON(http.StatusOK, tool.RespFail(tool.MissingParameters.Code, tool.MissingParameters.Msg, nil))
+		return
+	}
+	permits, err := service.GetPermitsByAdminId(adminId)
+
+	if err != nil {
+		ctx.JSON(http.StatusOK, tool.GetResponseForError(err))
+		return
+	}
+	vo := adminVo.PermitListVO{
+		PermitList: permits,
+	}
+	ctx.JSON(http.StatusOK, tool.RespOk(vo))
+
 }
 
 // AddAdminPermits 為管理員添加權限
