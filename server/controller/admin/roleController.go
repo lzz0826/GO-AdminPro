@@ -12,6 +12,7 @@ import (
 	"time"
 )
 
+// GetAllRoleList 查詢所有角色
 func GetAllRoleList(ctx *gin.Context) {
 	pagination := utils.GeneratePaginationFromRequest(ctx)
 	roles, err := admin.GetAllRoleList(&pagination)
@@ -23,6 +24,27 @@ func GetAllRoleList(ctx *gin.Context) {
 		RoleList: roles,
 	}
 	ctx.JSON(http.StatusOK, tool.RespOk(vo))
+}
+
+// GetAdminRole 查詢指定adminId所包含的角色
+func GetAdminRole(ctx *gin.Context) {
+
+	adminId := ctx.Param("adminId")
+	if adminId == "" {
+		ctx.JSON(http.StatusOK, tool.RespFail(tool.MissingParameters.Code, tool.MissingParameters.Msg, nil))
+		return
+	}
+
+	roles, err := service.GetRoleByAdminId(adminId)
+	if err != nil {
+		ctx.JSON(http.StatusOK, tool.GetResponseForError(err))
+		return
+	}
+	vo := adminVo.RoleListVO{
+		RoleList: roles,
+	}
+	ctx.JSON(http.StatusOK, tool.RespOk(vo))
+
 }
 
 // AddRole 添加角色

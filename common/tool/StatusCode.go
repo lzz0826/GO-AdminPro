@@ -18,14 +18,16 @@ var statusList = []Status{
 	NotFinPermit,
 	AddAdminRolesFail,
 	NotFindAdmin,
+	AddAdminPermitsFail,
+	MissingParameters,
 }
 
 // 添加狀態 上面statusList也需要添加 才能收尋到
 var (
 	//系統 0
-	Success     = Status{Code: 0, Msg: "成功"}
-	SystemError = Status{Code: -1, Msg: "失敗"}
-
+	Success           = Status{Code: 0, Msg: "成功"}
+	SystemError       = Status{Code: -1, Msg: "失敗"}
+	MissingParameters = Status{Code: 1, Msg: "缺少必要參數"}
 	//登入 1000
 	LoginError    = Status{Code: 1000, Msg: "登入失敗"}
 	UserError     = Status{Code: 1001, Msg: "帳號錯誤"}
