@@ -2,6 +2,7 @@ package adminDao
 
 import (
 	"AdminPro/common/driver"
+	"errors"
 	"log"
 	"time"
 )
@@ -60,6 +61,15 @@ func (ap *AdminPermitDAO) GetAdminPermitByAdminID(adminID string) (adminPermit A
 	return
 }
 
+func (ap *AdminPermitDAO) GetAdminPermitByAdminIdAndPermitIds(adminID string, permitIds []string) (adminPermits []AdminPermitDAO, err error) {
+	err = driver.GormDb.Table(ap.TableName()).Where("admin_id = ? AND permit_id IN (?)", adminID, permitIds).Find(&adminPermits).Error
+	if err != nil {
+		log.Println(err.Error())
+		return
+	}
+	return
+}
+
 func (ap *AdminPermitDAO) GetAdminPermitListByAdminID(adminID string) (adminPermits []AdminPermitDAO, err error) {
 	err = driver.GormDb.Table(ap.TableName()).Where("admin_id = ?", adminID).Find(&adminPermits).Error
 	if err != nil {
@@ -67,4 +77,16 @@ func (ap *AdminPermitDAO) GetAdminPermitListByAdminID(adminID string) (adminPerm
 		return
 	}
 	return
+}
+
+func (ap *AdminPermitDAO) DeleteAdminPermit(ids []string) (err error) {
+	if len(ids) == 0 {
+		return errors.New("ids slice is empty")
+	}
+	err = driver.GormDb.Table(ap.TableName()).Where("id IN (?)", ids).Delete(&AdminPermitDAO{}).Error
+	if err != nil {
+		log.Println("DeleteAdminPermit error:", err.Error())
+		return err
+	}
+	return nil
 }

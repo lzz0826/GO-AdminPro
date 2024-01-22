@@ -92,7 +92,7 @@ func (rp *RolePermitDAO) GetRolePermitByRoleIdAndPermitIds(roleIds string, permi
 	return rolePermits, nil
 }
 
-func (rp *RolePermitDAO) DeleteByIds(ids []string) (err error) {
+func (rp *RolePermitDAO) DeleteRolePermitByIds(ids []string) (err error) {
 	if len(ids) == 0 {
 		return errors.New("ids slice is empty")
 	}

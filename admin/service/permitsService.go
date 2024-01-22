@@ -113,6 +113,36 @@ func AddAdminPermits(adminId string, permitsIds []string, currentAdminId string)
 	return nil
 }
 
+// RemoveAdminPermits 移除管理員額外的權限
+func RemoveAdminPermits(adminId string, permitsIds []string) error {
+
+	_, err := admin.GetAdminById(adminId)
+	if err != nil {
+		return errors.New(tool.NotFindAdmin.Msg)
+	}
+
+	_, err = admin.CheckPermitIdsExist(permitsIds)
+
+	if err != nil {
+		return errors.New(tool.GetStatusMsgFromError(err))
+	}
+
+	permits, err := admin.GetAdminPermitByAdminIdAndPermitIds(adminId, permitsIds)
+
+	var adminPermitDAOIds []string
+	if permits != nil {
+		for _, p := range permits {
+			adminPermitDAOIds = append(adminPermitDAOIds, p.ID)
+		}
+	}
+	err = admin.DeleteAdminPermit(adminPermitDAOIds)
+	if err != nil {
+		return errors.New(tool.RemoveAdminPermitsFail.Msg)
+	}
+	return nil
+
+}
+
 func ContainsPermits(daos []adminDao.PermitDAO, permit adminDao.PermitDAO) bool {
 	for _, p := range daos {
 		if p.ID == permit.ID {

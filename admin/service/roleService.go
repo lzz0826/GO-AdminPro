@@ -74,7 +74,7 @@ func RemoveRolePermits(roleId string, permitIds []string) error {
 		}
 	}
 
-	err = admin.DeleteByIds(rolePermitDAOIds)
+	err = admin.DeleteRolePermitByIds(rolePermitDAOIds)
 	if err != nil {
 		return errors.New(tool.RemoveRolePermitsFail.Msg)
 	}

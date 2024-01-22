@@ -45,12 +45,12 @@ func InsertRolePermits(rolePermits []adminDao.RolePermitDAO) error {
 	return nil
 }
 
-func DeleteByIds(ids []string) (err error) {
+func DeleteRolePermitByIds(ids []string) (err error) {
 	if len(ids) == 0 {
 		return nil
 	}
 	dao := adminDao.RolePermitDAO{}
-	err = dao.DeleteByIds(ids)
+	err = dao.DeleteRolePermitByIds(ids)
 	if err != nil {
 		return err
 	}

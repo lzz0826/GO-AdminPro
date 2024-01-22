@@ -92,3 +92,24 @@ func AddAdminPermits(ctx *gin.Context) {
 	ctx.JSON(http.StatusOK, tool.RespOk(tool.Success.Msg))
 
 }
+
+// RemoveAdminPermits 移除管理員額外的權限
+func RemoveAdminPermits(ctx *gin.Context) {
+	var request struct {
+		AdminId    string   `json:"adminId" binding:"required"`
+		PermitsIds []string `json:"permitsIds" binding:"required"`
+	}
+	if err := ctx.ShouldBindJSON(&request); err != nil {
+		ctx.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
+		return
+	}
+	adminId := request.AdminId
+	permitsIds := request.PermitsIds
+	err := service.RemoveAdminPermits(adminId, permitsIds)
+	if err != nil {
+		ctx.JSON(http.StatusOK, tool.GetResponseForError(err))
+		return
+	}
+	ctx.JSON(http.StatusOK, tool.RespOk(tool.Success.Msg))
+
+}
