@@ -29,7 +29,7 @@ func GetAllRoleList(ctx *gin.Context) {
 // GetAdminRole 查詢指定adminId所包含的角色
 func GetAdminRole(ctx *gin.Context) {
 
-	adminId := ctx.Param("adminId")
+	adminId := ctx.PostForm("adminId")
 	if adminId == "" {
 		ctx.JSON(http.StatusOK, tool.RespFail(tool.MissingParameters.Code, tool.MissingParameters.Msg, nil))
 		return
