@@ -20,6 +20,7 @@ var statusList = []Status{
 	NotFindAdmin,
 	AddAdminPermitsFail,
 	MissingParameters,
+	RemoveRolePermitsFail,
 }
 
 // 添加狀態 上面statusList也需要添加 才能收尋到
@@ -39,10 +40,12 @@ var (
 	NotFinPermit   = Status{Code: 2002, Msg: "找不到指定權限"}
 
 	//API 3000
-	SelectFail          = Status{Code: 3000, Msg: "查詢失敗"}
-	AddRolePermitsFail  = Status{Code: 3001, Msg: "角色添添加權限失敗"}
-	AddAdminRolesFail   = Status{Code: 3002, Msg: "管理員添加角色失敗"}
-	AddAdminPermitsFail = Status{Code: 3003, Msg: "管理員添加權限失敗"}
+	SelectFail            = Status{Code: 3000, Msg: "查詢失敗"}
+	AddRolePermitsFail    = Status{Code: 3001, Msg: "角色添添加權限失敗"}
+	AddAdminRolesFail     = Status{Code: 3002, Msg: "管理員添加角色失敗"}
+	AddAdminPermitsFail   = Status{Code: 3003, Msg: "管理員添加權限失敗"}
+	RemoveRolePermitsFail = Status{Code: 3003, Msg: "移除角色所屬的權限"}
+
 	//管理員 4000
 	NotFindAdmin = Status{Code: 4000, Msg: "找不到管理員"}
 )

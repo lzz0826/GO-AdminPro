@@ -128,3 +128,29 @@ func AddAdminRoles(ctx *gin.Context) {
 	ctx.JSON(http.StatusOK, tool.RespOk(tool.Success.Msg))
 
 }
+
+// RemoveRolePermits 移除角色的權限
+func RemoveRolePermits(ctx *gin.Context) {
+	var request struct {
+		RoleId     string   `json:"roleId" binding:"required"`
+		PermitsIds []string `json:"permitsIds" binding:"required"`
+	}
+
+	if err := ctx.ShouldBindJSON(&request); err != nil {
+		ctx.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
+		return
+	}
+
+	// 獲取結構體中的值
+	roleId := request.RoleId
+	permitIds := request.PermitsIds
+
+	err := service.RemoveRolePermits(roleId, permitIds)
+
+	if err != nil {
+		ctx.JSON(http.StatusOK, tool.GetResponseForError(err))
+		return
+	}
+	ctx.JSON(http.StatusOK, tool.RespOk(tool.Success.Msg))
+
+}

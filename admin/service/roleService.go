@@ -45,6 +45,34 @@ func AddRolePermits(roleId string, permitIds []string, currentAdminId string) er
 	return nil
 }
 
+// RemoveRolePermits 移除角色的權限
+func RemoveRolePermits(roleId string, permitIds []string) error {
+	_, err := admin.GetRoleByID(roleId)
+	if err != nil {
+		return errors.New(tool.NotFindRole.Msg)
+	}
+
+	_, err = admin.CheckPermitIdsExist(permitIds)
+	if err != nil {
+		return errors.New(tool.NotFinPermit.Msg)
+	}
+
+	var rolePermitDAOIds []string
+	permits, err := admin.GetRolePermitByRoleIdAndPermitIds(roleId, permitIds)
+	if permits != nil {
+		for _, p := range permits {
+			rolePermitDAOIds = append(rolePermitDAOIds, p.ID)
+		}
+	}
+
+	err = admin.DeleteByIds(rolePermitDAOIds)
+	if err != nil {
+		return errors.New(tool.RemoveRolePermitsFail.Msg)
+	}
+	return nil
+
+}
+
 // AddAdminRoles 為管理員添加角色
 func AddAdminRoles(adminId string, roleIds []string, currentAdminId string) error {
 

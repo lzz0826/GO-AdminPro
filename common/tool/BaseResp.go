@@ -25,7 +25,7 @@ func RespFail(statusCode int, message string, data interface{}) BaseResp {
 	}
 }
 
-// 根據拋出的狀態返回 BaseResp
+// GetResponseForError 根據拋出的狀態返回 BaseResp
 func GetResponseForError(err error) BaseResp {
 	status := GetStatusByMsg(err.Error())
 	return RespFail(status.Code, status.Msg, nil)

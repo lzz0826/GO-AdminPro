@@ -2,6 +2,7 @@ package adminDao
 
 import (
 	"AdminPro/common/driver"
+	"errors"
 	"log"
 	"time"
 )
@@ -71,4 +72,25 @@ func (rp *RolePermitDAO) GetRolePermitByRoleIds(roleIds []string) (rolePermits [
 		return
 	}
 	return rolePermits, nil
+}
+
+func (rp *RolePermitDAO) GetRolePermitByRoleIdAndPermitIds(roleIds string, permitIds []string) (rolePermits []RolePermitDAO, err error) {
+	err = driver.GormDb.Table(rp.TableName()).Where("role_id = ? AND permit_id IN (?)", roleIds, permitIds).Find(&rolePermits).Error
+	if err != nil {
+		log.Println("GetRolePermitByRoleIdAndPermitIds error:", err.Error())
+		return
+	}
+	return rolePermits, nil
+}
+
+func (rp *RolePermitDAO) DeleteByIds(ids []string) (err error) {
+	if len(ids) == 0 {
+		return errors.New("ids slice is empty")
+	}
+	err = driver.GormDb.Table(rp.TableName()).Where("id IN (?)", ids).Delete(&RolePermitDAO{}).Error
+	if err != nil {
+		log.Println("deleteIds error:", err.Error())
+		return err
+	}
+	return nil
 }
