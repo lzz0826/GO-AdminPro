@@ -24,6 +24,29 @@ func GetAllPermitList(ctx *gin.Context) {
 	ctx.JSON(http.StatusOK, tool.RespOk(vo))
 }
 
+// 查詢所指定管理員所有權限
+func GetAdminAllPermits(ctx *gin.Context) {
+	adminId := ctx.PostForm("adminId")
+	if adminId == "" {
+		ctx.JSON(http.StatusOK, tool.RespFail(tool.MissingParameters.Code, tool.MissingParameters.Msg, nil))
+		return
+	}
+	permits, err := service.GetAllPermitByAdminId(adminId)
+
+	if err != nil {
+		ctx.JSON(http.StatusOK, tool.GetResponseForError(err))
+		return
+	}
+
+	newPermits := service.RemoveDuplicatesPermits(permits)
+
+	vo := adminVo.PermitListVO{
+		PermitList: newPermits,
+	}
+	ctx.JSON(http.StatusOK, tool.RespOk(vo))
+
+}
+
 // GetAdminExtraPermits 查詢管理員 額外設置 的權限
 func GetAdminExtraPermits(ctx *gin.Context) {
 	adminId := ctx.PostForm("adminId")

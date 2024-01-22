@@ -121,3 +121,16 @@ func ContainsPermits(daos []adminDao.PermitDAO, permit adminDao.PermitDAO) bool 
 	}
 	return false
 }
+
+func RemoveDuplicatesPermits(permits []adminDao.PermitDAO) []adminDao.PermitDAO {
+	var adminDaoMap = make(map[string]adminDao.PermitDAO, 0)
+
+	for _, p := range permits {
+		adminDaoMap[p.ID] = p
+	}
+	var newPermits []adminDao.PermitDAO
+	for _, m := range adminDaoMap {
+		newPermits = append(newPermits, m)
+	}
+	return newPermits
+}
