@@ -4,6 +4,7 @@ import (
 	"AdminPro/common/model"
 	"AdminPro/dao/model/adminDao"
 	_ "AdminPro/dao/model/adminDao"
+	"gorm.io/gorm"
 )
 
 func GetAdminByUsername(username string) (adminDao.AdminDAO, error) {
@@ -23,4 +24,12 @@ func GetAllAdminList(pagination *model.Pagination) (admins []adminDao.AdminDAO, 
 	admins, err = adminModel.GetAllAdminList(pagination)
 	return admins, err
 
+}
+
+func InsertAdmin(dao adminDao.AdminDAO, tx *gorm.DB) (err error) {
+	err = dao.InsertAdmin(tx)
+	if err != nil {
+		return err
+	}
+	return nil
 }

@@ -29,6 +29,7 @@ func RegisterRoutes(router *gin.Engine) {
 		protected.GET("/GetAdminExtraPermits", admin.GetAdminExtraPermits)
 		protected.GET("/GetAdminAllPermits", admin.GetAdminAllPermits)
 
+		protected.POST("/AddAdmin", admin.AddAdmin)
 		protected.POST("/AddRole", admin.AddRole)
 		protected.POST("/AddRolePermits", admin.AddRolePermits)
 		protected.POST("/AddAdminRoles", admin.AddAdminRoles)

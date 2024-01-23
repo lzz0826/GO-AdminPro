@@ -1,17 +1,32 @@
-package service
+package driver
+
+import (
+	"gorm.io/gorm"
+)
+
+func WithTransaction(txFunc func(*gorm.DB) error) (err error) {
+	tx := GormDb.Begin()
+	defer func() {
+		if p := recover(); p != nil {
+			// 如果有 panic 發生，回滾事務
+			tx.Rollback()
+			panic(p) // 繼續傳播 panic
+		} else if err != nil {
+			// 如果有錯誤，回滾事務
+			tx.Rollback()
+		} else {
+			// 提交事務
+			err = tx.Commit().Error
+		}
+	}()
+	return txFunc(tx)
+}
 
 //
 //import (
 //	"fmt"
+//	"gorm.io/driver/sqlite"
 //	"gorm.io/gorm"
-//)
-//
-//package main
-//
-//import (
-//"fmt"
-//"gorm.io/driver/sqlite"
-//"gorm.io/gorm"
 //)
 //
 //// 定義一個用於處理事務的函數
@@ -29,7 +44,6 @@ package service
 //	if err := tx.Create(&newUser).Error; err != nil {
 //		return err
 //	}
-//
 //
 //	// 模擬一些操作，這裡假設操作成功
 //	// 模擬成功的情况下返回 nil，模拟失败的情况下返回错误
@@ -58,7 +72,6 @@ package service
 //
 //	// 設定事務的隔離性和傳播性 隔离级别为 REPEATABLE READ
 //	tx = tx.Set("gorm:query_option", "SET TRANSACTION ISOLATION LEVEL REPEATABLE READ")
-//
 //
 //	// 執行事務內的操作
 //	err = processTransaction(tx)

@@ -2,6 +2,7 @@ package adminDao
 
 import (
 	"AdminPro/common/driver"
+	"gorm.io/gorm"
 	"log"
 	"time"
 )
@@ -22,14 +23,8 @@ func (at *AdminTokenDAO) TableName() string {
 	return "admin_admintoken"
 }
 
-// InsertAdminToken 插入 AdminTokenDAO 資料
-func (at *AdminTokenDAO) InsertAdminToken() (err error) {
-	err = driver.GormDb.Table(at.TableName()).Create(at).Error
-	if err != nil {
-		log.Println("InsertAdminToken error:", err.Error())
-		return
-	}
-	return
+func (at *AdminTokenDAO) InsertAdminToken(tx *gorm.DB) error {
+	return tx.Table(at.TableName()).Omit("id").Create(at).Error
 }
 
 // GetAdminTokenByID 根據 ID 查詢 AdminTokenDAO

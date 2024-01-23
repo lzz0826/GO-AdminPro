@@ -21,11 +21,6 @@ func CheckUserAndPassword(username string, password string) (vo adminVo.AdminLog
 		return adminVo.AdminLoginVO{}, err
 	}
 
-	//TODO 需要改道註冊GenerateFromPassword
-	hashedPassword, err := bcrypt.GenerateFromPassword([]byte(password), bcrypt.DefaultCost)
-	encodePW := string(hashedPassword)
-	fmt.Println(encodePW)
-
 	err = bcrypt.CompareHashAndPassword([]byte(token.Token), []byte(password))
 	if err != nil {
 		fmt.Println("密码不匹配")

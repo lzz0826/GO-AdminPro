@@ -3,6 +3,7 @@ package adminDao
 import (
 	"AdminPro/common/driver"
 	"AdminPro/common/model"
+	"gorm.io/gorm"
 	_ "gorm.io/gorm"
 	"log"
 	"time"
@@ -29,14 +30,8 @@ func (AdminDAO) TableName() string {
 	return "admin_admin"
 }
 
-// InsertAdmin 插入 AdminDAO 資料
-func (model *AdminDAO) InsertAdmin() (err error) {
-	err = driver.GormDb.Table(model.TableName()).Create(model).Error
-	if err != nil {
-		log.Println(err.Error())
-		return
-	}
-	return
+func (model *AdminDAO) InsertAdmin(tx *gorm.DB) error {
+	return tx.Table(model.TableName()).Create(model).Error
 }
 
 // GetAdminByID 根據 ID 查詢 AdminDAO
