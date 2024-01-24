@@ -27,7 +27,6 @@ func CheckUserAndPassword(username string, password string) (vo adminVo.AdminLog
 		return adminVo.AdminLoginVO{}, err
 	}
 
-	// jwt 暫時只放username
 	tokenStr, err := jwt.LoginHandler(usr)
 	if err != nil {
 		return adminVo.AdminLoginVO{}, err

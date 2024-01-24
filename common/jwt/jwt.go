@@ -11,7 +11,7 @@ import (
 	"time"
 )
 
-// TODO 帶移致配置文件
+// TODO 待移致配置文件
 var jwtKey = []byte("your_secret_key")
 
 // Claims 是JWT 的內容，可以自定義需要的欄位
@@ -27,6 +27,7 @@ type Claims struct {
 }
 
 func LoginHandler(adminDao adminDao.AdminDAO) (tokenStr string, err error) {
+	//TODO  設置過期時間 待移致配置文件
 	expirationTime := time.Now().Add(5 * time.Minute)
 	claims := &Claims{
 		Username:  adminDao.Username,
