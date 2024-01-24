@@ -6,9 +6,9 @@ import (
 
 //role 對應 permit 中間表
 
-func GetRolePermitByRoleId(roleIds string) (rolePermits []adminDao.RolePermitDAO, err error) {
+func GetRolePermitByRoleId(roleId string) (rolePermits []adminDao.RolePermitDAO, err error) {
 	dao := adminDao.RolePermitDAO{}
-	permits, err := dao.GetRolePermitByRoleId(roleIds)
+	permits, err := dao.GetRolePermitByRoleId(roleId)
 	return permits, err
 }
 

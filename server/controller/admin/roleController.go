@@ -47,6 +47,27 @@ func GetAdminRole(ctx *gin.Context) {
 
 }
 
+// GetRolePermits 查詢指定角色的權限
+func GetRolePermits(ctx *gin.Context) {
+
+	roleId := ctx.PostForm("roleId")
+	if roleId == "" {
+		ctx.JSON(http.StatusOK, tool.RespFail(tool.MissingParameters.Code, tool.MissingParameters.Msg, nil))
+		return
+	}
+	permits, err := service.GetRolePermits(roleId)
+	if err != nil {
+		ctx.JSON(http.StatusOK, tool.GetResponseForError(err))
+		return
+	}
+
+	vo := adminVo.PermitListVO{
+		PermitList: permits,
+	}
+	ctx.JSON(http.StatusOK, tool.RespOk(vo))
+
+}
+
 // AddRole 添加角色
 func AddRole(ctx *gin.Context) {
 	var role adminDao.RoleDAO

@@ -36,6 +36,14 @@ func GetRoleByIDs(ids []string) (role []adminDao.RoleDAO, err error) {
 	return roles, err
 }
 
+func CheckRoleIdExist(roleId string) bool {
+	_, err := GetRoleByID(roleId)
+	if err != nil {
+		return false
+	}
+	return true
+}
+
 func CheckRoleIdsExist(roleIds []string) (roles []adminDao.RoleDAO, err error) {
 	roles, err = GetRoleByIDs(roleIds)
 	if err != nil {
@@ -45,5 +53,4 @@ func CheckRoleIdsExist(roleIds []string) (roles []adminDao.RoleDAO, err error) {
 		return nil, errors.New(tool.NotFindRole.Msg)
 	}
 	return roles, nil
-
 }

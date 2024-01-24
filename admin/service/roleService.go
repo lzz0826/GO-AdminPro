@@ -175,6 +175,24 @@ func GetRoleByAdminId(adminId string) (role []adminDao.RoleDAO, err error) {
 	return roles, nil
 }
 
+// GetRolePermits 查詢指定角色的權限
+func GetRolePermits(roleId string) (permits []adminDao.PermitDAO, err error) {
+	if !admin.CheckRoleIdExist(roleId) {
+		return nil, errors.New(tool.NotFindRole.Msg)
+	}
+	rolePermits, _ := admin.GetRolePermitByRoleId(roleId)
+
+	var rolePermitsIds []string
+
+	if rolePermits != nil {
+		for _, r := range rolePermits {
+			rolePermitsIds = append(rolePermitsIds, r.PermitID)
+		}
+	}
+	permits, err = admin.GetPermitByByIds(rolePermitsIds)
+	return permits, nil
+}
+
 func containsRole(s []adminDao.RoleDAO, role adminDao.RoleDAO) bool {
 	for _, r := range s {
 		if r.ID == role.ID {
