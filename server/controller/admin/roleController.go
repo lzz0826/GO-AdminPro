@@ -154,3 +154,26 @@ func RemoveRolePermits(ctx *gin.Context) {
 	ctx.JSON(http.StatusOK, tool.RespOk(tool.Success.Msg))
 
 }
+
+// RemoveAdminRoles 移除管理員的角色
+func RemoveAdminRoles(ctx *gin.Context) {
+	var request struct {
+		AdminId string   `json:"adminId" binding:"required"`
+		RoleIds []string `json:"roleIds" binding:"required"`
+	}
+
+	if err := ctx.ShouldBindJSON(&request); err != nil {
+		ctx.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
+		return
+	}
+	adminId := request.AdminId
+	roleIds := request.RoleIds
+
+	err := service.RemoveAdminRoles(adminId, roleIds)
+	if err != nil {
+		ctx.JSON(http.StatusOK, tool.GetResponseForError(err))
+		return
+	}
+	ctx.JSON(http.StatusOK, tool.RespOk(tool.Success.Msg))
+
+}

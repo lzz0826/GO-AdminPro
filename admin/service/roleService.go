@@ -82,6 +82,34 @@ func RemoveRolePermits(roleId string, permitIds []string) error {
 
 }
 
+func RemoveAdminRoles(adminId string, roleIds []string) (err error) {
+	if !admin.CheckAdminExist(adminId) {
+		return errors.New(tool.NotFindAdmin.Msg)
+	}
+
+	_, err = admin.CheckRoleIdsExist(roleIds)
+	if err != nil {
+		return errors.New(tool.GetStatusMsgFromError(err))
+	}
+
+	adminRoles, err := admin.GetAdminRoleByAdminIdAndRoleIds(adminId, roleIds)
+
+	var adminRolesDAOIds []string
+
+	if adminRoles != nil {
+		for _, a := range adminRoles {
+			adminRolesDAOIds = append(adminRolesDAOIds, a.ID)
+		}
+	}
+
+	err = admin.DeleteAdminRoleByIds(adminRolesDAOIds)
+	if err != nil {
+		return errors.New(tool.RemoveAdminRolesFail.Msg)
+	}
+	return nil
+
+}
+
 // AddAdminRoles 為管理員添加角色
 func AddAdminRoles(adminId string, roleIds []string, currentAdminId string) error {
 

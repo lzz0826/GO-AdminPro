@@ -33,3 +33,8 @@ func InsertAdmin(dao adminDao.AdminDAO, tx *gorm.DB) (err error) {
 	}
 	return nil
 }
+
+func CheckAdminExist(adminId string) bool {
+	_, err := GetAdminById(adminId)
+	return err == nil
+}

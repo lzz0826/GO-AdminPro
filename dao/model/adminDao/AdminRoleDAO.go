@@ -59,11 +59,29 @@ func (ar *AdminRoleDAO) GetAdminRoleByID(id string) (adminRole AdminRoleDAO, err
 	return
 }
 
-func (ar *AdminRoleDAO) GetAdminRoleByAdminId(admins string) (adminRoles []AdminRoleDAO, err error) {
-	err = driver.GormDb.Table(ar.TableName()).Where("admin_id IN (?)", admins).Find(&adminRoles).Error
+func (ar *AdminRoleDAO) GetAdminRoleByAdminId(adminId string) (adminRoles []AdminRoleDAO, err error) {
+	err = driver.GormDb.Table(ar.TableName()).Where("admin_id IN (?)", adminId).Find(&adminRoles).Error
 	if err != nil {
 		log.Println("GetAdminRoleByID error:", err.Error())
 		return
 	}
 	return
+}
+
+func (ar *AdminRoleDAO) GetAdminRoleByAdminIdAndRoleIds(admins string, roleIds []string) (adminRoles []AdminRoleDAO, err error) {
+	err = driver.GormDb.Table(ar.TableName()).Where("admin_id = ? AND role_id IN (?)", admins, roleIds).Find(&adminRoles).Error
+	if err != nil {
+		log.Println("GetAdminRoleByAdminIdAndRoleIds error:", err.Error())
+		return
+	}
+	return
+}
+
+func (ar *AdminRoleDAO) DeleteAdminRoleByIds(ids []string) (err error) {
+	err = driver.GormDb.Table(ar.TableName()).Where("id IN (?)", ids).Delete(&AdminRoleDAO{}).Error
+	if err != nil {
+		log.Println("DeleteAdminRoleByIds error:", err.Error())
+		return err
+	}
+	return nil
 }

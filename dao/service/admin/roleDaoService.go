@@ -2,7 +2,9 @@ package admin
 
 import (
 	"AdminPro/common/model"
+	"AdminPro/common/tool"
 	"AdminPro/dao/model/adminDao"
+	"errors"
 )
 
 func InsertRole(dao adminDao.RoleDAO) error {
@@ -32,4 +34,16 @@ func GetRoleByIDs(ids []string) (role []adminDao.RoleDAO, err error) {
 	roleDAO := adminDao.RoleDAO{}
 	roles, err := roleDAO.GetRoleByIDs(ids)
 	return roles, err
+}
+
+func CheckRoleIdsExist(roleIds []string) (roles []adminDao.RoleDAO, err error) {
+	roles, err = GetRoleByIDs(roleIds)
+	if err != nil {
+		return nil, errors.New(tool.NotFindRole.Msg)
+	}
+	if roles == nil || len(roles) != len(roleIds) {
+		return nil, errors.New(tool.NotFindRole.Msg)
+	}
+	return roles, nil
+
 }

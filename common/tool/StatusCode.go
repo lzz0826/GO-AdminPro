@@ -23,6 +23,7 @@ var statusList = []Status{
 	RemoveRolePermitsFail,
 	RemoveAdminPermitsFail,
 	RegisterAdminFail,
+	RemoveAdminRolesFail,
 	AdminIsExits,
 }
 
@@ -49,7 +50,8 @@ var (
 	AddAdminPermitsFail    = Status{Code: 3003, Msg: "管理員添加權限失敗"}
 	RemoveRolePermitsFail  = Status{Code: 3004, Msg: "移除角色所屬的權限失敗"}
 	RemoveAdminPermitsFail = Status{Code: 3005, Msg: "移除管理員額外的權限失敗"}
-	RegisterAdminFail      = Status{Code: 3006, Msg: "註冊管理員失敗"}
+	RemoveAdminRolesFail   = Status{Code: 3006, Msg: "移除管理員角色失敗"}
+	RegisterAdminFail      = Status{Code: 3007, Msg: "註冊管理員失敗"}
 
 	//管理員 4000
 	NotFindAdmin = Status{Code: 4000, Msg: "找不到管理員"}
