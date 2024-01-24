@@ -27,10 +27,10 @@ CREATE TABLE IF NOT EXISTS `admin_admin` (
 -- Insert data for administrator accounts
 INSERT INTO admin.admin_admin
 (id, channel_id, username, admin_name, nickname, account_status, login_ip, login_time, memo, creator_id, updater_id, update_time, create_time, two_factor_code)
-VALUES('0', 'channel001', 'admin', 'Highest', 'Big Boss', 0, '192.168.1.1', '2024-01-12 09:58:00', 'Some memo', '999', '999', '2024-01-12 09:58:00', '2024-01-12 09:58:00', '123456');
+VALUES('1', 'channel001', 'admin', 'Highest', 'Big Boss', 0, '192.168.1.1', '2024-01-12 09:58:00', 'Some memo', '999', '999', '2024-01-12 09:58:00', '2024-01-12 09:58:00', '123456');
 INSERT INTO admin.admin_admin
 (id, channel_id, username, admin_name, nickname, account_status, login_ip, login_time, memo, creator_id, updater_id, update_time, create_time, two_factor_code)
-VALUES('1', 'channel002', 'manager', 'Manager', 'Second in Command', 0, '192.168.1.1', '2024-01-12 09:58:00', 'Some memo', '999', '999', '2024-01-12 09:58:00', '2024-01-14 09:58:00', '123456');
+VALUES('2', 'channel002', 'manager', 'Manager', 'Second in Command', 0, '192.168.1.1', '2024-01-12 09:58:00', 'Some memo', '999', '999', '2024-01-12 09:58:00', '2024-01-14 09:58:00', '123456');
 
 
 /**
@@ -68,10 +68,11 @@ CREATE TABLE IF NOT EXISTS `admin_admin_role` (
 -- Insert data for roles associated with administrators
 INSERT INTO admin.admin_admin_role
 (id, admin_id, role_id, creator_id, updater_id, create_time, update_time)
-VALUES(1, '0', '0', '999', '999', '2024-01-14 14:39:16', '2024-01-14 14:39:16');
+VALUES(1, '1', '1', '999', '999', '2024-01-14 14:39:16', '2024-01-14 14:39:16');
 INSERT INTO admin.admin_admin_role
 (id, admin_id, role_id, creator_id, updater_id, create_time, update_time)
-VALUES(2, '0', '1', '999', '999', '2024-01-12 10:14:18', '2024-01-12 10:14:18');
+VALUES(2, '2', '2', '999', '999', '2024-01-12 10:14:18', '2024-01-12 10:14:18');
+
 
 
 
@@ -93,15 +94,15 @@ CREATE TABLE IF NOT EXISTS `admin_admintoken` (
 ) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 -- Insert data for administrator account passwords
-
-INSERT INTO admin.admin_admintoken
-(id, admin_id, token_type, token, expire_time, update_time, create_time, creator_id, updater_id)
-VALUES(0, '0', 1, '$2a$10$dU6nEGsh7QA4/caU3WZC9ODBThGZ8f/p9a3Q66LHH0UQzqKnANpva
-', '2024-01-12 11:22:52', '2024-01-12 10:22:52', '2024-01-12 10:22:52', '999', '999');
 INSERT INTO admin.admin_admintoken
 (id, admin_id, token_type, token, expire_time, update_time, create_time, creator_id, updater_id)
 VALUES(1, '1', 1, '$2a$10$dU6nEGsh7QA4/caU3WZC9ODBThGZ8f/p9a3Q66LHH0UQzqKnANpva
 ', '2024-01-12 11:22:52', '2024-01-12 11:22:52', '2024-01-12 11:22:52', '999', '999');
+INSERT INTO admin.admin_admintoken
+(id, admin_id, token_type, token, expire_time, update_time, create_time, creator_id, updater_id)
+VALUES(2, '2', 1, '$2a$10$dU6nEGsh7QA4/caU3WZC9ODBThGZ8f/p9a3Q66LHH0UQzqKnANpva
+', '2024-01-12 11:22:52', '2024-01-12 10:22:52', '2024-01-12 10:22:52', '999', '999');
+
 
 
 
@@ -124,52 +125,51 @@ CREATE TABLE IF NOT EXISTS `admin_permit` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 -- Insert permission data
-
 INSERT INTO admin.admin_permit
 (id, permit_key, permit_name, memo, permit_desc, sort, creator_id, updater_id, update_time, create_time)
-VALUES('0', 'AddAdmin', 'AddAdmin', 'Add administrator', 'Add administrator', 1, '999', '999', '2024-01-12 10:31:53', '2024-01-12 10:31:53');
+VALUES('1', 'AddAdmin', 'AddAdmin', 'Add administrator', 'Add administrator', 1, '999', '999', '2024-01-12 10:31:53', '2024-01-12 10:31:53');
 INSERT INTO admin.admin_permit
 (id, permit_key, permit_name, memo, permit_desc, sort, creator_id, updater_id, update_time, create_time)
-VALUES('1', 'AddRole', 'AddRole', 'Add role', 'Add role', 1, '999', '999', '2024-01-14 14:51:43', '2024-01-14 14:51:43');
+VALUES('10', 'AddRolePermits', 'AddRolePermits', 'Add permissions to a role', 'Add permissions to a role', 1, '999', '999', '2024-01-14 14:51:43', '2024-01-14 14:51:43');
 INSERT INTO admin.admin_permit
 (id, permit_key, permit_name, memo, permit_desc, sort, creator_id, updater_id, update_time, create_time)
-VALUES('10', 'GetAdminAllPermits', 'GetAdminAllPermits', 'Query all permissions for a specified administrator (including roles)', 'Query all permissions for a specified administrator (including roles)', 1, '999', '999', '2024-01-14 14:51:43', '2024-01-14 14:51:43');
+VALUES('11', 'AddAdminRoles', 'AddAdminRoles', 'Add roles to an administrator', 'Add roles to an administrator', 1, '999', '999', '2024-01-14 14:51:43', '2024-01-14 14:51:43');
 INSERT INTO admin.admin_permit
 (id, permit_key, permit_name, memo, permit_desc, sort, creator_id, updater_id, update_time, create_time)
-VALUES('11', 'RemoveRolePermits', 'RemoveRolePermits', 'Remove permissions associated with a role', 'Remove permissions associated with a role', 1, '999', '999', '2024-01-14 14:51:43', '2024-01-14 14:51:43');
+VALUES('12', 'AddAdminPermits', 'AddAdminPermits', 'Add permissions to an administrator', 'Add permissions to an administrator', 1, '999', '999', '2024-01-14 14:51:43', '2024-01-14 14:51:43');
 INSERT INTO admin.admin_permit
 (id, permit_key, permit_name, memo, permit_desc, sort, creator_id, updater_id, update_time, create_time)
-VALUES('12', 'RemoveAdminPermits', 'RemoveAdminPermits', 'Remove additional permissions for an administrator', 'Remove additional permissions for an administrator', 1, '999', '999', '2024-01-14 14:51:43', '2024-01-14 14:51:43');
+VALUES('13', 'GetAllAdminList', 'GetAllAdminList', 'Query all administrators', 'Query all administrators', 1, '999', '999', '2024-01-14 14:51:43', '2024-01-14 14:51:43');
 INSERT INTO admin.admin_permit
 (id, permit_key, permit_name, memo, permit_desc, sort, creator_id, updater_id, update_time, create_time)
-VALUES('13', 'RemoveAdminRoles', 'RemoveAdminRoles', 'Remove roles assigned to an administrator', 'Remove roles assigned to an administrator', 1, '999', '999', '2024-01-14 14:51:43', '2024-01-14 14:51:43');
+VALUES('14', 'GetAdminRole', 'GetAdminRole', 'Query roles for a specified administrator', 'Query roles for a specified administrator', 1, '999', '999', '2024-01-14 14:51:43', '2024-01-14 14:51:43');
 INSERT INTO admin.admin_permit
 (id, permit_key, permit_name, memo, permit_desc, sort, creator_id, updater_id, update_time, create_time)
-VALUES('14', 'GetRolePermits', 'GetRolePermits', 'Get role permissions', 'Get role permissions', 1, '999', '999', '2024-01-12 10:31:53', '2024-01-12 10:31:53');
+VALUES('15', 'GetAdminExtraPermits', 'GetAdminExtraPermits', 'Query additional permissions for a specified administrator', 'Query additional permissions for a specified administrator', 1, '999', '999', '2024-01-14 14:51:43', '2024-01-14 14:51:43');
 INSERT INTO admin.admin_permit
 (id, permit_key, permit_name, memo, permit_desc, sort, creator_id, updater_id, update_time, create_time)
-VALUES('2', 'GetAllRoleList', 'GetAllRoleList', 'Query all roles', 'Query all roles', 1, '999', '999', '2024-01-12 10:32:21', '2024-01-12 10:32:21');
+VALUES('2', 'AddRole', 'AddRole', 'Add role', 'Add role', 1, '999', '999', '2024-01-14 14:51:43', '2024-01-14 14:51:43');
 INSERT INTO admin.admin_permit
 (id, permit_key, permit_name, memo, permit_desc, sort, creator_id, updater_id, update_time, create_time)
-VALUES('3', 'GetAllPermitList', 'GetAllPermitList', 'Query all permissions', 'Query all permissions', 1, '999', '999', '2024-01-12 10:32:21', '2024-01-12 10:32:21');
+VALUES('3', 'GetAdminAllPermits', 'GetAdminAllPermits', 'Query all permissions for a specified administrator (including roles)', 'Query all permissions for a specified administrator (including roles)', 1, '999', '999', '2024-01-14 14:51:43', '2024-01-14 14:51:43');
 INSERT INTO admin.admin_permit
 (id, permit_key, permit_name, memo, permit_desc, sort, creator_id, updater_id, update_time, create_time)
-VALUES('4', 'AddRolePermits', 'AddRolePermits', 'Add permissions to a role', 'Add permissions to a role', 1, '999', '999', '2024-01-14 14:51:43', '2024-01-14 14:51:43');
+VALUES('4', 'RemoveRolePermits', 'RemoveRolePermits', 'Remove permissions associated with a role', 'Remove permissions associated with a role', 1, '999', '999', '2024-01-14 14:51:43', '2024-01-14 14:51:43');
 INSERT INTO admin.admin_permit
 (id, permit_key, permit_name, memo, permit_desc, sort, creator_id, updater_id, update_time, create_time)
-VALUES('5', 'AddAdminRoles', 'AddAdminRoles', 'Add roles to an administrator', 'Add roles to an administrator', 1, '999', '999', '2024-01-14 14:51:43', '2024-01-14 14:51:43');
+VALUES('5', 'RemoveAdminPermits', 'RemoveAdminPermits', 'Remove additional permissions for an administrator', 'Remove additional permissions for an administrator', 1, '999', '999', '2024-01-14 14:51:43', '2024-01-14 14:51:43');
 INSERT INTO admin.admin_permit
 (id, permit_key, permit_name, memo, permit_desc, sort, creator_id, updater_id, update_time, create_time)
-VALUES('6', 'AddAdminPermits', 'AddAdminPermits', 'Add permissions to an administrator', 'Add permissions to an administrator', 1, '999', '999', '2024-01-14 14:51:43', '2024-01-14 14:51:43');
+VALUES('6', 'RemoveAdminRoles', 'RemoveAdminRoles', 'Remove roles assigned to an administrator', 'Remove roles assigned to an administrator', 1, '999', '999', '2024-01-14 14:51:43', '2024-01-14 14:51:43');
 INSERT INTO admin.admin_permit
 (id, permit_key, permit_name, memo, permit_desc, sort, creator_id, updater_id, update_time, create_time)
-VALUES('7', 'GetAllAdminList', 'GetAllAdminList', 'Query all administrators', 'Query all administrators', 1, '999', '999', '2024-01-14 14:51:43', '2024-01-14 14:51:43');
+VALUES('7', 'GetRolePermits', 'GetRolePermits', 'Get role permissions', 'Get role permissions', 1, '999', '999', '2024-01-12 10:31:53', '2024-01-12 10:31:53');
 INSERT INTO admin.admin_permit
 (id, permit_key, permit_name, memo, permit_desc, sort, creator_id, updater_id, update_time, create_time)
-VALUES('8', 'GetAdminRole', 'GetAdminRole', 'Query roles for a specified administrator', 'Query roles for a specified administrator', 1, '999', '999', '2024-01-14 14:51:43', '2024-01-14 14:51:43');
+VALUES('8', 'GetAllRoleList', 'GetAllRoleList', 'Query all roles', 'Query all roles', 1, '999', '999', '2024-01-12 10:32:21', '2024-01-12 10:32:21');
 INSERT INTO admin.admin_permit
 (id, permit_key, permit_name, memo, permit_desc, sort, creator_id, updater_id, update_time, create_time)
-VALUES('9', 'GetAdminExtraPermits', 'GetAdminExtraPermits', 'Query additional permissions for a specified administrator', 'Query additional permissions for a specified administrator', 1, '999', '999', '2024-01-14 14:51:43', '2024-01-14 14:51:43');
+VALUES('9', 'GetAllPermitList', 'GetAllPermitList', 'Query all permissions', 'Query all permissions', 1, '999', '999', '2024-01-12 10:32:21', '2024-01-12 10:32:21');
 
 
 
@@ -196,19 +196,19 @@ CREATE TABLE IF NOT EXISTS `admin_role` (
 -- Insert role data
 INSERT INTO admin.admin_role
 (id, role_key, role_name, sort, role_status, memo, creator_id, updater_id, role_desc, update_time, create_time)
-VALUES(0, 'ADMIN', 'Administrator', 0, 0, NULL, '1', '1', 'Administrator', '2023-03-17 13:13:44', '2023-03-17 13:13:43');
+VALUES(1, 'ADMIN', 'Administrator', 0, 0, NULL, '1', '1', 'Administrator', '2023-03-17 13:13:44', '2023-03-17 13:13:43');
 INSERT INTO admin.admin_role
 (id, role_key, role_name, sort, role_status, memo, creator_id, updater_id, role_desc, update_time, create_time)
-VALUES(1, 'SUPER_MANAGER', 'Super Manager', 0, 0, NULL, '1', '1', 'Super Manager', '2023-04-25 09:40:15', '2023-04-25 09:40:15');
+VALUES(2, 'SUPER_MANAGER', 'Super Manager', 0, 0, NULL, '1', '1', 'Super Manager', '2023-04-25 09:40:15', '2023-04-25 09:40:15');
 INSERT INTO admin.admin_role
 (id, role_key, role_name, sort, role_status, memo, creator_id, updater_id, role_desc, update_time, create_time)
-VALUES(2, 'NORMAL_MANAGER', 'Normal Manager', 0, 0, NULL, '1', '1', 'Normal Manager', '2023-04-25 09:43:19', '2023-04-25 09:43:19');
+VALUES(3, 'NORMAL_MANAGER', 'Normal Manager', 0, 0, NULL, '1', '1', 'Normal Manager', '2023-04-25 09:43:19', '2023-04-25 09:43:19');
 INSERT INTO admin.admin_role
 (id, role_key, role_name, sort, role_status, memo, creator_id, updater_id, role_desc, update_time, create_time)
-VALUES(3, 'USER', 'Regular User', 0, 0, NULL, '1', '1', 'Regular User', '2023-04-25 09:44:10', '2023-04-25 09:44:10');
+VALUES(4, 'USER', 'Regular User', 0, 0, NULL, '1', '1', 'Regular User', '2023-04-25 09:44:10', '2023-04-25 09:44:10');
 INSERT INTO admin.admin_role
 (id, role_key, role_name, sort, role_status, memo, creator_id, updater_id, role_desc, update_time, create_time)
-VALUES(4, 'TESTKEY', 'TESTNAME', 0, 1, '', '0', '0', '', '2024-01-16 09:18:50', '2024-01-16 09:18:50');
+VALUES(5, 'TESTKEY', 'TESTNAME', 0, 1, '', '0', '0', '', '2024-01-16 09:18:50', '2024-01-16 09:18:50');
 
 
 
@@ -230,106 +230,109 @@ CREATE TABLE IF NOT EXISTS `admin_role_permit` (
 -- Insert data for the mapping between Roles and Permissions
 INSERT INTO admin.admin_role_permit
 (id, role_id, permit_id, creator_id, updater_id, create_time, update_time)
-VALUES(0, '0', '0', '999', '999', '2024-01-12 10:42:33', '2024-01-12 10:42:33');
+VALUES(1, '1', '1', '999', '999', '2024-01-12 10:42:33', '2024-01-12 10:42:33');
 INSERT INTO admin.admin_role_permit
 (id, role_id, permit_id, creator_id, updater_id, create_time, update_time)
-VALUES(1, '0', '1', '999', '999', '2024-01-22 07:30:42', '2024-01-22 07:30:42');
+VALUES(2, '1', '2', '999', '999', '2024-01-22 07:30:42', '2024-01-22 07:30:42');
 INSERT INTO admin.admin_role_permit
 (id, role_id, permit_id, creator_id, updater_id, create_time, update_time)
-VALUES(2, '0', '2', '999', '999', '2024-01-22 07:30:42', '2024-01-22 07:30:42');
+VALUES(3, '1', '3', '999', '999', '2024-01-22 07:30:42', '2024-01-22 07:30:42');
 INSERT INTO admin.admin_role_permit
 (id, role_id, permit_id, creator_id, updater_id, create_time, update_time)
-VALUES(3, '0', '3', '999', '999', '2024-01-12 10:42:59', '2024-01-12 10:42:59');
+VALUES(4, '1', '4', '999', '999', '2024-01-12 10:42:59', '2024-01-12 10:42:59');
 INSERT INTO admin.admin_role_permit
 (id, role_id, permit_id, creator_id, updater_id, create_time, update_time)
-VALUES(4, '0', '4', '999', '999', '2024-01-12 10:42:59', '2024-01-12 10:42:59');
+VALUES(5, '1', '5', '999', '999', '2024-01-12 10:42:59', '2024-01-12 10:42:59');
 INSERT INTO admin.admin_role_permit
 (id, role_id, permit_id, creator_id, updater_id, create_time, update_time)
-VALUES(5, '0', '5', '999', '999', '2024-01-12 10:42:59', '2024-01-12 10:42:59');
+VALUES(6, '1', '6', '999', '999', '2024-01-12 10:42:59', '2024-01-12 10:42:59');
 INSERT INTO admin.admin_role_permit
 (id, role_id, permit_id, creator_id, updater_id, create_time, update_time)
-VALUES(6, '0', '6', '999', '999', '2024-01-22 07:30:42', '2024-01-22 07:30:42');
+VALUES(7, '1', '7', '999', '999', '2024-01-22 07:30:42', '2024-01-22 07:30:42');
 INSERT INTO admin.admin_role_permit
 (id, role_id, permit_id, creator_id, updater_id, create_time, update_time)
-VALUES(7, '0', '7', '999', '999', '2024-01-12 10:42:33', '2024-01-12 10:42:33');
+VALUES(8, '1', '8', '999', '999', '2024-01-12 10:42:33', '2024-01-12 10:42:33');
 INSERT INTO admin.admin_role_permit
 (id, role_id, permit_id, creator_id, updater_id, create_time, update_time)
-VALUES(8, '0', '8', '999', '999', '2024-01-12 10:42:33', '2024-01-12 10:42:33');
+VALUES(9, '1', '9', '999', '999', '2024-01-12 10:42:33', '2024-01-12 10:42:33');
 INSERT INTO admin.admin_role_permit
 (id, role_id, permit_id, creator_id, updater_id, create_time, update_time)
-VALUES(9, '0', '9', '999', '999', '2024-01-12 10:42:33', '2024-01-12 10:42:33');
+VALUES(10, '1', '10', '999', '999', '2024-01-12 10:42:33', '2024-01-12 10:42:33');
 INSERT INTO admin.admin_role_permit
 (id, role_id, permit_id, creator_id, updater_id, create_time, update_time)
-VALUES(10, '0', '10', '999', '999', '2024-01-12 10:42:33', '2024-01-12 10:42:33');
+VALUES(11, '1', '11', '999', '999', '2024-01-12 10:42:33', '2024-01-12 10:42:33');
 INSERT INTO admin.admin_role_permit
 (id, role_id, permit_id, creator_id, updater_id, create_time, update_time)
-VALUES(11, '0', '11', '999', '999', '2024-01-12 10:42:33', '2024-01-12 10:42:33');
+VALUES(12, '1', '12', '999', '999', '2024-01-12 10:42:33', '2024-01-12 10:42:33');
 INSERT INTO admin.admin_role_permit
 (id, role_id, permit_id, creator_id, updater_id, create_time, update_time)
-VALUES(12, '0', '12', '999', '999', '2024-01-12 10:42:33', '2024-01-12 10:42:33');
+VALUES(13, '1', '13', '999', '999', '2024-01-12 10:42:33', '2024-01-12 10:42:33');
 INSERT INTO admin.admin_role_permit
 (id, role_id, permit_id, creator_id, updater_id, create_time, update_time)
-VALUES(13, '0', '13', '999', '999', '2024-01-12 10:42:33', '2024-01-12 10:42:33');
+VALUES(14, '1', '14', '999', '999', '2024-01-12 10:42:33', '2024-01-12 10:42:33');
 INSERT INTO admin.admin_role_permit
 (id, role_id, permit_id, creator_id, updater_id, create_time, update_time)
-VALUES(14, '0', '14', '999', '999', '2024-01-12 10:42:33', '2024-01-12 10:42:33');
+VALUES(15, '1', '15', '999', '999', '2024-01-12 10:42:33', '2024-01-12 10:42:33');
 INSERT INTO admin.admin_role_permit
 (id, role_id, permit_id, creator_id, updater_id, create_time, update_time)
-VALUES(15, '1', '1', '0', '0', '2024-01-24 09:43:45', '2024-01-24 09:43:45');
+VALUES(16, '2', '10', '1', '1', '2024-01-24 13:35:47', '2024-01-24 13:35:47');
 INSERT INTO admin.admin_role_permit
 (id, role_id, permit_id, creator_id, updater_id, create_time, update_time)
-VALUES(16, '1', '10', '0', '0', '2024-01-24 09:43:45', '2024-01-24 09:43:45');
+VALUES(17, '2', '11', '1', '1', '2024-01-24 13:35:47', '2024-01-24 13:35:47');
 INSERT INTO admin.admin_role_permit
 (id, role_id, permit_id, creator_id, updater_id, create_time, update_time)
-VALUES(17, '1', '11', '0', '0', '2024-01-24 09:43:45', '2024-01-24 09:43:45');
+VALUES(18, '2', '12', '1', '1', '2024-01-24 13:35:47', '2024-01-24 13:35:47');
 INSERT INTO admin.admin_role_permit
 (id, role_id, permit_id, creator_id, updater_id, create_time, update_time)
-VALUES(18, '1', '12', '0', '0', '2024-01-24 09:43:45', '2024-01-24 09:43:45');
+VALUES(19, '2', '13', '1', '1', '2024-01-24 13:35:47', '2024-01-24 13:35:47');
 INSERT INTO admin.admin_role_permit
 (id, role_id, permit_id, creator_id, updater_id, create_time, update_time)
-VALUES(19, '1', '13', '0', '0', '2024-01-24 09:43:45', '2024-01-24 09:43:45');
+VALUES(20, '2', '14', '1', '1', '2024-01-24 13:35:47', '2024-01-24 13:35:47');
 INSERT INTO admin.admin_role_permit
 (id, role_id, permit_id, creator_id, updater_id, create_time, update_time)
-VALUES(20, '1', '14', '0', '0', '2024-01-24 09:43:45', '2024-01-24 09:43:45');
+VALUES(21, '2', '15', '1', '1', '2024-01-24 13:35:47', '2024-01-24 13:35:47');
 INSERT INTO admin.admin_role_permit
 (id, role_id, permit_id, creator_id, updater_id, create_time, update_time)
-VALUES(21, '1', '2', '0', '0', '2024-01-24 09:43:45', '2024-01-24 09:43:45');
+VALUES(22, '2', '2', '1', '1', '2024-01-24 13:35:47', '2024-01-24 13:35:47');
 INSERT INTO admin.admin_role_permit
 (id, role_id, permit_id, creator_id, updater_id, create_time, update_time)
-VALUES(22, '1', '3', '0', '0', '2024-01-24 09:43:45', '2024-01-24 09:43:45');
+VALUES(23, '2', '3', '1', '1', '2024-01-24 13:35:47', '2024-01-24 13:35:47');
 INSERT INTO admin.admin_role_permit
 (id, role_id, permit_id, creator_id, updater_id, create_time, update_time)
-VALUES(23, '1', '4', '0', '0', '2024-01-24 09:43:45', '2024-01-24 09:43:45');
+VALUES(24, '2', '4', '1', '1', '2024-01-24 13:35:47', '2024-01-24 13:35:47');
 INSERT INTO admin.admin_role_permit
 (id, role_id, permit_id, creator_id, updater_id, create_time, update_time)
-VALUES(24, '1', '5', '0', '0', '2024-01-24 09:43:45', '2024-01-24 09:43:45');
+VALUES(25, '2', '5', '1', '1', '2024-01-24 13:35:47', '2024-01-24 13:35:47');
 INSERT INTO admin.admin_role_permit
 (id, role_id, permit_id, creator_id, updater_id, create_time, update_time)
-VALUES(25, '1', '6', '0', '0', '2024-01-24 09:43:45', '2024-01-24 09:43:45');
+VALUES(26, '2', '6', '1', '1', '2024-01-24 13:35:47', '2024-01-24 13:35:47');
 INSERT INTO admin.admin_role_permit
 (id, role_id, permit_id, creator_id, updater_id, create_time, update_time)
-VALUES(26, '1', '7', '0', '0', '2024-01-24 09:43:45', '2024-01-24 09:43:45');
+VALUES(27, '2', '7', '1', '1', '2024-01-24 13:35:47', '2024-01-24 13:35:47');
 INSERT INTO admin.admin_role_permit
 (id, role_id, permit_id, creator_id, updater_id, create_time, update_time)
-VALUES(27, '1', '8', '0', '0', '2024-01-24 09:43:45', '2024-01-24 09:43:45');
+VALUES(28, '2', '8', '1', '1', '2024-01-24 13:35:47', '2024-01-24 13:35:47');
 INSERT INTO admin.admin_role_permit
 (id, role_id, permit_id, creator_id, updater_id, create_time, update_time)
-VALUES(28, '1', '9', '0', '0', '2024-01-24 09:43:45', '2024-01-24 09:43:45');
+VALUES(29, '2', '9', '1', '1', '2024-01-24 13:35:47', '2024-01-24 13:35:47');
 INSERT INTO admin.admin_role_permit
 (id, role_id, permit_id, creator_id, updater_id, create_time, update_time)
-VALUES(29, '2', '10', '0', '0', '2024-01-24 09:49:09', '2024-01-24 09:49:09');
+VALUES(30, '3', '13', '1', '1', '2024-01-24 13:39:35', '2024-01-24 13:39:35');
 INSERT INTO admin.admin_role_permit
 (id, role_id, permit_id, creator_id, updater_id, create_time, update_time)
-VALUES(30, '2', '2', '0', '0', '2024-01-24 09:49:09', '2024-01-24 09:49:09');
+VALUES(31, '3', '14', '1', '1', '2024-01-24 13:39:35', '2024-01-24 13:39:35');
 INSERT INTO admin.admin_role_permit
 (id, role_id, permit_id, creator_id, updater_id, create_time, update_time)
-VALUES(31, '2', '3', '0', '0', '2024-01-24 09:49:09', '2024-01-24 09:49:09');
+VALUES(32, '3', '15', '1', '1', '2024-01-24 13:39:35', '2024-01-24 13:39:35');
 INSERT INTO admin.admin_role_permit
 (id, role_id, permit_id, creator_id, updater_id, create_time, update_time)
-VALUES(32, '2', '7', '0', '0', '2024-01-24 09:49:09', '2024-01-24 09:49:09');
+VALUES(33, '3', '3', '1', '1', '2024-01-24 13:39:35', '2024-01-24 13:39:35');
 INSERT INTO admin.admin_role_permit
 (id, role_id, permit_id, creator_id, updater_id, create_time, update_time)
-VALUES(33, '2', '8', '0', '0', '2024-01-24 09:49:09', '2024-01-24 09:49:09');
+VALUES(34, '3', '7', '1', '1', '2024-01-24 13:39:35', '2024-01-24 13:39:35');
 INSERT INTO admin.admin_role_permit
 (id, role_id, permit_id, creator_id, updater_id, create_time, update_time)
-VALUES(34, '2', '9', '0', '0', '2024-01-24 09:49:09', '2024-01-24 09:49:09');
+VALUES(35, '3', '8', '1', '1', '2024-01-24 13:39:35', '2024-01-24 13:39:35');
+INSERT INTO admin.admin_role_permit
+(id, role_id, permit_id, creator_id, updater_id, create_time, update_time)
+VALUES(36, '3', '9', '1', '1', '2024-01-24 13:39:35', '2024-01-24 13:39:35');
