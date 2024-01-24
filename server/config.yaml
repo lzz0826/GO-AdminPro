@@ -1,3 +1,13 @@
+server:
+  HOST: "0.0.0.0" # 监听地址
+  PORT: "8081"    # 监听端口
+  ENV: "debug"    # 环境模式 release/debug/test
+
+jwt:
+  jwt_key: "your_secret_key" #jwtKey
+  token_timeOut : 60 # token失效時間(分)
+
+
 mysql:
   host: 127.0.0.1
   port: 13306

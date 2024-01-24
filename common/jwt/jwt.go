@@ -5,14 +5,16 @@ import (
 	"fmt"
 	"github.com/dgrijalva/jwt-go"
 	"github.com/gin-gonic/gin"
+	"github.com/spf13/viper"
 	_ "golang.org/x/crypto/bcrypt"
 	"net/http"
 	"strings"
 	"time"
 )
 
-// TODO 待移致配置文件
-var jwtKey = []byte("your_secret_key")
+var jwtKey = []byte(viper.GetString("jwt.jwt_key"))
+
+var tokenTimeOut = viper.GetInt32("jwt.token_timeOut")
 
 // Claims 是JWT 的內容，可以自定義需要的欄位
 
@@ -28,7 +30,8 @@ type Claims struct {
 
 func LoginHandler(adminDao adminDao.AdminDAO) (tokenStr string, err error) {
 	//TODO  設置過期時間 待移致配置文件
-	expirationTime := time.Now().Add(5 * time.Minute)
+	expirationTime := time.Now().Add(time.Duration(tokenTimeOut) * time.Minute)
+
 	claims := &Claims{
 		Username:  adminDao.Username,
 		AdminName: adminDao.AdminName,
