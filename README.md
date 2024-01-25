@@ -18,12 +18,10 @@ GO - 後台管理
 * 需要先安裝 docker-compose<br />
 
 <br />
-<br />
 
 ### Docker Compose 運行前需要加上虛擬內部網域
 docker network create --subnet=192.168.200.0/24 redis-cluster-net<br />
 
-<br />
 <br />
 
 ### Mysql5.7
@@ -37,13 +35,11 @@ dokcer compose up -d
 完成後會自動添加表和預設data<br />
 
 <br />
-<br />
 
 ### 測試帳號
 -最高管理員 admin : 12345678<br />
 -超級管理員 manager : 12345678<br />
 
-<br />
 <br />
 
 ### 預設腳色:
