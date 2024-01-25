@@ -1,6 +1,8 @@
 # GO-AdminPro
 GO - 後台管理
 
+<br />
+<br />
 
 ## 後端技術概覽:
 -  Bcrypt : 一種用於安全存儲和驗證密碼的哈希函數，特別適用於登錄密碼的加密和驗證過程<br />
@@ -15,8 +17,14 @@ GO - 後台管理
 ## 運行項目:
 * 需要先安裝 docker-compose<br />
 
+<br />
+<br />
+
 ### Docker Compose 運行前需要加上虛擬內部網域
 docker network create --subnet=192.168.200.0/24 redis-cluster-net<br />
+
+<br />
+<br />
 
 ### Mysql5.7
 
@@ -28,12 +36,15 @@ dokcer compose up -d
 
 完成後會自動添加表和預設data<br />
 
-
+<br />
+<br />
 
 ### 測試帳號
 -最高管理員 admin : 12345678<br />
 -超級管理員 manager : 12345678<br />
 
+<br />
+<br />
 
 ### 預設腳色:
 - ADMIN : 可以使用全部權限<br />
@@ -41,6 +52,8 @@ dokcer compose up -d
 - NORMAL_MANAGER : 只能使用查詢相關權限<br />
 - USER : 佔無任何權限<br />
 
+<br />
+<br />
 
 ## 權限關係總覽圖：
 - 管理員可以自由添加或刪除對應角色<br />
@@ -48,13 +61,22 @@ dokcer compose up -d
 - 可以單獨為某個管理員添加指定權限<br />
 ![image](https://github.com/lzz0826/GO-AdminPro/blob/main/img/005.png)
 
+<br />
+<br />
+
 ## 管理員對應角色關係圖：
 ### 一位管理員可以對應多個角色
 ![image](https://github.com/lzz0826/GO-AdminPro/blob/main/img/002.png)
 
+<br />
+<br />
+
 ## 角色對應權限關係圖：
 ### 一個角色可以對應多個權限
 ![image](https://github.com/lzz0826/GO-AdminPro/blob/main/img/003.png)
+
+<br />
+<br />
 
 ## 管理員對應權限關係圖：
 ### 一位管理員可以對應多個權限(相當於可以開額外給予權限)
