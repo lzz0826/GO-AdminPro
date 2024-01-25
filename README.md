@@ -24,9 +24,7 @@ cd GO-AdminPro/docker/goAdminMysql57/docker-compose.yml
 執行:
 dokcer compose up -d 
 
-* 完成後會自動添加表和預設data<br />
-
-
+完成後會自動添加表和預設data<br />
 
 
 
@@ -35,7 +33,7 @@ dokcer compose up -d
 -超級管理員 manager : 12345678<br />
 
 
-### 預設幾色:
+### 預設腳色:
 - ADMIN : 可以使用全部權限<br />
 - SUPER_MANAGER : 除了創建管理員 其他權限全部都可使用<br />
 - NORMAL_MANAGER : 只能使用查詢相關權限<br />
