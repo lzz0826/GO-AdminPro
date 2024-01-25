@@ -1,0 +1,693 @@
+{
+	"info": {
+		"_postman_id": "44349690-16eb-4868-8c34-c5f8bd8e7c7c",
+		"name": "GO後台",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "20383253"
+	},
+	"item": [
+		{
+			"name": "測試",
+			"request": {
+				"method": "GET",
+				"header": [
+					{
+						"key": "Authorization",
+						"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6ImFkbWluIiwiYWRtaW5OYW1lIjoi5pyA6auYIiwibmlja25hbWUiOiLlpKfogIEiLCJhZG1pbklkIjoiMCIsImNoYW5uZWxJRCI6ImNoYW5uZWwwMDEiLCJleHAiOjE3MDUzODQ4ODl9.IL4qJaF4KcebgOGoMtR4DbM-i_oObA69WWNV2k1gu_8",
+						"type": "text"
+					}
+				],
+				"url": {
+					"raw": "127.0.0.1:8081/user/123",
+					"host": [
+						"127",
+						"0",
+						"0",
+						"1"
+					],
+					"port": "8081",
+					"path": [
+						"user",
+						"123"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "登入admin",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "formdata",
+					"formdata": [
+						{
+							"key": "username",
+							"value": "admin",
+							"type": "text"
+						},
+						{
+							"key": "password",
+							"value": "12345678",
+							"type": "text"
+						}
+					]
+				},
+				"url": {
+					"raw": "127.0.0.1:8081/login",
+					"host": [
+						"127",
+						"0",
+						"0",
+						"1"
+					],
+					"port": "8081",
+					"path": [
+						"login"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "登入(manager)",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "formdata",
+					"formdata": [
+						{
+							"key": "username",
+							"value": "manager",
+							"type": "text"
+						},
+						{
+							"key": "password",
+							"value": "12345678",
+							"type": "text"
+						}
+					]
+				},
+				"url": {
+					"raw": "127.0.0.1:8081/login",
+					"host": [
+						"127",
+						"0",
+						"0",
+						"1"
+					],
+					"port": "8081",
+					"path": [
+						"login"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "查詢所有管理員",
+			"request": {
+				"method": "GET",
+				"header": [
+					{
+						"key": "Authorization",
+						"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6ImFkbWluIiwiYWRtaW5OYW1lIjoi5pyA6auYIiwibmlja25hbWUiOiLlpKfogIEiLCJhZG1pbklkIjoiMCIsImNoYW5uZWxJRCI6ImNoYW5uZWwwMDEiLCJleHAiOjE3MDU4OTA5Mjh9.8EmLUrZ57bfkvRcwkJ8SJ1XlfUVtl1Vb8Qv7CLeP_Ow",
+						"type": "text"
+					}
+				],
+				"url": {
+					"raw": "127.0.0.1:8081/GetAllAdminList?page=1&limit=1&sort=create_time desc",
+					"host": [
+						"127",
+						"0",
+						"0",
+						"1"
+					],
+					"port": "8081",
+					"path": [
+						"GetAllAdminList"
+					],
+					"query": [
+						{
+							"key": "page",
+							"value": "1"
+						},
+						{
+							"key": "limit",
+							"value": "1"
+						},
+						{
+							"key": "sort",
+							"value": "create_time desc"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "查詢所有角色",
+			"request": {
+				"method": "GET",
+				"header": [
+					{
+						"key": "Authorization",
+						"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6ImFkbWluIiwiYWRtaW5OYW1lIjoi5pyA6auYIiwibmlja25hbWUiOiLlpKfogIEiLCJhZG1pbklkIjoiMCIsImNoYW5uZWxJRCI6ImNoYW5uZWwwMDEiLCJleHAiOjE3MDUzOTEwNTl9.Us2XxQXyxr-Nqfs1hvxcvQrKAId77Ksi3ixTQDsfLNs",
+						"type": "text"
+					}
+				],
+				"url": {
+					"raw": "127.0.0.1:8081/GetAllRoleList?page=1&limit=2&sort=create_time desc",
+					"host": [
+						"127",
+						"0",
+						"0",
+						"1"
+					],
+					"port": "8081",
+					"path": [
+						"GetAllRoleList"
+					],
+					"query": [
+						{
+							"key": "page",
+							"value": "1"
+						},
+						{
+							"key": "limit",
+							"value": "2"
+						},
+						{
+							"key": "sort",
+							"value": "create_time desc"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "查詢角色權限",
+			"protocolProfileBehavior": {
+				"disableBodyPruning": true
+			},
+			"request": {
+				"method": "GET",
+				"header": [
+					{
+						"key": "Authorization",
+						"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6ImFkbWluIiwiYWRtaW5OYW1lIjoi5pyA6auYIiwibmlja25hbWUiOiLlpKfogIEiLCJhZG1pbklkIjoiMCIsImNoYW5uZWxJRCI6ImNoYW5uZWwwMDEiLCJleHAiOjE3MDYwOTI5Njh9.6xpfFewksob4xTCDO0aD7fDFiXwdL4FuIYn54Da86kU",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "formdata",
+					"formdata": [
+						{
+							"key": "roleId",
+							"value": "1",
+							"type": "text"
+						}
+					]
+				},
+				"url": {
+					"raw": "127.0.0.1:8081/GetRolePermits",
+					"host": [
+						"127",
+						"0",
+						"0",
+						"1"
+					],
+					"port": "8081",
+					"path": [
+						"GetRolePermits"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "查詢所有權限",
+			"request": {
+				"method": "GET",
+				"header": [
+					{
+						"key": "Authorization",
+						"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6ImFkbWluIiwiYWRtaW5OYW1lIjoi5pyA6auYIiwibmlja25hbWUiOiLlpKfogIEiLCJhZG1pbklkIjoiMCIsImNoYW5uZWxJRCI6ImNoYW5uZWwwMDEiLCJleHAiOjE3MDUzOTg1OTh9.tX9HO1H7WmAobh0D3pGNmuVpLFQKFsOM1kMQNNZzECo",
+						"type": "text"
+					}
+				],
+				"url": {
+					"raw": "127.0.0.1:8081/GetAllPermitList?page=1&limit=2&sort=desc",
+					"host": [
+						"127",
+						"0",
+						"0",
+						"1"
+					],
+					"port": "8081",
+					"path": [
+						"GetAllPermitList"
+					],
+					"query": [
+						{
+							"key": "page",
+							"value": "1"
+						},
+						{
+							"key": "limit",
+							"value": "2"
+						},
+						{
+							"key": "sort",
+							"value": "desc"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "查詢管理員擁有的角色",
+			"protocolProfileBehavior": {
+				"disableBodyPruning": true
+			},
+			"request": {
+				"method": "GET",
+				"header": [
+					{
+						"key": "Authorization",
+						"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6ImFkbWluIiwiYWRtaW5OYW1lIjoi5pyA6auYIiwibmlja25hbWUiOiLlpKfogIEiLCJhZG1pbklkIjoiMCIsImNoYW5uZWxJRCI6ImNoYW5uZWwwMDEiLCJleHAiOjE3MDU5MDI3NDR9.dKnDSJmo3lbt5vZp-HJeuX1fFYFUmtpyVXGGShH5kWo",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "formdata",
+					"formdata": [
+						{
+							"key": "adminId",
+							"value": "0",
+							"type": "text"
+						}
+					]
+				},
+				"url": {
+					"raw": "127.0.0.1:8081/GetAdminRole?adminId=0",
+					"host": [
+						"127",
+						"0",
+						"0",
+						"1"
+					],
+					"port": "8081",
+					"path": [
+						"GetAdminRole"
+					],
+					"query": [
+						{
+							"key": "adminId",
+							"value": "0"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "查詢管理員額外設置的權限",
+			"protocolProfileBehavior": {
+				"disableBodyPruning": true
+			},
+			"request": {
+				"method": "GET",
+				"header": [
+					{
+						"key": "Authorization",
+						"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6ImFkbWluIiwiYWRtaW5OYW1lIjoi5pyA6auYIiwibmlja25hbWUiOiLlpKfogIEiLCJhZG1pbklkIjoiMCIsImNoYW5uZWxJRCI6ImNoYW5uZWwwMDEiLCJleHAiOjE3MDU5MDM1OTF9.CDg0YZk8XIUeUJ2U9CZuXFJzgezw3-QWr6RmlCeUi3s",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "formdata",
+					"formdata": [
+						{
+							"key": "adminId",
+							"value": "0",
+							"type": "text"
+						}
+					]
+				},
+				"url": {
+					"raw": "127.0.0.1:8081/GetAdminExtraPermits",
+					"host": [
+						"127",
+						"0",
+						"0",
+						"1"
+					],
+					"port": "8081",
+					"path": [
+						"GetAdminExtraPermits"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "查詢指定管理員所有的權限(包含角色)",
+			"protocolProfileBehavior": {
+				"disableBodyPruning": true
+			},
+			"request": {
+				"method": "GET",
+				"header": [
+					{
+						"key": "Authorization",
+						"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6ImFkbWluIiwiYWRtaW5OYW1lIjoi5pyA6auYIiwibmlja25hbWUiOiLlpKfogIEiLCJhZG1pbklkIjoiMCIsImNoYW5uZWxJRCI6ImNoYW5uZWwwMDEiLCJleHAiOjE3MDU5MDUyMDR9.7lIrk5hXqRWUODno-TKfgsnxujMMZ0j8RF5w7z7J-dM",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "formdata",
+					"formdata": [
+						{
+							"key": "adminId",
+							"value": "0",
+							"type": "text"
+						}
+					]
+				},
+				"url": {
+					"raw": "127.0.0.1:8081/GetAdminAllPermits",
+					"host": [
+						"127",
+						"0",
+						"0",
+						"1"
+					],
+					"port": "8081",
+					"path": [
+						"GetAdminAllPermits"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "添加管理員",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Authorization",
+						"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6ImFkbWluIiwiYWRtaW5OYW1lIjoi5pyA6auYIiwibmlja25hbWUiOiLlpKfogIEiLCJhZG1pbklkIjoiMCIsImNoYW5uZWxJRCI6ImNoYW5uZWwwMDEiLCJleHAiOjE3MDU5OTQyODJ9.ilYscGlO5qgdflef-EkZ_VqDCWbwvQlrePoqFHN9DZQ",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n  \"username\": \"tony\",\n  \"password\": \"12345678\",\n  \"adminName\": \"tonyName\",\n  \"nickName\": \"nickTony\"\n\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "127.0.0.1:8081/AddAdmin?Authorization=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6ImFkbWluIiwiYWRtaW5OYW1lIjoi5pyA6auYIiwibmlja25hbWUiOiLlpKfogIEiLCJhZG1pbklkIjoiMCIsImNoYW5uZWxJRCI6ImNoYW5uZWwwMDEiLCJleHAiOjE3MDU5ODI5Mjl9.G1ulLYJRl043D0eT4vUnv9OudZswIUhkRexrWMTXxMQ",
+					"host": [
+						"127",
+						"0",
+						"0",
+						"1"
+					],
+					"port": "8081",
+					"path": [
+						"AddAdmin"
+					],
+					"query": [
+						{
+							"key": "Authorization",
+							"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6ImFkbWluIiwiYWRtaW5OYW1lIjoi5pyA6auYIiwibmlja25hbWUiOiLlpKfogIEiLCJhZG1pbklkIjoiMCIsImNoYW5uZWxJRCI6ImNoYW5uZWwwMDEiLCJleHAiOjE3MDU5ODI5Mjl9.G1ulLYJRl043D0eT4vUnv9OudZswIUhkRexrWMTXxMQ"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "添加角色",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Authorization",
+						"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6ImFkbWluIiwiYWRtaW5OYW1lIjoi5pyA6auYIiwibmlja25hbWUiOiLlpKfogIEiLCJhZG1pbklkIjoiMCIsImNoYW5uZWxJRCI6ImNoYW5uZWwwMDEiLCJleHAiOjE3MDUzOTY5MjB9.R6dIX6RmPWkt6dboP1y9-V9NlR7FvGZjoTCflDgMclg",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"role_key\" : \"TESTKEY\",\n    \"role_name\": \"TESTNAME\",\n    \"role_status\": 1\n    \n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "127.0.0.1:8081/AddRole",
+					"host": [
+						"127",
+						"0",
+						"0",
+						"1"
+					],
+					"port": "8081",
+					"path": [
+						"AddRole"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "為角色添加權限",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Authorization",
+						"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6ImFkbWluIiwiYWRtaW5OYW1lIjoi5pyA6auYIiwibmlja25hbWUiOiLlpKfogIEiLCJhZG1pbklkIjoiMCIsImNoYW5uZWxJRCI6ImNoYW5uZWwwMDEiLCJleHAiOjE3MDU0NjA4NTB9.8hWhnYMgnzXfZ11vPzLzPivpodCz6NjvkvGwhoqhkTQ",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n  \"roleId\": \"7\",\n  \"permitIds\": [\"1\", \"2\",\"6\"]\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "127.0.0.1:8081/AddRolePermits",
+					"host": [
+						"127",
+						"0",
+						"0",
+						"1"
+					],
+					"port": "8081",
+					"path": [
+						"AddRolePermits"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "為管理員添加角色",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Authorization",
+						"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6ImFkbWluIiwiYWRtaW5OYW1lIjoi5pyA6auYIiwibmlja25hbWUiOiLlpKfogIEiLCJhZG1pbklkIjoiMCIsImNoYW5uZWxJRCI6ImNoYW5uZWwwMDEiLCJleHAiOjE3MDU1NjMwNjF9.y0_X33TipKyD_i7WF_2jqlvEwIPm3S0SR9pzSNAThcU",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n  \"adminId\": \"0\",\n  \"roleIds\": [\"1\", \"2\"]\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "127.0.0.1:8081/AddAdminRoles",
+					"host": [
+						"127",
+						"0",
+						"0",
+						"1"
+					],
+					"port": "8081",
+					"path": [
+						"AddAdminRoles"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "為管理員添加額外權限",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Authorization",
+						"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6ImFkbWluIiwiYWRtaW5OYW1lIjoi5pyA6auYIiwibmlja25hbWUiOiLlpKfogIEiLCJhZG1pbklkIjoiMCIsImNoYW5uZWxJRCI6ImNoYW5uZWwwMDEiLCJleHAiOjE3MDU4NDU4NTB9.Cocfsrsk4qcOHX4loaO67l85hapu9uNpJeZfUvmnOTQ",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n  \"adminId\": \"0\",\n  \"permitsIds\": [\"1\", \"2\",\"4\"]\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "127.0.0.1:8081/AddAdminPermits",
+					"host": [
+						"127",
+						"0",
+						"0",
+						"1"
+					],
+					"port": "8081",
+					"path": [
+						"AddAdminPermits"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "移除角色的權限",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Authorization",
+						"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6ImFkbWluIiwiYWRtaW5OYW1lIjoi5pyA6auYIiwibmlja25hbWUiOiLlpKfogIEiLCJhZG1pbklkIjoiMCIsImNoYW5uZWxJRCI6ImNoYW5uZWwwMDEiLCJleHAiOjE3MDU5MTQ5NTJ9.kiNNo9qWRujfyhJU9KA3JDfqBwDullk0uy2w1BSw4JA",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n  \"roleId\": \"1\",\n  \"permitsIds\": [\"2\",\"6\"]\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "127.0.0.1:8081/RemoveRolePermits",
+					"host": [
+						"127",
+						"0",
+						"0",
+						"1"
+					],
+					"port": "8081",
+					"path": [
+						"RemoveRolePermits"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "移除管理員額外的權限",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Authorization",
+						"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6ImFkbWluIiwiYWRtaW5OYW1lIjoi5pyA6auYIiwibmlja25hbWUiOiLlpKfogIEiLCJhZG1pbklkIjoiMCIsImNoYW5uZWxJRCI6ImNoYW5uZWwwMDEiLCJleHAiOjE3MDU5MTkwOTF9.5gjTCf4CSoIkBGtpjEk1gZmgZFbiHQNkSTK8jcU56y4",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n  \"adminId\": \"0\",\n  \"permitsIds\": [\"1\", \"2\",\"3\"]\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "127.0.0.1:8081/RemoveAdminPermits",
+					"host": [
+						"127",
+						"0",
+						"0",
+						"1"
+					],
+					"port": "8081",
+					"path": [
+						"RemoveAdminPermits"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "移除管理員的角色",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Authorization",
+						"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6ImFkbWluIiwiYWRtaW5OYW1lIjoi5pyA6auYIiwibmlja25hbWUiOiLlpKfogIEiLCJhZG1pbklkIjoiMCIsImNoYW5uZWxJRCI6ImNoYW5uZWwwMDEiLCJleHAiOjE3MDYwNjk1Njl9.D5GJI_JGUixYAv68Zk9nWDIYM1oiYEYQyzX90dU-ptI",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n  \"adminId\": \"1\",\n  \"roleIds\": [\"0\"]\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "127.0.0.1:8081/RemoveAdminRoles",
+					"host": [
+						"127",
+						"0",
+						"0",
+						"1"
+					],
+					"port": "8081",
+					"path": [
+						"RemoveAdminRoles"
+					]
+				}
+			},
+			"response": []
+		}
+	]
+}
