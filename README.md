@@ -1,14 +1,45 @@
 # GO-AdminPro
 GO - 後台管理
 
-bcrypt
 
-sonyflake
+## 後端技術概覽:
+-  Bcrypt : 一種用於安全存儲和驗證密碼的哈希函數，特別適用於登錄密碼的加密和驗證過程<br />
+-  Sonyflake : Golang 中的全域性唯一 ID 生成器，用於生成唯一的分散式 ID，包含時間戳和機器 ID<br />
+-  Gorm : Golang 中的資料庫 ORM 操作庫，提供了簡化的 API 來執行資料庫操作，包括事務支援<br />
+-  Viper : 一個配置管理庫，支援讀取不同資料來源和格式的設定文件，提供了方便的方法來處理應用程式配置<br />
+-  jwt-go : 一個用於 Golang 的 JSON Web Token (JWT) 實現庫，用於生成和驗證 JWT，可用於實現使用者驗證和生成安全令牌 <br />
 
 
-admin 全
-超管 比admin少了添加管理員
-普管 只能查詢
+## 運行項目:
+* 需要先安裝 docker-compose<br />
+
+### Docker Compose 運行前需要加上虛擬內部網域
+docker network create --subnet=192.168.200.0/24 redis-cluster-net<br />
+
+### Mysql5.7
+
+進到目錄: 
+cd GO-AdminPro/docker/goAdminMysql57/docker-compose.yml
+
+執行:
+dokcer compose up -d 
+
+* 完成後會自動添加表和預設data<br />
+
+
+
+
+
+### 測試帳號
+-最高管理員 admin : 12345678<br />
+-超級管理員 manager : 12345678<br />
+
+
+### 預設幾色:
+- ADMIN : 可以使用全部權限<br />
+- SUPER_MANAGER : 除了創建管理員 其他權限全部都可使用<br />
+- NORMAL_MANAGER : 只能使用查詢相關權限<br />
+- USER : 佔無任何權限<br />
 
 
 ## 權限關係總覽圖：
