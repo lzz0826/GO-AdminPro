@@ -46,6 +46,8 @@
 
 ## 運行項目:
 * 需要先安裝 docker-compose<br />
+* 配置文件路徑: GO-AdminPro/server/config.yaml<br />
+
 
 <br />
 
