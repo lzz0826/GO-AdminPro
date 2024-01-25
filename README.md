@@ -54,7 +54,7 @@ dokcer compose up -d
 ## 資源：
 PostMan引入檔 : GO-AdminPro/postman/GoAdminPro.postman_collection.json
 
-Mysqk 初始 : /Users/sai/GolandProjects/GO-AdminPro/db/initV1.sql
+Mysql 初始 : /Users/sai/GolandProjects/GO-AdminPro/db/initV1.sql
 
 <br />
 <br />
