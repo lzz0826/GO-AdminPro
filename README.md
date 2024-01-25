@@ -51,6 +51,13 @@ dokcer compose up -d
 <br />
 <br />
 
+## 資源：
+PostMan引入檔 : GO-AdminPro/postman/GoAdminPro.postman_collection.json
+Mysqk 初始 : /Users/sai/GolandProjects/GO-AdminPro/db/initV1.sql
+
+<br />
+<br />
+
 ## 權限關係總覽圖：
 - 管理員可以自由添加或刪除對應角色<br />
 - 角色可以自由添加或刪除對應權限<br />
