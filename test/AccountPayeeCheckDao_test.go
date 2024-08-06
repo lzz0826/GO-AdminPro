@@ -77,7 +77,7 @@ func TestDeleteByExample(t *testing.T) {
 
 func TestInsert(t *testing.T) {
 	adminMember := adminDao.AccountPayeeCheckDao{}
-	i := 9
+	i := 4
 	s := "test"
 	time := time.Now()
 	ap := adminDao.AccountPayeeCheck{
@@ -91,15 +91,19 @@ func TestInsert(t *testing.T) {
 		UpdateTime:  &time,
 		CreatedTime: &time,
 	}
-	err := adminMember.Insert(ap)
+	insert, err := adminMember.Insert(ap)
 	if err != nil {
 		t.Fatalf("Insert 失敗：%v", err)
 	}
+
+	fmt.Println("----------------------------")
+	fmt.Printf("%+v\n", insert)
+	fmt.Println("----------------------------")
+
 }
 
 func TestInsertSelective(t *testing.T) {
 	adminMember := adminDao.AccountPayeeCheckDao{}
-	id := 16
 	uid := 99
 	typet := 1
 	description := "test"
@@ -108,7 +112,6 @@ func TestInsertSelective(t *testing.T) {
 	time := time.Now()
 
 	ap := adminDao.AccountPayeeCheck{
-		ID:          &id,
 		UID:         &uid,
 		Type:        &typet,
 		Description: &description,
@@ -118,10 +121,14 @@ func TestInsertSelective(t *testing.T) {
 		UpdateTime:  &time,
 		CreatedTime: &time,
 	}
-	err := adminMember.InsertSelective(ap)
+	insert, err := adminMember.InsertSelective(ap)
 	if err != nil {
 		t.Fatalf("InsertSelective 失敗：%v", err)
 	}
+
+	fmt.Println("----------------------------")
+	fmt.Printf("%+v\n", insert)
+	fmt.Println("----------------------------")
 }
 
 func TestCountByExample(t *testing.T) {
