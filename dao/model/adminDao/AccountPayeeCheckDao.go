@@ -4,6 +4,7 @@ import (
 	"AdminPro/common/driver"
 	"AdminPro/common/model"
 	"AdminPro/common/utils"
+	"gorm.io/gorm"
 )
 
 type AccountPayeeCheckDao struct {
@@ -13,7 +14,7 @@ func (apd *AccountPayeeCheckDao) TableName() string {
 	return "account_payee_check"
 }
 
-func (apd *AccountPayeeCheckDao) SelectByExample(uid *int, status *int, page *model.Pagination) ([]AccountPayeeCheck, error) {
+func (apd *AccountPayeeCheckDao) SelectByExample(uid *int, status *int, customizeSQL func(db *gorm.DB) *gorm.DB, page *model.Pagination) ([]AccountPayeeCheck, error) {
 	var results []AccountPayeeCheck
 	db := driver.GormDb
 
@@ -28,8 +29,7 @@ func (apd *AccountPayeeCheckDao) SelectByExample(uid *int, status *int, page *mo
 
 	query.Scopes(utils.WithPagination(page.Page, page.Limit))
 
-	//排序 未审核的优先排前面 其余按创建时间倒续
-	query.Scopes(utils.WithOrderBySQL("case when status = 0 then 0 else 1 end asc, created_time desc, id desc"))
+	query.Scopes(customizeSQL)
 
 	err := query.Find(&results).Error
 	if err != nil {

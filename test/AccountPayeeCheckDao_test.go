@@ -2,6 +2,7 @@ package test
 
 import (
 	"AdminPro/common/model"
+	"AdminPro/common/utils"
 	"AdminPro/dao/model/adminDao"
 	"fmt"
 	"strconv"
@@ -15,7 +16,10 @@ func TestSelectByExample(t *testing.T) {
 
 	pagination := model.Pagination{Page: 1, Limit: 2}
 
-	results, err := adminMember.SelectByExample(&i, &i, &pagination)
+	//排序 未审核的优先排前面 其余按创建时间倒续
+	sql := utils.WithOrderBySQL("case when status = 0 then 0 else 1 end asc, created_time desc, id desc")
+
+	results, err := adminMember.SelectByExample(&i, &i, sql, &pagination)
 
 	if err != nil {
 		t.Fatalf("TestSelectByExample 失敗：%v", err)
