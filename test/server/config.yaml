@@ -3,7 +3,7 @@ mysql:
   port: 13306
   name: admin
   user: root
-  pwd: oh_my_ody!
+  pwd: tony0204
   charset: utf8
   pool:
     max_open_conns: 20 # 连接池最大连接数

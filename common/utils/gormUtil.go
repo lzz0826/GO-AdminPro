@@ -1,7 +1,9 @@
 package utils
 
 import (
+	"fmt"
 	"gorm.io/gorm"
+	"reflect"
 	"strings"
 	"time"
 )
@@ -266,4 +268,234 @@ func WithSelectDistinct(fields ...string) func(db *gorm.DB) *gorm.DB {
 	return func(db *gorm.DB) *gorm.DB {
 		return db.Select(fields).Distinct()
 	}
+}
+
+/**
+  动态拼接
+*/
+//MAP 空直判断 忽略空值 (构造用指针)
+func BuildNotNullMap(obj interface{}) map[string]interface{} {
+	insertMap := make(map[string]interface{})
+	v := reflect.ValueOf(obj)
+	if v.Kind() == reflect.Ptr {
+		v = v.Elem()
+	}
+
+	if v.Kind() != reflect.Struct {
+		return insertMap
+	}
+
+	t := v.Type()
+	for i := 0; i < v.NumField(); i++ {
+		fieldValue := v.Field(i)
+		fieldType := t.Field(i)
+
+		// Check for nil pointers
+		if fieldValue.Kind() == reflect.Ptr && fieldValue.IsNil() {
+			continue
+		}
+
+		gormTag := fieldType.Tag.Get("gorm")
+		columnName := parseColumnName(gormTag)
+		if columnName == "" {
+			columnName = fieldType.Name
+		}
+
+		// Dereference pointer types
+		if fieldValue.Kind() == reflect.Ptr {
+			fieldValue = fieldValue.Elem()
+		}
+
+		insertMap[columnName] = fieldValue.Interface()
+	}
+
+	return insertMap
+}
+
+// BuildNullMap 包含指针空值处理的 map (构造用指针)
+func BuildNullMap(obj interface{}) map[string]interface{} {
+	insertMap := make(map[string]interface{})
+	v := reflect.ValueOf(obj)
+	if v.Kind() == reflect.Ptr {
+		v = v.Elem()
+	}
+
+	if v.Kind() != reflect.Struct {
+		return insertMap
+	}
+
+	t := v.Type()
+	for i := 0; i < v.NumField(); i++ {
+		fieldValue := v.Field(i)
+		fieldType := t.Field(i)
+
+		// 解析 gorm 标签获取列名
+		gormTag := fieldType.Tag.Get("gorm")
+		columnName := parseColumnName(gormTag)
+		if columnName == "" {
+			columnName = fieldType.Name
+		}
+
+		// 检查指针类型字段并处理空值
+		if fieldValue.Kind() == reflect.Ptr && fieldValue.IsNil() {
+			insertMap[columnName] = nil
+		} else {
+			// 处理指针类型字段的解引用
+			if fieldValue.Kind() == reflect.Ptr {
+				fieldValue = fieldValue.Elem()
+			}
+			insertMap[columnName] = fieldValue.Interface()
+		}
+	}
+
+	return insertMap
+}
+
+// 返回构造中非空字段的名称和值 #预设值也会加进条件(构造不使用指针)
+func GetNonEmptyFields(obj interface{}) map[string]interface{} {
+	fields := map[string]interface{}{}
+	refValue := reflect.ValueOf(obj)
+	refType := reflect.TypeOf(obj)
+
+	if refValue.Kind() != reflect.Struct {
+		panic("obj must be a struct")
+	}
+
+	for i := 0; i < refValue.NumField(); i++ {
+		field := refType.Field(i)
+		value := refValue.Field(i)
+
+		// 获取字段的gorm tag
+		gormTag := field.Tag.Get("gorm")
+		if gormTag == "" {
+			continue // 跳过没有gorm tag字段
+		}
+
+		columnName := field.Tag.Get("column")
+		if columnName == "" {
+			continue // 跳过没有column tag字段
+		}
+
+		// 根据字段类型设置条件
+		switch value.Kind() {
+		case reflect.Int, reflect.Int8, reflect.Int16, reflect.Int32, reflect.Int64:
+			if value.Int() != 0 {
+				fields[columnName] = value.Interface()
+			}
+		case reflect.String:
+			if value.String() != "" {
+				fields[columnName] = value.Interface()
+			}
+		case reflect.Float32, reflect.Float64:
+			if value.Float() != 0 {
+				fields[columnName] = value.Interface()
+			}
+		case reflect.Bool:
+			fields[columnName] = value.Interface()
+			// 添加其他类型的处理
+		}
+	}
+
+	fmt.Println(fields)
+
+	return fields
+}
+
+// WhereConditions (构造不使用指针)
+func WhereConditions(obj interface{}) func(db *gorm.DB) *gorm.DB {
+	return func(db *gorm.DB) *gorm.DB {
+		refValue := reflect.ValueOf(obj)
+		refType := reflect.TypeOf(obj)
+
+		if refValue.Kind() != reflect.Struct {
+			panic("obj must be a struct")
+		}
+
+		for i := 0; i < refValue.NumField(); i++ {
+			field := refType.Field(i)
+			value := refValue.Field(i)
+
+			// 获取字段的gorm tag
+			gormTag := field.Tag.Get("gorm")
+			if gormTag == "" {
+				continue // 跳过没有gorm tag字段?
+			}
+
+			columnName := field.Tag.Get("column")
+			if columnName == "" {
+				continue // 跳过没有column tag字段
+			}
+
+			switch value.Kind() {
+			case reflect.Int, reflect.Int8, reflect.Int16, reflect.Int32, reflect.Int64:
+				if value.Int() != 0 {
+					db = db.Where(columnName+" = ?", value.Interface())
+				}
+			case reflect.String:
+				if value.String() != "" {
+					db = db.Where(columnName+" = ?", value.Interface())
+				}
+			case reflect.Struct:
+				if field.Type == reflect.TypeOf(time.Time{}) {
+					timeValue := value.Interface().(time.Time)
+					if !timeValue.IsZero() {
+						db = db.Where(columnName+" = ?", value.Interface())
+					}
+				}
+			}
+		}
+
+		return db
+	}
+
+}
+
+// Criterion 包含查询条件的结构体
+//
+//		criteria := []Criterion{
+//		  {Condition: "age", Operation: "gt", Value: 18},
+//		  {Condition: "name", Operation: "eq", Value: "John"},
+//		  {Condition: "created_at", Operation: "between", Value: startTime, SecondValue: endTime},
+//		  {Condition: "role", Operation: "in", ListValue: []interface{}{"admin", "user"}},
+//	    }
+type Criterion struct {
+	Condition   string        // 查询条件字服串 例如 "age > ?"
+	Operation   string        // 操作符例如 "eq", "gt", "in"
+	Value       interface{}   // 值 可以式单个值或值的集合
+	SecondValue interface{}   // 第二个直 用于 betweenValue 操作
+	ListValue   []interface{} // 值的列表 用于 listValue 操作
+}
+
+// BuildDynamicQuery 根据传入得 Criterion 结构体动态构建查询条件
+func BuildDynamicQuery(db *gorm.DB, criteria []Criterion) *gorm.DB {
+	for _, criterion := range criteria {
+		switch criterion.Operation {
+		case "eq":
+			db = db.Where(criterion.Condition, criterion.Value)
+		case "gt":
+			db = db.Where(criterion.Condition+" > ?", criterion.Value)
+		case "lt":
+			db = db.Where(criterion.Condition+" < ?", criterion.Value)
+		case "between":
+			db = db.Where(criterion.Condition+" BETWEEN ? AND ?", criterion.Value, criterion.SecondValue)
+		// 处理直为列表的状态
+		case "in":
+			// ?????????
+			db = db.Where(criterion.Condition+" IN (?)", criterion.ListValue)
+		default:
+			// 其他操作符的处理
+		}
+	}
+	return db
+}
+
+// parseColumnName 解析 GORM 标签中的列名
+func parseColumnName(tag string) string {
+	parts := strings.Split(tag, ";")
+	for _, part := range parts {
+		if strings.HasPrefix(part, "column:") {
+			return strings.TrimPrefix(part, "column:")
+		}
+	}
+	return ""
 }
