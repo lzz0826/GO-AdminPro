@@ -92,6 +92,16 @@ func (apd *AccountPayeeCheckDao) DeleteByExample(id int) error {
 	return nil
 }
 
+func (apd *AccountPayeeCheckDao) DeleteByCustomizeSQL(customizeSQL func(db *gorm.DB) *gorm.DB) error {
+	db := driver.GormDb
+
+	err := db.Debug().Table(apd.TableName()).Scopes(customizeSQL).Delete(&AccountPayeeCheck{}).Error
+	if err != nil {
+		return err
+	}
+	return nil
+}
+
 // Insert 插入,包含空值(没带的属性 "会" 添加至条件中在 DB NULL)
 func (apd *AccountPayeeCheckDao) Insert(a AccountPayeeCheck) (int64, error) {
 

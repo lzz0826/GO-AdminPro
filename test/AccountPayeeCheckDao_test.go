@@ -154,6 +154,24 @@ func TestDeleteByExample(t *testing.T) {
 
 }
 
+func TestDeleteByCustomizeSQL(t *testing.T) {
+
+	adminMember := adminDao.AccountPayeeCheckDao{}
+
+	customizeSQL := func(db *gorm.DB) *gorm.DB {
+		db = db.Where("uid = ?", 1)
+		db = db.Where("status = ?", 1)
+		return db
+	}
+
+	err := adminMember.DeleteByCustomizeSQL(customizeSQL)
+
+	if err != nil {
+		t.Fatalf("DeleteByExample 失敗：%v", err)
+	}
+
+}
+
 func TestInsert(t *testing.T) {
 	adminMember := adminDao.AccountPayeeCheckDao{}
 	i := 4
