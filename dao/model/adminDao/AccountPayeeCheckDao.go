@@ -39,11 +39,30 @@ func (apd *AccountPayeeCheckDao) SelectByExample(uid *int, status *int, customiz
 	return results, nil
 }
 
-func (apd *AccountPayeeCheckDao) SelectByExample2(customizeSQL func(db *gorm.DB) *gorm.DB) ([]AccountPayeeCheck, error) {
+func (apd *AccountPayeeCheckDao) SelectByExampleSelectGeneric(customizeSQL func(db *gorm.DB) *gorm.DB) ([]AccountPayeeCheck, error) {
 	var results []AccountPayeeCheck
 
 	err := utils.SelectGeneric(apd.TableName(), customizeSQL, &results)
 
+	if err != nil {
+		return nil, err
+	}
+
+	return results, nil
+}
+
+func (apd *AccountPayeeCheckDao) SelectByExampleEX(customizeSQL func(db *gorm.DB) *gorm.DB) ([]AccountPayeeCheck, error) {
+	var results []AccountPayeeCheck
+
+	db := driver.GormDb
+
+	query := db.Debug().Model(AccountPayeeCheck{}).Table(apd.TableName())
+
+	// 使用传入的自定义查询函数
+	query = query.Scopes(customizeSQL)
+
+	// 执行查询并填充结果集
+	err := query.Find(&results).Error
 	if err != nil {
 		return nil, err
 	}
