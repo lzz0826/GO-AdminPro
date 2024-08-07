@@ -1,12 +1,31 @@
 package utils
 
 import (
+	"AdminPro/common/driver"
 	"fmt"
 	"gorm.io/gorm"
 	"reflect"
 	"strings"
 	"time"
 )
+
+// 通用SelectGeneric操作
+func SelectGeneric(tableName string, customizeSQL func(db *gorm.DB) *gorm.DB, model interface{}) error {
+	db := driver.GormDb
+
+	query := db.Debug().Model(model).Table(tableName)
+
+	// 使用传入的自定义查询函数
+	query = query.Scopes(customizeSQL)
+
+	// 执行查询并填充结果集
+	err := query.Find(model).Error
+	if err != nil {
+		return err
+	}
+
+	return nil
+}
 
 /**
   SELECT

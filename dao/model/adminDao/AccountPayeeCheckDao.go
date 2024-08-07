@@ -39,6 +39,18 @@ func (apd *AccountPayeeCheckDao) SelectByExample(uid *int, status *int, customiz
 	return results, nil
 }
 
+func (apd *AccountPayeeCheckDao) SelectByExample2(customizeSQL func(db *gorm.DB) *gorm.DB) ([]AccountPayeeCheck, error) {
+	var results []AccountPayeeCheck
+
+	err := utils.SelectGeneric(apd.TableName(), customizeSQL, &results)
+
+	if err != nil {
+		return nil, err
+	}
+
+	return results, nil
+}
+
 func (apd *AccountPayeeCheckDao) SelectByPrimaryKey(id int) (AccountPayeeCheck, error) {
 	var result AccountPayeeCheck
 	db := driver.GormDb

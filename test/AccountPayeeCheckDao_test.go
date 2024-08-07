@@ -5,6 +5,7 @@ import (
 	"AdminPro/common/utils"
 	"AdminPro/dao/model/adminDao"
 	"fmt"
+	"gorm.io/gorm"
 	"strconv"
 	"testing"
 	"time"
@@ -26,6 +27,45 @@ func TestSelectByExample(t *testing.T) {
 	}
 
 	for _, result := range results {
+		fmt.Println("----------------------------")
+		fmt.Printf("%+v\n", *result.ID)
+		fmt.Printf("%+v\n", *result.UID)
+		fmt.Printf("%+v\n", *result.Type)
+		fmt.Printf("%+v\n", *result.Description)
+		fmt.Printf("%+v\n", *result.Status)
+		fmt.Printf("%+v\n", *result.CheckID)
+		fmt.Printf("%+v\n", *result.CheckTime)
+		fmt.Printf("%+v\n", *result.UpdateTime)
+		fmt.Printf("%+v\n", *result.CreatedTime)
+		fmt.Println("----------------------------")
+	}
+}
+
+func TestSelectByExample2(t *testing.T) {
+
+	adminMember := adminDao.AccountPayeeCheckDao{}
+	uid := 1
+	status := 0
+
+	customizeSQL := func(db *gorm.DB) *gorm.DB {
+		db = db.Where("uid = ?", uid)
+		db = db.Where("status = ?", status)
+		db = db.Scopes(utils.WithPagination(1, 2))
+		db = db.Order("case when status = 0 then 0 else 1 end asc, created_time desc, id desc")
+		return db
+	}
+
+	example, err := adminMember.SelectByExample2(customizeSQL)
+
+	if err != nil {
+		fmt.Print(err.Error())
+	}
+
+	if err != nil {
+		t.Fatalf("TestSelectByExample 失敗：%v", err)
+	}
+
+	for _, result := range example {
 		fmt.Println("----------------------------")
 		fmt.Printf("%+v\n", *result.ID)
 		fmt.Printf("%+v\n", *result.UID)
