@@ -246,6 +246,24 @@ func TestCountByExample(t *testing.T) {
 
 }
 
+func TestCountByCustomizeSQL(t *testing.T) {
+	adminMember := adminDao.AccountPayeeCheckDao{}
+
+	customizeSQL := func(db *gorm.DB) *gorm.DB {
+		db = db.Where("uid = ?", 1)
+		db = db.Where("status = ?", 1)
+		return db
+	}
+
+	example, err := adminMember.CountByCustomizeSQL(customizeSQL)
+	if err != nil {
+		t.Fatalf("CountByCustomizeSQL 失敗：%v", err)
+	}
+
+	fmt.Printf(strconv.FormatInt(example, 10))
+
+}
+
 func TestUpdateByExampleSelective(t *testing.T) {
 	adminMember := adminDao.AccountPayeeCheckDao{}
 	uid := 66
@@ -272,6 +290,47 @@ func TestUpdateByExampleSelective(t *testing.T) {
 	err := adminMember.UpdateByExampleSelective(updatesReq, whereReq)
 	if err != nil {
 		t.Fatalf("UpdateByExampleSelective 失敗：%v", err)
+	}
+}
+
+func TestUpdateByCustomizeSQL(t *testing.T) {
+	adminMember := adminDao.AccountPayeeCheckDao{}
+	uid := 77
+	typet := 7
+	description := "test77"
+	status := 7
+	checkID := 7
+	timeAdmin := time.Now()
+
+	updatesReq := adminDao.AccountPayeeCheck{
+		UID:         &uid,
+		Type:        &typet,
+		Description: &description,
+		Status:      &status,
+		CheckID:     &checkID,
+		CheckTime:   &timeAdmin,
+		UpdateTime:  &timeAdmin,
+		CreatedTime: &timeAdmin,
+	}
+
+	id := 3
+	whereReq := adminDao.AccountPayeeCheck{
+		ID: &id,
+	}
+
+	specificTime := time.Date(2023, time.September, 15, 12, 0, 0, 0, time.UTC)
+
+	customizeSQL := func(db *gorm.DB) *gorm.DB {
+		db = db.Where("created_time >= ?", specificTime)
+		db = db.Where("created_time <= ?", time.Now())
+		//db = db.Where("status = ?", 1)
+
+		return db
+	}
+
+	err := adminMember.UpdateByCustomizeSQL(updatesReq, whereReq, customizeSQL)
+	if err != nil {
+		t.Fatalf("UpdateByCustomizeSQL 失敗：%v", err)
 	}
 }
 
@@ -303,6 +362,46 @@ func TestUpdateByExample(t *testing.T) {
 	err := adminMember.UpdateByExample(updatesReq, whereReq)
 	if err != nil {
 		t.Fatalf("UpdateByExample 失敗：%v", err)
+	}
+}
+func TestUpdateByExampleCustomizeSQL(t *testing.T) {
+
+	adminMember := adminDao.AccountPayeeCheckDao{}
+	uid := 888
+	typet := 8
+	description := "test888"
+	status := 888
+	checkID := 8
+	timeA := time.Now()
+	updatesReq := adminDao.AccountPayeeCheck{
+		UID:         &uid,
+		Type:        &typet,
+		Description: &description,
+		Status:      &status,
+		CheckID:     &checkID,
+		CheckTime:   &timeA,
+		UpdateTime:  &timeA,
+		CreatedTime: &timeA,
+	}
+
+	id := 2
+	whereReq := adminDao.AccountPayeeCheck{
+		ID: &id,
+	}
+
+	specificTime := time.Date(2023, time.September, 15, 12, 0, 0, 0, time.UTC)
+
+	customizeSQL := func(db *gorm.DB) *gorm.DB {
+		db = db.Where("created_time >= ?", specificTime)
+		db = db.Where("created_time <= ?", time.Now())
+		//db = db.Where("status = ?", 1)
+
+		return db
+	}
+
+	err := adminMember.UpdateByExampleCustomizeSQL(updatesReq, whereReq, customizeSQL)
+	if err != nil {
+		t.Fatalf("UpdateByExampleCustomizeSQL 失敗：%v", err)
 	}
 }
 
