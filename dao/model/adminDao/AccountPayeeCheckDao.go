@@ -186,48 +186,50 @@ func (apd *AccountPayeeCheckDao) CountByCustomizeSQL(customizeSQL func(db *gorm.
 }
 
 // UpdateByExampleSelective 更新 (没带的属性 "不会" 添加到条件中)
-func (apd *AccountPayeeCheckDao) UpdateByExampleSelective(updatesReq AccountPayeeCheck, whereReq AccountPayeeCheck) error {
+func (apd *AccountPayeeCheckDao) UpdateByExampleSelective(updatesReq AccountPayeeCheck, whereReq AccountPayeeCheck) (int64, error) {
 	db := driver.GormDb
-	err := db.Debug().Table(apd.TableName()).Where(utils.BuildNotNullMap(whereReq)).Updates(updatesReq).Error
-	if err != nil {
-		return err
+	result := db.Debug().Table(apd.TableName()).Where(utils.BuildNotNullMap(whereReq)).Updates(updatesReq)
+
+	if result.Error != nil {
+		return 0, result.Error
 	}
-	return nil
+
+	return result.RowsAffected, nil
 }
 
 // UpdateByCustomizeSQL 更新 (没带的属性 "不会" 添加到条件中)
-func (apd *AccountPayeeCheckDao) UpdateByCustomizeSQL(updatesReq AccountPayeeCheck, whereReq AccountPayeeCheck, customizeSQL func(db *gorm.DB) *gorm.DB) error {
+func (apd *AccountPayeeCheckDao) UpdateByCustomizeSQL(updatesReq AccountPayeeCheck, whereReq AccountPayeeCheck, customizeSQL func(db *gorm.DB) *gorm.DB) (int64, error) {
 	db := driver.GormDb
-	err := db.Debug().Table(apd.TableName()).Where(utils.BuildNotNullMap(whereReq)).Scopes(customizeSQL).Updates(updatesReq).Error
-	if err != nil {
-		return err
+	result := db.Debug().Table(apd.TableName()).Where(utils.BuildNotNullMap(whereReq)).Scopes(customizeSQL).Updates(updatesReq)
+	if result.Error != nil {
+		return 0, result.Error
 	}
-	return nil
+	return result.RowsAffected, nil
 }
 
 // UpdateByExample 更新 (没带的属性 "会" 添加至条件中在 DB NULL)
-func (apd *AccountPayeeCheckDao) UpdateByExample(updatesReq AccountPayeeCheck, whereReq AccountPayeeCheck) error {
+func (apd *AccountPayeeCheckDao) UpdateByExample(updatesReq AccountPayeeCheck, whereReq AccountPayeeCheck) (int64, error) {
 	db := driver.GormDb
 	upReq := utils.BuildNullMap(updatesReq)
 	//更新条件去掉id
 	delete(upReq, "id")
-	err := db.Debug().Table(apd.TableName()).Where(utils.BuildNotNullMap(whereReq)).Updates(upReq).Error
-	if err != nil {
-		return err
+	result := db.Debug().Table(apd.TableName()).Where(utils.BuildNotNullMap(whereReq)).Updates(upReq)
+	if result.Error != nil {
+		return 0, result.Error
 	}
-	return nil
+	return result.RowsAffected, nil
 }
 
-func (apd *AccountPayeeCheckDao) UpdateByExampleCustomizeSQL(updatesReq AccountPayeeCheck, whereReq AccountPayeeCheck, customizeSQL func(db *gorm.DB) *gorm.DB) error {
+func (apd *AccountPayeeCheckDao) UpdateByExampleCustomizeSQL(updatesReq AccountPayeeCheck, whereReq AccountPayeeCheck, customizeSQL func(db *gorm.DB) *gorm.DB) (int64, error) {
 	db := driver.GormDb
 	upReq := utils.BuildNullMap(updatesReq)
 	//更新条件去掉id
 	delete(upReq, "id")
-	err := db.Debug().Table(apd.TableName()).Where(utils.BuildNotNullMap(whereReq)).Scopes(customizeSQL).Updates(upReq).Error
-	if err != nil {
-		return err
+	result := db.Debug().Table(apd.TableName()).Where(utils.BuildNotNullMap(whereReq)).Scopes(customizeSQL).Updates(upReq)
+	if result.Error != nil {
+		return 0, result.Error
 	}
-	return nil
+	return result.RowsAffected, nil
 }
 
 // UpdateByPrimaryKeySelective 更新 (没带的属性 "不会" 添加到条件中)
@@ -241,14 +243,14 @@ func (apd *AccountPayeeCheckDao) UpdateByPrimaryKeySelective(id int, updatesReq 
 }
 
 // UpdateByPrimaryKey 更新  (没带的属性 "会" 添加至条件中在 DB NULL)
-func (apd *AccountPayeeCheckDao) UpdateByPrimaryKey(id int, updatesReq AccountPayeeCheck) error {
+func (apd *AccountPayeeCheckDao) UpdateByPrimaryKey(id int, updatesReq AccountPayeeCheck) (int64, error) {
 	db := driver.GormDb
 	upReq := utils.BuildNullMap(updatesReq)
 	//更新条件去掉id
 	delete(upReq, "id")
-	err := db.Table(apd.TableName()).Where("id = ?", id).Updates(upReq).Error
-	if err != nil {
-		return err
+	result := db.Table(apd.TableName()).Where("id = ?", id).Updates(upReq)
+	if result.Error != nil {
+		return 0, result.Error
 	}
-	return nil
+	return result.RowsAffected, nil
 }

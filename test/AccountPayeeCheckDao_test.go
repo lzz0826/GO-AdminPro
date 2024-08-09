@@ -266,7 +266,7 @@ func TestCountByCustomizeSQL(t *testing.T) {
 
 func TestUpdateByExampleSelective(t *testing.T) {
 	adminMember := adminDao.AccountPayeeCheckDao{}
-	uid := 66
+	uid := 667
 	typet := 6
 	description := "test6"
 	status := 6
@@ -283,14 +283,17 @@ func TestUpdateByExampleSelective(t *testing.T) {
 		CreatedTime: &time,
 	}
 
-	id := 15
+	id := 3
 	whereReq := adminDao.AccountPayeeCheck{
 		ID: &id,
 	}
-	err := adminMember.UpdateByExampleSelective(updatesReq, whereReq)
+	selective, err := adminMember.UpdateByExampleSelective(updatesReq, whereReq)
 	if err != nil {
 		t.Fatalf("UpdateByExampleSelective 失敗：%v", err)
 	}
+
+	fmt.Printf(strconv.FormatInt(selective, 10))
+
 }
 
 func TestUpdateByCustomizeSQL(t *testing.T) {
@@ -328,10 +331,12 @@ func TestUpdateByCustomizeSQL(t *testing.T) {
 		return db
 	}
 
-	err := adminMember.UpdateByCustomizeSQL(updatesReq, whereReq, customizeSQL)
+	rep, err := adminMember.UpdateByCustomizeSQL(updatesReq, whereReq, customizeSQL)
 	if err != nil {
 		t.Fatalf("UpdateByCustomizeSQL 失敗：%v", err)
 	}
+	fmt.Printf(strconv.FormatInt(rep, 10))
+
 }
 
 func TestUpdateByExample(t *testing.T) {
@@ -359,10 +364,12 @@ func TestUpdateByExample(t *testing.T) {
 		ID: &id,
 	}
 
-	err := adminMember.UpdateByExample(updatesReq, whereReq)
+	example, err := adminMember.UpdateByExample(updatesReq, whereReq)
 	if err != nil {
 		t.Fatalf("UpdateByExample 失敗：%v", err)
 	}
+	fmt.Printf(strconv.FormatInt(example, 10))
+
 }
 func TestUpdateByExampleCustomizeSQL(t *testing.T) {
 
@@ -384,7 +391,7 @@ func TestUpdateByExampleCustomizeSQL(t *testing.T) {
 		CreatedTime: &timeA,
 	}
 
-	id := 2
+	id := 4
 	whereReq := adminDao.AccountPayeeCheck{
 		ID: &id,
 	}
@@ -399,10 +406,13 @@ func TestUpdateByExampleCustomizeSQL(t *testing.T) {
 		return db
 	}
 
-	err := adminMember.UpdateByExampleCustomizeSQL(updatesReq, whereReq, customizeSQL)
+	rep, err := adminMember.UpdateByExampleCustomizeSQL(updatesReq, whereReq, customizeSQL)
 	if err != nil {
 		t.Fatalf("UpdateByExampleCustomizeSQL 失敗：%v", err)
 	}
+
+	fmt.Printf(strconv.FormatInt(rep, 10))
+
 }
 
 func TestUpdateByPrimaryKeySelective(t *testing.T) {
@@ -447,8 +457,9 @@ func TestUpdateByPrimaryKey(t *testing.T) {
 
 	id := 14
 
-	err := adminMember.UpdateByPrimaryKey(id, updatesReq)
+	rep, err := adminMember.UpdateByPrimaryKey(id, updatesReq)
 	if err != nil {
 		t.Fatalf("UpdateByPrimaryKeySelective 失敗：%v", err)
 	}
+	fmt.Printf(strconv.FormatInt(rep, 10))
 }
