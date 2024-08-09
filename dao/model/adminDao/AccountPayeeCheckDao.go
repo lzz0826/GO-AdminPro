@@ -4,6 +4,8 @@ import (
 	"AdminPro/common/driver"
 	"AdminPro/common/model"
 	"AdminPro/common/utils"
+	"database/sql"
+	"fmt"
 	"gorm.io/gorm"
 )
 
@@ -249,6 +251,37 @@ func (apd *AccountPayeeCheckDao) UpdateByPrimaryKey(id int, updatesReq AccountPa
 	//更新条件去掉id
 	delete(upReq, "id")
 	result := db.Table(apd.TableName()).Where("id = ?", id).Updates(upReq)
+	if result.Error != nil {
+		return 0, result.Error
+	}
+	return result.RowsAffected, nil
+}
+
+//(没带的属性 "会" 添加至条件中在 DB NULL)
+func (apd *AccountPayeeCheckDao) UpdateDBNullTest(uid, status, checkID *int, description *string) (int64, error) {
+	updates := map[string]interface{}{}
+
+	//如果没有添加NullString会被忽略 不会添加到条件中
+	if description != nil {
+		updates["description"] = sql.NullString{String: *description, Valid: true}
+	} else {
+		updates["description"] = sql.NullString{Valid: false}
+	}
+
+	//如果没有添加NullInt32会被忽略 不会添加到条件中
+	if status != nil {
+		updates["status"] = sql.NullInt32{Int32: int32(*status), Valid: true}
+	} else {
+		updates["status"] = sql.NullInt32{Valid: false}
+	}
+
+	if len(updates) == 0 {
+		return 0, fmt.Errorf("no fields to update")
+	}
+
+	db := driver.GormDb
+	//uid check_id 查询条件会自动代收寻条件 WHERE NULL
+	result := db.Debug().Table(apd.TableName()).Where("uid = ? AND check_id = ?", uid, checkID).Updates(updates)
 	if result.Error != nil {
 		return 0, result.Error
 	}

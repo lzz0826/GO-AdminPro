@@ -463,3 +463,20 @@ func TestUpdateByPrimaryKey(t *testing.T) {
 	}
 	fmt.Printf(strconv.FormatInt(rep, 10))
 }
+
+func TestUpdateDBNullTest(t *testing.T) {
+
+	adminMember := adminDao.AccountPayeeCheckDao{}
+
+	//var uid *int
+	uid := 1
+	var status *int
+	//status := 2
+	description := "test"
+	checkID := 3
+	rep, err := adminMember.UpdateDBNullTest(&uid, status, &checkID, &description)
+	if err != nil {
+		t.Fatalf("UpdateByPrimaryKeySelective 失敗：%v", err)
+	}
+	fmt.Printf(strconv.FormatInt(rep, 10))
+}
