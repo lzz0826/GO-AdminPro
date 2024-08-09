@@ -280,7 +280,7 @@ func (apd *AccountPayeeCheckDao) UpdateDBNullTest(uid, status, checkID *int, des
 	}
 
 	db := driver.GormDb
-	//uid check_id 查询条件会自动代收寻条件 WHERE NULL
+	//uid check_id 查询条件会自动代收寻条件  WHERE uid = NULL AND check_id = 3
 	result := db.Debug().Table(apd.TableName()).Where("uid = ? AND check_id = ?", uid, checkID).Updates(updates)
 	if result.Error != nil {
 		return 0, result.Error

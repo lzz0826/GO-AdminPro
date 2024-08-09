@@ -470,9 +470,13 @@ func TestUpdateDBNullTest(t *testing.T) {
 
 	//var uid *int
 	uid := 1
+
 	var status *int
 	//status := 2
+
+	//var description *string
 	description := "test"
+
 	checkID := 3
 	rep, err := adminMember.UpdateDBNullTest(&uid, status, &checkID, &description)
 	if err != nil {
