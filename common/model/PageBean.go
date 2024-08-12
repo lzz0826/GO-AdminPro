@@ -1,14 +1,5 @@
 package model
 
-/**
- * PageBean
- *
- * @param total    总记录数
- * @param page     总页数
- * @param size     每页记录数
- * @param  interface{}      数据列表
- */
-
 type PageBean struct {
 	Total      int64       `json:"total"`      // 总记录数
 	Pages      int         `json:"pages"`      // 总页数
@@ -42,6 +33,13 @@ func Empty() *PageBean {
 	}
 }
 
+/**
+ * 生成PageBean
+ * @param total    总记录数
+ * @param page     當前頁
+ * @param size     頁大小
+ * @param  interface{} 范行
+ */
 // Of 根据传入的参数创建并返回一个PageBean实例
 func Of(total int64, page, size int, beanList interface{}) *PageBean {
 	pb := &PageBean{}
