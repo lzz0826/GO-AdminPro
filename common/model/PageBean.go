@@ -4,7 +4,7 @@ package model
  * PageBean
  *
  * @param total    总记录数
- * @param page     当前页码
+ * @param page     总页数
  * @param size     每页记录数
  * @param  interface{}      数据列表
  */
