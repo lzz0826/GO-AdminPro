@@ -5,8 +5,10 @@ import (
 	"AdminPro/common/model"
 	"AdminPro/common/utils"
 	"AdminPro/dao/model/adminDao"
+	"encoding/json"
 	"fmt"
 	"gorm.io/gorm"
+	"log"
 	"strconv"
 	"testing"
 	"time"
@@ -95,7 +97,7 @@ func TestSelectByExampleEX(t *testing.T) {
 		return db
 	}
 
-	example, err := adminMember.SelectByExampleEX(customizeSQL)
+	example, err := adminMember.SelectByExampleCustomizeSQL(customizeSQL)
 
 	if err != nil {
 		fmt.Print(err.Error())
@@ -484,6 +486,51 @@ func TestUpdateDBNullTest(t *testing.T) {
 		t.Fatalf("UpdateByPrimaryKeySelective 失敗：%v", err)
 	}
 	fmt.Printf(strconv.FormatInt(rep, 10))
+}
+
+func TestFindRecordByStatusAndUey(t *testing.T) {
+	adminMember := adminDao.AccountPayeeCheckDao{}
+	uid := "1"
+	status := 2
+
+	page := 2
+	pageSize := 3
+	rep, err := adminMember.FindRecordByStatusAndUey(status, uid, page, pageSize)
+	if err != nil {
+		t.Fatalf("FindRecordByStatusAndUey 失敗：%v", err)
+	}
+
+	fmt.Println("----------------------------")
+	fmt.Printf("总记录数： %+v\n", rep.Total)
+	fmt.Printf("总页数： %+v\n", rep.Pages)
+	fmt.Printf("是否最后一页： %+v\n", rep.IsLastPage)
+
+	list := rep.BeanList
+
+	// 将 BeanList 转换为 []AccountPayeeCheck
+	var accountPayeeCheck []adminDao.AccountPayeeCheck
+	beanListJson, err := json.Marshal(list)
+	if err != nil {
+		log.Fatal(err)
+	}
+
+	err = json.Unmarshal(beanListJson, &accountPayeeCheck)
+	if err != nil {
+		log.Fatal(err)
+	}
+	for _, result := range accountPayeeCheck {
+		fmt.Println("----------------------------")
+		fmt.Printf("%+v\n", *result.ID)
+		fmt.Printf("%+v\n", *result.UID)
+		fmt.Printf("%+v\n", *result.Type)
+		fmt.Printf("%+v\n", *result.Description)
+		fmt.Printf("%+v\n", *result.Status)
+		fmt.Printf("%+v\n", *result.CheckID)
+		fmt.Printf("%+v\n", *result.CheckTime)
+		fmt.Printf("%+v\n", *result.UpdateTime)
+		fmt.Printf("%+v\n", *result.CreatedTime)
+		fmt.Println("----------------------------")
+	}
 }
 
 func TestOnUserOfClub(t *testing.T) {

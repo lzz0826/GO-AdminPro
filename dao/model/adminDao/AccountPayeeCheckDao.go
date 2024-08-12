@@ -53,7 +53,7 @@ func (apd *AccountPayeeCheckDao) SelectByExampleSelectGeneric(customizeSQL func(
 	return results, nil
 }
 
-func (apd *AccountPayeeCheckDao) SelectByExampleEX(customizeSQL func(db *gorm.DB) *gorm.DB) ([]AccountPayeeCheck, error) {
+func (apd *AccountPayeeCheckDao) SelectByExampleCustomizeSQL(customizeSQL func(db *gorm.DB) *gorm.DB) ([]AccountPayeeCheck, error) {
 	var results []AccountPayeeCheck
 
 	db := driver.GormDb
@@ -286,6 +286,44 @@ func (apd *AccountPayeeCheckDao) UpdateDBNullTest(uid, status, checkID *int, des
 		return 0, result.Error
 	}
 	return result.RowsAffected, nil
+}
+
+func (apd *AccountPayeeCheckDao) FindRecordByStatusAndUey(status int, uid string, page int, pageSize int) (model.PageBean, error) {
+
+	bean := model.PageBean{}
+
+	buildQuery := func(db *gorm.DB) *gorm.DB {
+		if status >= 0 {
+			db = db.Where("status = ?", status)
+		}
+		if uid != "" {
+			db = db.Where("uid = ?", uid)
+		}
+		return db
+	}
+
+	totalRecords, err := apd.CountByCustomizeSQL(buildQuery)
+
+	customizeSQL := func(db *gorm.DB) *gorm.DB {
+		db = db.Scopes(buildQuery)
+		db = db.Scopes(utils.WithPagination(page, pageSize))
+		return db
+	}
+	example, err := apd.SelectByExampleCustomizeSQL(customizeSQL)
+
+	if err != nil {
+		return bean, err
+	}
+
+	if err != nil {
+		return bean, err
+	}
+
+	fmt.Printf("totalRecords： %+v\n", totalRecords)
+
+	pageBean := model.Of(totalRecords, page, pageSize, example)
+
+	return *pageBean, nil
 }
 
 //打印出的SQL
