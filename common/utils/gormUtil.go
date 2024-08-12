@@ -518,3 +518,12 @@ func parseColumnName(tag string) string {
 	}
 	return ""
 }
+
+//[]int64 转 []interface{}
+func ConvertToInterfaceSlice(ids []int64) []interface{} {
+	result := make([]interface{}, len(ids))
+	for i, id := range ids {
+		result[i] = id
+	}
+	return result
+}

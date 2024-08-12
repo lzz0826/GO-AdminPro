@@ -287,3 +287,41 @@ func (apd *AccountPayeeCheckDao) UpdateDBNullTest(uid, status, checkID *int, des
 	}
 	return result.RowsAffected, nil
 }
+
+//打印出的SQL
+//SELECT aa.id AS clubId,
+//COUNT(CASE WHEN apc.status = '1' AND apc.type = '2' THEN 1 ELSE NULL END) AS normalNum,
+//COUNT(CASE WHEN apc.status = '1' AND apc.type = '2' THEN 1 ELSE NULL END) AS opNum
+//FROM account_payee_check apc
+//LEFT JOIN admin_admin aa ON apc.uid = aa.id
+//WHERE aa.id IN (1,2,3)
+//GROUP BY aa.id
+func CustomizeSQL(db *gorm.DB, clubIdLst []int64) ([]ClubOnUserStatistics, error) {
+	// Create a comma-separated list of club IDs for the SQL IN clause
+	clubIdPlaceholders := ""
+	for i := range clubIdLst {
+		if i > 0 {
+			clubIdPlaceholders += ","
+		}
+		clubIdPlaceholders += "?"
+	}
+
+	// Construct the raw SQL query
+	query := `
+		SELECT aa.id AS clubId,
+		       COUNT(CASE WHEN apc.status = '1' AND apc.type = '2' THEN 1 ELSE NULL END) AS normalNum,
+		       COUNT(CASE WHEN apc.status = '1' AND apc.type = '2' THEN 1 ELSE NULL END) AS opNum
+		FROM account_payee_check apc
+		LEFT JOIN admin_admin aa ON apc.uid = aa.id
+		WHERE aa.id IN (` + clubIdPlaceholders + `)
+		GROUP BY aa.id
+	`
+
+	// Execute the raw SQL query and scan the results into a slice of ClubStats
+	var stats []ClubOnUserStatistics
+	if err := db.Debug().Raw(query, utils.ConvertToInterfaceSlice(clubIdLst)...).Scan(&stats).Error; err != nil {
+		return nil, err
+	}
+
+	return stats, nil
+}

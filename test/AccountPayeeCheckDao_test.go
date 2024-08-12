@@ -1,6 +1,7 @@
 package test
 
 import (
+	"AdminPro/common/driver"
 	"AdminPro/common/model"
 	"AdminPro/common/utils"
 	"AdminPro/dao/model/adminDao"
@@ -483,4 +484,26 @@ func TestUpdateDBNullTest(t *testing.T) {
 		t.Fatalf("UpdateByPrimaryKeySelective 失敗：%v", err)
 	}
 	fmt.Printf(strconv.FormatInt(rep, 10))
+}
+
+func TestOnUserOfClub(t *testing.T) {
+	db := driver.GormDb
+
+	clubIdLst := []int64{1, 2, 3}
+
+	club, err := adminDao.CustomizeSQL(db, clubIdLst)
+
+	if err != nil {
+		fmt.Printf("%+v\n", err)
+
+	}
+
+	for _, result := range club {
+		fmt.Println("----------------------------")
+		fmt.Printf("%+v\n", result.ClubId)
+		fmt.Printf("%+v\n", result.OpNum)
+		fmt.Printf("%+v\n", result.NormalNum)
+		fmt.Println("----------------------------")
+	}
+
 }
