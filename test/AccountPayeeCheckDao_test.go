@@ -493,8 +493,8 @@ func TestFindRecordByStatusAndUey(t *testing.T) {
 	uid := "1"
 	status := 2
 
-	page := 2
-	pageSize := 3
+	page := 3
+	pageSize := 2
 	rep, err := adminMember.FindRecordByStatusAndUey(status, uid, page, pageSize)
 	if err != nil {
 		t.Fatalf("FindRecordByStatusAndUey 失敗：%v", err)

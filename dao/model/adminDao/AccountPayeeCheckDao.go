@@ -315,10 +315,6 @@ func (apd *AccountPayeeCheckDao) FindRecordByStatusAndUey(status int, uid string
 		return bean, err
 	}
 
-	if err != nil {
-		return bean, err
-	}
-
 	fmt.Printf("totalRecords： %+v\n", totalRecords)
 
 	pageBean := model.Of(totalRecords, page, pageSize, example)
