@@ -180,7 +180,7 @@ func (apd *AccountPayeeCheckDao) CountByExample(a AccountPayeeCheck) (int64, err
 func (apd *AccountPayeeCheckDao) CountByCustomizeSQL(customizeSQL func(db *gorm.DB) *gorm.DB) (int64, error) {
 	db := driver.GormDb
 	var count int64
-	result := db.Debug().Table(apd.TableName()).Scopes(customizeSQL).Count(&count)
+	result := db.Debug().Model(AccountPayeeCheck{}).Table(apd.TableName()).Scopes(customizeSQL).Count(&count)
 	if result.Error != nil {
 		return 0, result.Error
 	}
