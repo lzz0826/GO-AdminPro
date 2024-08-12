@@ -304,6 +304,10 @@ func (apd *AccountPayeeCheckDao) FindRecordByStatusAndUey(status int, uid string
 
 	totalRecords, err := apd.CountByCustomizeSQL(buildQuery)
 
+	if err != nil {
+		return bean, err
+	}
+
 	customizeSQL := func(db *gorm.DB) *gorm.DB {
 		db = db.Scopes(buildQuery)
 		db = db.Scopes(utils.WithPagination(page, pageSize))
