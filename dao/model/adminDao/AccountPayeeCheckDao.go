@@ -347,6 +347,42 @@ func (apd *AccountPayeeCheckDao) SelectByAccountStatus(accountStatus *int) ([]Cl
 	return cs, nil
 }
 
+//返回最後自增ID DB會有 NULL 情況
+func (apd *AccountPayeeCheckDao) AddAccountPayeeCheck(a AccountPayeeCheck) (int64, error) {
+	db := driver.GormDb
+
+	// 开始一个事务
+	tx := db.Begin()
+	if tx.Error != nil {
+		return 0, tx.Error
+	}
+
+	// 执行插入操作
+	if err := tx.Debug().Exec(`
+        INSERT INTO 
+            account_payee_check (check_id, check_time, description, status, type, uid, created_time, update_time)
+        VALUES 
+            (?, ?, ?, ?, ?, ?, NOW(), NOW())
+    `, a.CheckID, a.CheckTime, a.Description, a.Status, a.Type, a.UID).Error; err != nil {
+		tx.Rollback() // 发生错误回滚
+		return 0, err
+	}
+
+	// 获取自增 ID
+	var lastInsertID int64
+	if err := tx.Debug().Raw("SELECT LAST_INSERT_ID()").Scan(&lastInsertID).Error; err != nil {
+		tx.Rollback() // 发生错误回滚
+		return 0, err
+	}
+
+	// 提交事务
+	if err := tx.Commit().Error; err != nil {
+		return 0, err
+	}
+
+	return lastInsertID, nil
+}
+
 //打印出的SQL
 //SELECT aa.id AS clubId,
 //COUNT(CASE WHEN apc.status = '1' AND apc.type = '2' THEN 1 ELSE NULL END) AS normalNum,

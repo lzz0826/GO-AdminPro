@@ -556,6 +556,33 @@ func TestSelectByAccountStatus(t *testing.T) {
 
 }
 
+func TestAddAccountPayeeCheck(t *testing.T) {
+	adminMember := adminDao.AccountPayeeCheckDao{}
+
+	i := 4
+
+	s := "s"
+
+	localTime := time.Now()
+
+	ap := adminDao.AccountPayeeCheck{
+		ID:          &i,
+		UID:         nil,
+		Type:        &i,
+		Description: &s,
+		Status:      &i,
+		CheckID:     &i,
+		CheckTime:   &localTime,
+	}
+
+	cs, err := adminMember.AddAccountPayeeCheck(ap)
+
+	if err != nil {
+		fmt.Printf("%+v\n", err)
+	}
+	fmt.Printf("%+v\n", cs)
+}
+
 func TestOnUserOfClub(t *testing.T) {
 	db := driver.GormDb
 
