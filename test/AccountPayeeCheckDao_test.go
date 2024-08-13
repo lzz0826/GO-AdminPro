@@ -533,6 +533,29 @@ func TestFindRecordByStatusAndUey(t *testing.T) {
 	}
 }
 
+func TestSelectByAccountStatus(t *testing.T) {
+	adminMember := adminDao.AccountPayeeCheckDao{}
+	var i *int
+
+	ii := 1
+
+	i = &ii
+
+	cs, err := adminMember.SelectByAccountStatus(i)
+
+	if err != nil {
+		fmt.Printf("%+v\n", err)
+	}
+	for _, result := range cs {
+		fmt.Println("----------------------------")
+		fmt.Printf("%+v\n", result.ClubId)
+		fmt.Printf("%+v\n", result.OpNum)
+		fmt.Printf("%+v\n", result.NormalNum)
+		fmt.Println("----------------------------")
+	}
+
+}
+
 func TestOnUserOfClub(t *testing.T) {
 	db := driver.GormDb
 

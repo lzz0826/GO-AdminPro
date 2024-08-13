@@ -324,6 +324,29 @@ func (apd *AccountPayeeCheckDao) FindRecordByStatusAndUey(status int, uid string
 	return *pageBean, nil
 }
 
+//accountStatus 指針會有 WHERE aa.account_status = 1 或 WHERE aa.account_status = NULL的情況
+func (apd *AccountPayeeCheckDao) SelectByAccountStatus(accountStatus *int) ([]ClubOnUserStatistics, error) {
+	db := driver.GormDb
+	query := `
+		SELECT
+			aa.id AS clubId,
+		    apc.status AS normalNum,
+		    apc.type AS opNum
+		FROM
+			account_payee_check apc
+		INNER JOIN
+			admin_admin aa ON apc.uid = aa.id
+		WHERE
+			aa.account_status = ?
+	`
+
+	var cs []ClubOnUserStatistics
+	if err := db.Debug().Raw(query, accountStatus).Scan(&cs).Error; err != nil {
+		return nil, err
+	}
+	return cs, nil
+}
+
 //打印出的SQL
 //SELECT aa.id AS clubId,
 //COUNT(CASE WHEN apc.status = '1' AND apc.type = '2' THEN 1 ELSE NULL END) AS normalNum,
