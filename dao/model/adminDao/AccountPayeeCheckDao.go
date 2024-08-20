@@ -420,3 +420,38 @@ func CustomizeSQL(db *gorm.DB, clubIdLst []int64) ([]ClubOnUserStatistics, error
 
 	return stats, nil
 }
+
+// 包含了QueryComplaintList 和 CountComplaintList
+//func (dao *CheatComplaintDao) QueryComplaintListAndCount(typeVal *int, startTime, endTime *time.Time, start, size int, status *int) ([]CheatComplaintDao, int64, error) {
+//	var count int64
+//	var results []CheatComplaintDao
+//	db := sqldb.GetSqlDB().GameTidb
+//
+//	query := db.Table(dao.TableName()).
+//		Select("t1.id, t2.random_num as complainant, t1.type, t1.content, t1.status, DATE_FORMAT(t1.create_time,'%Y/%c/%d %H:%i') as time, t2.nike_name as complainantName, t4.name as clubName").
+//		Joins("join user_details_info t2 on t1.complainant = t2.USER_ID").
+//		Joins("join club_members t3 on t2.USER_ID = t3.user_id").
+//		Joins("join club_record t4 on t3.club_id = t4.id")
+//
+//	if typeVal != nil {
+//		query = query.Where("t1.type = ?", *typeVal)
+//	}
+//	if startTime != nil {
+//		query = query.Where("t1.create_time >= ?", *startTime)
+//	}
+//	if endTime != nil {
+//		query = query.Where("t1.create_time <= ?", *endTime)
+//	}
+//	//CountComplaintList
+//	if err := query.Count(&count).Error; err != nil {
+//		return nil, 0, err
+//	}
+//	if status != nil && *status != -1 {
+//		query = query.Where("t1.status = ?", *status)
+//	}
+//	//QueryComplaintList
+//	if err := query.Order("t1.create_time desc").Offset(start).Limit(size).Scan(&results).Error; err != nil {
+//		return nil, 0, err
+//	}
+//	return results, count, nil
+//}
