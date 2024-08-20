@@ -474,3 +474,38 @@ func CustomizeSQL(db *gorm.DB, clubIdLst []int64) ([]ClubOnUserStatistics, error
 //
 //	return results, nil
 //}
+
+//func (dao *CheatComplaintDao) UpdateUnDealMsgListComplaint(idList []int, localDateTime *time.Time, operatorId, status *int) error {
+//	db := sqldb.GetSqlDB().GameTidb
+//
+//	// 创建一个 map 存储需要更新的字段和值
+//	updateFields := make(map[string]interface{})
+//
+//	if status != nil {
+//		updateFields["status"] = *status
+//	}
+//	if localDateTime != nil {
+//		updateFields["update_time"] = *localDateTime
+//	}
+//	if operatorId != nil {
+//		updateFields["update_by"] = *operatorId
+//	}
+//
+//	// 如果没有需要更新的字段，则不执行更新
+//	if len(updateFields) == 0 {
+//		return nil
+//	}
+//
+//	// 更新操作
+//	query := db.Table(dao.TableName()).Where("status = 0")
+//
+//	if len(idList) > 0 {
+//		query = query.Where("id IN (?)", idList)
+//	}
+//
+//	if err := query.Updates(updateFields).Error; err != nil {
+//		return err
+//	}
+//
+//	return nil
+//}
