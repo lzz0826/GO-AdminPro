@@ -15,3 +15,8 @@ type AccountPayeeCheck struct {
 	UpdateTime  *time.Time `gorm:"column:update_time;comment:'更新时间'" json:"updateTime"`
 	CreatedTime *time.Time `gorm:"column:created_time;comment:'创建时间'" json:"createdTime"`
 }
+
+
+func (apd *AccountPayeeCheck) GetTableName() string {
+	return "account_payee_check"
+}
