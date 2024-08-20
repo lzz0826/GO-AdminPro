@@ -455,3 +455,22 @@ func CustomizeSQL(db *gorm.DB, clubIdLst []int64) ([]ClubOnUserStatistics, error
 //	}
 //	return results, count, nil
 //}
+
+//func (dao *CheatComplaintDao) SelectCheatComplaint(idList []int, typeVal, status *int) ([]CheatComplaint, error) {
+//	var results []CheatComplaint
+//	db := sqldb.GetSqlDB().GameTidb
+//
+//	query := db.Table(dao.TableName()).
+//		Where("status = ?", status).
+//		Where("type = ?", typeVal)
+//
+//	if len(idList) > 0 {
+//		query = query.Where("id IN (?)", idList)
+//	}
+//
+//	if err := query.Scan(&results).Error; err != nil {
+//		return nil, err
+//	}
+//
+//	return results, nil
+//}
