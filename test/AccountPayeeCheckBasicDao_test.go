@@ -43,6 +43,24 @@ func TestListAccountPayeeChecks(t *testing.T) {
 	}
 }
 
+func TestSumTotalStatusSUM(t *testing.T) {
+
+	adminMember := adminDao.AccountPayeeCheckBasicDao{}
+
+	customizeSQL := func(db *gorm.DB) *gorm.DB {
+		return db
+	}
+
+	price, err := adminMember.SumTotalStatusSUM(customizeSQL)
+
+	if err != nil {
+		t.Fatalf("SumTotalStatusSUM 失敗：%v", err)
+	}
+
+	fmt.Printf(" price : %+v\n", price)
+
+}
+
 func TestSelectByPrimaryKey2(t *testing.T) {
 	var result adminDao.AccountPayeeCheck
 

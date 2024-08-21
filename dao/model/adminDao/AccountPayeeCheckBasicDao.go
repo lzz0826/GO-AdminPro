@@ -1,9 +1,12 @@
 package adminDao
 
 import (
+	"AdminPro/common/driver"
 	"AdminPro/common/enum"
 	"AdminPro/common/model"
 	"AdminPro/common/utils"
+	"fmt"
+	"github.com/shopspring/decimal"
 	"gorm.io/gorm"
 )
 
@@ -36,4 +39,24 @@ func (dao *AccountPayeeCheckBasicDao) ListAccountPayeeChecks(userRandomId *strin
 	}
 
 	return count, results, nil
+}
+
+func (dao *AccountPayeeCheckBasicDao) SumTotalStatusSUM(customizeSQL func(db *gorm.DB) *gorm.DB) (*decimal.Decimal, error) {
+	var totalAmount decimal.Decimal
+	db := driver.GormDb.Debug()
+	query := db.Table(AccountPayeeCheck{}.GetTableName()).
+		Select("IFNULL(SUM(status), 0) AS total_amount").
+		Scopes(customizeSQL)
+
+	var totalAmountStr string
+	if err := query.Scan(&totalAmountStr).Error; err != nil {
+		return nil, err
+	}
+
+	totalAmount, err := decimal.NewFromString(totalAmountStr)
+	if err != nil {
+		return nil, fmt.Errorf("failed to convert total amount to decimal: %w", err)
+	}
+
+	return &totalAmount, nil
 }

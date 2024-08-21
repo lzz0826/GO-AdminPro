@@ -16,7 +16,6 @@ type AccountPayeeCheck struct {
 	CreatedTime *time.Time `gorm:"column:created_time;comment:'创建时间'" json:"createdTime"`
 }
 
-
-func (apd *AccountPayeeCheck) GetTableName() string {
+func (AccountPayeeCheck) GetTableName() string {
 	return "account_payee_check"
 }
