@@ -5,6 +5,7 @@ import (
 	"AdminPro/common/tool"
 	"AdminPro/dao/model/adminDao"
 	"errors"
+	"log"
 )
 
 func GetPermitByByIds(ids []string) (permits []adminDao.PermitDAO, err error) {
@@ -30,4 +31,18 @@ func CheckPermitIdsExist(permitIds []string) (permits []adminDao.PermitDAO, err 
 	}
 	return permits, nil
 
+}
+
+func Convert() []adminDao.PermitDAO {
+
+	page := model.Pagination{
+		Page:  1,
+		Limit: 20,
+	}
+	permits, err := GetAllPermitList(&page)
+	if err != nil {
+		log.Println("GetAllPermitList error:", err.Error())
+	}
+
+	return permits
 }
