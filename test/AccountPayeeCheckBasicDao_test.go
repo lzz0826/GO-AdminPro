@@ -157,11 +157,11 @@ func TestInsertSelective2(t *testing.T) {
 }
 
 func TestUpdateByExampleSelective2(t *testing.T) {
-	uid := 77
-	typet := 7
+	uid := 66
+	typet := 6
 	description := "test77"
-	status := 7
-	checkID := 7
+	status := 6
+	checkID := 6
 	timeAdmin := time.Now()
 
 	updatesReq := adminDao.AccountPayeeCheck{
@@ -188,7 +188,7 @@ func TestUpdateByExampleSelective2(t *testing.T) {
 		//db = db.Where("status = ?", 1)
 		return db
 	}
-	rep, err := adminDao.UpdateByExampleSelective(updatesReq, whereReq, customizeSQL, &adminDao.AccountPayeeCheck{})
+	rep, err := adminDao.UpdateByExampleSelective(&updatesReq, &whereReq, customizeSQL, &adminDao.AccountPayeeCheck{})
 	if err != nil {
 		t.Fatalf("UpdateByCustomizeSQL 失敗：%v", err)
 	}

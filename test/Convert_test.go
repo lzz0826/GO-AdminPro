@@ -24,11 +24,11 @@ func TestCh(t *testing.T) {
 	fmt.Printf("%+v\n", permitMap)
 
 	//----------------- map 取id 轉List ---------------
-	clubIds := make([]string, 0, len(permitMap))
+	permitIds := make([]string, 0, len(permitMap))
 	for _, club := range permitMap {
-		clubIds = append(clubIds, club.ID)
+		permitIds = append(permitIds, club.ID)
 	}
-	fmt.Printf("%+v\n", clubIds)
+	fmt.Printf("%+v\n", permitIds)
 
 	//----------------- 将 Go 结构体转换为 JSON 格式的字节切片 ---------------
 	//物件转JSON
