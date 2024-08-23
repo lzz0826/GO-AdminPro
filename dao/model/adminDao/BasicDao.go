@@ -109,6 +109,34 @@ func InsertSelective(insetCondition interface{}, table Model) (int64, error) {
 	return lastInsertID, nil
 }
 
+// InsertSelectiveList auto_increment 无须带id  插入 , 忽略空字段 (没带的属性 "不会" 添加到条件中)
+func InsertSelectiveList[T any](insetCondition []T, table Model) ([]int64, error) {
+	var idList []int64
+	db := driver.GormDb
+	tx := db.Begin()
+	if tx.Error != nil {
+		return nil, tx.Error
+	}
+
+	for _, v := range insetCondition {
+		if err := tx.Debug().Table(table.GetTableName()).Create(utils.BuildNotNullMap(v)).Error; err != nil {
+			tx.Rollback()
+			return nil, err
+		}
+
+		var lastInsertID int64
+		if err := tx.Raw("SELECT LAST_INSERT_ID()").Row().Scan(&lastInsertID); err != nil {
+			tx.Rollback()
+			return nil, err
+		}
+		idList = append(idList, lastInsertID)
+	}
+	if err := tx.Commit().Error; err != nil {
+		return nil, err
+	}
+	return idList, nil
+}
+
 // UpdateByExampleSelective 更新 (没带的属性 "不会" 添加到条件中)
 func UpdateByExampleSelective(updatesReq interface{}, whereReq interface{}, customizeSQL func(db *gorm.DB) *gorm.DB, table Model) (int64, error) {
 	db := driver.GormDb

@@ -156,6 +156,44 @@ func TestInsertSelective2(t *testing.T) {
 	fmt.Println("----------------------------")
 }
 
+func TestInsertSelectiveList(t *testing.T) {
+
+	var q []adminDao.AccountPayeeCheck
+	i := 4
+	s := "test"
+	time := time.Now()
+	ap := adminDao.AccountPayeeCheck{
+		UID:         &i,
+		Type:        &i,
+		Description: &s,
+		Status:      &i,
+		CheckID:     &i,
+		CheckTime:   &time,
+		UpdateTime:  &time,
+		CreatedTime: &time,
+	}
+	i2 := 5
+	s2 := "test2"
+	ap2 := adminDao.AccountPayeeCheck{
+		UID:         &i2,
+		Type:        &i2,
+		Description: &s2,
+		CheckTime:   &time,
+		UpdateTime:  &time,
+		CreatedTime: &time,
+	}
+	q = append(q, ap, ap2)
+
+	insert, err := adminDao.InsertSelectiveList(q, &adminDao.AccountPayeeCheck{})
+	if err != nil {
+		t.Fatalf("InsertSelectiveList 失敗：%v", err)
+	}
+
+	fmt.Println("----------------------------")
+	fmt.Printf("%+v\n", insert)
+	fmt.Println("----------------------------")
+}
+
 func TestUpdateByExampleSelective2(t *testing.T) {
 	uid := 66
 	typet := 6
