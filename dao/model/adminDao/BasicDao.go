@@ -29,22 +29,26 @@ func SelectByPrimaryKey(id int, out interface{}, table Model) error {
 	return nil
 }
 
-func DeleteByPrimaryKey(id int, table Model) error {
+// 返回受影响(删除的比数)
+func DeleteByPrimaryKey(id int, table Model) (int64, error) {
 	db := driver.GormDb
-	err := db.Debug().Table(table.GetTableName()).Delete(table, "id = ?", id).Error
-	if err != nil {
-		return err
+	result := db.Debug().Table(table.GetTableName()).Delete(table, "id = ?", id)
+	if result.Error != nil {
+		return 0, result.Error
 	}
-	return nil
+	return result.RowsAffected, nil
 }
 
-func DeleteByExample(customizeSQL func(db *gorm.DB) *gorm.DB, table Model) error {
+// 返回受影响(删除的比数)
+func DeleteByExample(customizeSQL func(db *gorm.DB) *gorm.DB, table Model) (int64, error) {
 	db := driver.GormDb
-	err := db.Debug().Table(table.GetTableName()).Scopes(customizeSQL).Delete(table).Error
-	if err != nil {
-		return err
+	result := db.Debug().Table(table.GetTableName()).Scopes(customizeSQL).Delete(table)
+
+	if result.Error != nil {
+		return 0, result.Error
 	}
-	return nil
+
+	return result.RowsAffected, nil
 }
 
 func CountByExample(customizeSQL func(db *gorm.DB) *gorm.DB, table Model) (int64, error) {
@@ -109,7 +113,7 @@ func InsertSelective(insetCondition interface{}, table Model) (int64, error) {
 	return lastInsertID, nil
 }
 
-// InsertSelectiveList auto_increment 无须带id  插入 , 忽略空字段 (没带的属性 "不会" 添加到条件中)
+// InsertSelectiveList auto_increment 无须带id  插入 , 忽略空字段 (没带的属性 "不会" 添加到条件中) 返回所有主建
 func InsertSelectiveList[T any](insetCondition []T, table Model) ([]int64, error) {
 	var idList []int64
 	db := driver.GormDb

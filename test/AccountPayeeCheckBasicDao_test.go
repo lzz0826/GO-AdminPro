@@ -85,23 +85,25 @@ func TestSelectByPrimaryKey2(t *testing.T) {
 }
 
 func TestDeleteByPrimaryKey2(t *testing.T) {
-	primaryKey := 1
-	err := adminDao.DeleteByPrimaryKey(primaryKey, &adminDao.AccountPayeeCheck{})
+	primaryKey := 10
+	i, err := adminDao.DeleteByPrimaryKey(primaryKey, &adminDao.AccountPayeeCheck{})
 	if err != nil {
 		t.Fatalf("TestSelectByExample 失敗：%v", err)
 	}
+	fmt.Printf("%+v\n", i)
 }
 
 func TestDeleteByExample2(t *testing.T) {
-	uir := 1
+	uir := 4
 	customizeSQL := func(db *gorm.DB) *gorm.DB {
 		db = db.Where("uid = ?", uir)
 		return db
 	}
-	err := adminDao.DeleteByExample(customizeSQL, &adminDao.AccountPayeeCheck{})
+	i, err := adminDao.DeleteByExample(customizeSQL, &adminDao.AccountPayeeCheck{})
 	if err != nil {
 		t.Fatalf("TestSelectByExample 失敗：%v", err)
 	}
+	fmt.Printf("%+v\n", i)
 }
 
 func TestInsert2(t *testing.T) {
