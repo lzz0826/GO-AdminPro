@@ -93,6 +93,16 @@ func TestDeleteByPrimaryKey2(t *testing.T) {
 	fmt.Printf("%+v\n", i)
 }
 
+func TestDeleteByList(t *testing.T) {
+	columnName := "check_id"
+	list := []int{22, 4}
+	i, err := adminDao.DeleteByList(columnName, list, &adminDao.AccountPayeeCheck{})
+	if err != nil {
+		t.Fatalf("TestDeleteByList 失敗：%v", err)
+	}
+	fmt.Printf("%+v\n", i)
+}
+
 func TestDeleteByExample2(t *testing.T) {
 	uir := 4
 	customizeSQL := func(db *gorm.DB) *gorm.DB {

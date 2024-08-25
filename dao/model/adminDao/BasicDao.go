@@ -3,6 +3,7 @@ package adminDao
 import (
 	"AdminPro/common/driver"
 	"AdminPro/common/utils"
+	"fmt"
 	"gorm.io/gorm"
 )
 
@@ -33,6 +34,18 @@ func SelectByPrimaryKey(id int, out interface{}, table Model) error {
 func DeleteByPrimaryKey(id int, table Model) (int64, error) {
 	db := driver.GormDb
 	result := db.Debug().Table(table.GetTableName()).Delete(table, "id = ?", id)
+	if result.Error != nil {
+		return 0, result.Error
+	}
+	return result.RowsAffected, nil
+}
+
+// 返回受影响(删除的比数)
+func DeleteByList(columnName string, list []int, table Model) (int64, error) {
+	db := driver.GormDb
+	// 使用 fmt.Sprintf 确保正确插入列名
+	query := fmt.Sprintf("%s IN ?", columnName)
+	result := db.Debug().Table(table.GetTableName()).Where(query, list).Delete(table)
 	if result.Error != nil {
 		return 0, result.Error
 	}
