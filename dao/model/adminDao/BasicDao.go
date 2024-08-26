@@ -22,6 +22,7 @@ func SelectByExample(customizeSQL func(db *gorm.DB) *gorm.DB, out interface{}, t
 	return nil
 }
 
+// customizeSQL db = db.Select("description")算总数会有问题
 func SelectByExamplePage(customizeSQL func(db *gorm.DB) *gorm.DB, out interface{}, page *model.Pagination, table Model) (int64, error) {
 	var total int64
 	db := driver.GormDb

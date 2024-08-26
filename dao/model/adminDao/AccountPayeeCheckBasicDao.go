@@ -38,6 +38,8 @@ func (dao *AccountPayeeCheckBasicDao) ListAccountPayeeChecksPage(userRandomId *s
 	var results []AccountPayeeCheck
 	customizeSQL := func(db *gorm.DB) *gorm.DB {
 		if userRandomId != nil {
+			//db = db.Select("description")
+
 			db = db.Where("uid = ?", userRandomId)
 		}
 		if status != nil {
