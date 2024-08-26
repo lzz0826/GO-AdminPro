@@ -29,7 +29,7 @@ func (apd *AccountPayeeCheckDao) SelectByExample(uid *int, status *int, customiz
 		query = query.Where("status = ?", *status)
 	}
 
-	query.Scopes(utils.WithPagination(page.Page, page.Limit))
+	query.Scopes(utils.WithPagination(page))
 
 	query.Scopes(customizeSQL)
 
@@ -257,7 +257,7 @@ func (apd *AccountPayeeCheckDao) UpdateByPrimaryKey(id int, updatesReq AccountPa
 	return result.RowsAffected, nil
 }
 
-//(没带的属性 "会" 添加至条件中在 DB NULL)
+// (没带的属性 "会" 添加至条件中在 DB NULL)
 func (apd *AccountPayeeCheckDao) UpdateDBNullTest(uid, status, checkID *int, description *string) (int64, error) {
 	updates := map[string]interface{}{}
 
@@ -288,7 +288,7 @@ func (apd *AccountPayeeCheckDao) UpdateDBNullTest(uid, status, checkID *int, des
 	return result.RowsAffected, nil
 }
 
-func (apd *AccountPayeeCheckDao) FindRecordByStatusAndUey(status int, uid string, page int, pageSize int) (model.PageBean, error) {
+func (apd *AccountPayeeCheckDao) FindRecordByStatusAndUey(status int, uid string, page *model.Pagination) (model.PageBean, error) {
 
 	bean := model.PageBean{}
 
@@ -310,7 +310,7 @@ func (apd *AccountPayeeCheckDao) FindRecordByStatusAndUey(status int, uid string
 
 	customizeSQL := func(db *gorm.DB) *gorm.DB {
 		db = db.Scopes(buildQuery)
-		db = db.Scopes(utils.WithPagination(page, pageSize))
+		db = db.Scopes(utils.WithPagination(page))
 		return db
 	}
 	example, err := apd.SelectByExampleCustomizeSQL(customizeSQL)
@@ -319,12 +319,12 @@ func (apd *AccountPayeeCheckDao) FindRecordByStatusAndUey(status int, uid string
 		return bean, err
 	}
 
-	pageBean := model.Of(totalRecords, page, pageSize, example)
+	pageBean := model.Of(totalRecords, page.Page, page.Limit, example)
 
 	return *pageBean, nil
 }
 
-//accountStatus 指針會有 WHERE aa.account_status = 1 或 WHERE aa.account_status = NULL的情況
+// accountStatus 指針會有 WHERE aa.account_status = 1 或 WHERE aa.account_status = NULL的情況
 func (apd *AccountPayeeCheckDao) SelectByAccountStatus(accountStatus *int) ([]ClubOnUserStatistics, error) {
 	db := driver.GormDb
 	query := `
@@ -347,7 +347,7 @@ func (apd *AccountPayeeCheckDao) SelectByAccountStatus(accountStatus *int) ([]Cl
 	return cs, nil
 }
 
-//返回最後自增ID DB會有 NULL 情況
+// 返回最後自增ID DB會有 NULL 情況
 func (apd *AccountPayeeCheckDao) AddAccountPayeeCheck(a AccountPayeeCheck) (int64, error) {
 	db := driver.GormDb
 
@@ -383,14 +383,14 @@ func (apd *AccountPayeeCheckDao) AddAccountPayeeCheck(a AccountPayeeCheck) (int6
 	return lastInsertID, nil
 }
 
-//打印出的SQL
-//SELECT aa.id AS clubId,
-//COUNT(CASE WHEN apc.status = '1' AND apc.type = '2' THEN 1 ELSE NULL END) AS normalNum,
-//COUNT(CASE WHEN apc.status = '1' AND apc.type = '2' THEN 1 ELSE NULL END) AS opNum
-//FROM account_payee_check apc
-//LEFT JOIN admin_admin aa ON apc.uid = aa.id
-//WHERE aa.id IN (1,2,3)
-//GROUP BY aa.id
+// 打印出的SQL
+// SELECT aa.id AS clubId,
+// COUNT(CASE WHEN apc.status = '1' AND apc.type = '2' THEN 1 ELSE NULL END) AS normalNum,
+// COUNT(CASE WHEN apc.status = '1' AND apc.type = '2' THEN 1 ELSE NULL END) AS opNum
+// FROM account_payee_check apc
+// LEFT JOIN admin_admin aa ON apc.uid = aa.id
+// WHERE aa.id IN (1,2,3)
+// GROUP BY aa.id
 func CustomizeSQL(db *gorm.DB, clubIdLst []int64) ([]ClubOnUserStatistics, error) {
 	// Create a comma-separated list of club IDs for the SQL IN clause
 	clubIdPlaceholders := ""

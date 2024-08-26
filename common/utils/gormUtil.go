@@ -2,6 +2,7 @@ package utils
 
 import (
 	"AdminPro/common/driver"
+	"AdminPro/common/model"
 	"fmt"
 	"gorm.io/gorm"
 	"reflect"
@@ -240,10 +241,10 @@ func WithOffsetAndOrderBy(offset int, orderClause string) func(db *gorm.DB) *gor
 */
 
 // WithPagination 應用分頁功能，使用頁面和限制
-func WithPagination(page, limit int) func(db *gorm.DB) *gorm.DB {
+func WithPagination(req *model.Pagination) func(db *gorm.DB) *gorm.DB {
 	return func(db *gorm.DB) *gorm.DB {
-		offset := (page - 1) * limit
-		return db.Offset(offset).Limit(limit)
+		offset := (req.Page - 1) * req.Limit
+		return db.Offset(offset).Limit(req.Limit)
 	}
 }
 
@@ -519,7 +520,7 @@ func parseColumnName(tag string) string {
 	return ""
 }
 
-//[]int64 转 []interface{}
+// []int64 转 []interface{}
 func ConvertToInterfaceSlice(ids []int64) []interface{} {
 	result := make([]interface{}, len(ids))
 	for i, id := range ids {

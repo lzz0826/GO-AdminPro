@@ -336,3 +336,17 @@ VALUES(35, '3', '8', '1', '1', '2024-01-24 13:39:35', '2024-01-24 13:39:35');
 INSERT INTO admin.admin_role_permit
 (id, role_id, permit_id, creator_id, updater_id, create_time, update_time)
 VALUES(36, '3', '9', '1', '1', '2024-01-24 13:39:35', '2024-01-24 13:39:35');
+
+
+
+CREATE TABLE IF NOT EXISTS `account_payee_check` (
+                                       `id` INT AUTO_INCREMENT PRIMARY KEY COMMENT 'id',
+                                       `uid` INT COMMENT '用户id',
+                                       `type` INT COMMENT '审核类型1-银行卡,2-支付保',
+                                       `description` VARCHAR(255) COMMENT '审核内容',
+                                       `status` INT COMMENT '状态(0-审核中,1-审核成功,2-审核失败)',
+                                       `check_id` INT COMMENT '审核人id',
+                                       `check_time` DATETIME COMMENT '审核时间',
+                                       `update_time` DATETIME COMMENT '更新时间',
+                                       `created_time` DATETIME COMMENT '创建时间'
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COMMENT='Account Payee Check Table';

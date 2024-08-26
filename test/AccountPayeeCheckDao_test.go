@@ -50,10 +50,13 @@ func TestSelectByExampleSelectGeneric(t *testing.T) {
 	uid := 1
 	status := 0
 
+	p := model.Pagination{Page: 1,
+		Limit: 2}
+
 	customizeSQL := func(db *gorm.DB) *gorm.DB {
 		db = db.Where("uid = ?", uid)
 		db = db.Where("status = ?", status)
-		db = db.Scopes(utils.WithPagination(1, 2))
+		db = db.Scopes(utils.WithPagination(&p))
 		db = db.Order("case when status = 0 then 0 else 1 end asc, created_time desc, id desc")
 		return db
 	}
@@ -89,10 +92,13 @@ func TestSelectByExampleEX(t *testing.T) {
 	uid := 1
 	status := 0
 
+	p := model.Pagination{Page: 1,
+		Limit: 2}
+
 	customizeSQL := func(db *gorm.DB) *gorm.DB {
 		db = db.Where("uid = ?", uid)
 		db = db.Where("status = ?", status)
-		db = db.Scopes(utils.WithPagination(1, 2))
+		db = db.Scopes(utils.WithPagination(&p))
 		db = db.Order("case when status = 0 then 0 else 1 end asc, created_time desc, id desc")
 		return db
 	}
@@ -493,9 +499,12 @@ func TestFindRecordByStatusAndUey(t *testing.T) {
 	uid := "1"
 	status := 2
 
-	page := 3
-	pageSize := 2
-	rep, err := adminMember.FindRecordByStatusAndUey(status, uid, page, pageSize)
+	p := model.Pagination{
+		Page:  1,
+		Limit: 2,
+	}
+
+	rep, err := adminMember.FindRecordByStatusAndUey(status, uid, &p)
 	if err != nil {
 		t.Fatalf("FindRecordByStatusAndUey 失敗：%v", err)
 	}

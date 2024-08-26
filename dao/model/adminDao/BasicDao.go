@@ -2,6 +2,7 @@ package adminDao
 
 import (
 	"AdminPro/common/driver"
+	"AdminPro/common/model"
 	"AdminPro/common/utils"
 	"fmt"
 	"gorm.io/gorm"
@@ -19,6 +20,23 @@ func SelectByExample(customizeSQL func(db *gorm.DB) *gorm.DB, out interface{}, t
 		return err
 	}
 	return nil
+}
+
+func SelectByExamplePage(customizeSQL func(db *gorm.DB) *gorm.DB, out interface{}, page *model.Pagination, table Model) (int64, error) {
+	var total int64
+	db := driver.GormDb
+
+	query := db.Debug().Table(table.GetTableName()).Scopes(customizeSQL)
+	err := query.Count(&total).Error
+	if err != nil {
+		return 0, nil
+	}
+	query = query.Scopes(utils.WithPagination(page))
+	err = query.Find(out).Error
+	if err != nil {
+		return 0, nil
+	}
+	return total, nil
 }
 
 func SelectByPrimaryKey(id int, out interface{}, table Model) error {
