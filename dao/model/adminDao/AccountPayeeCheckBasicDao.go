@@ -116,6 +116,7 @@ func (dao *AccountPayeeCheckBasicDao) SumTotalStatusSUM(customizeSQL func(db *go
 	return &totalAmount, nil
 }
 
+// JOIN 测试
 func TestJoin(channelId, start, size int, search *string) ([]AccountPayeeCheck, error) {
 	var results []AccountPayeeCheck
 	db := driver.GormDb
@@ -131,4 +132,27 @@ func TestJoin(channelId, start, size int, search *string) ([]AccountPayeeCheck, 
 		return nil, err
 	}
 	return results, nil
+}
+
+// 子查询 测试
+func TestSubquery(search string) (AccountPayeeCheck, error) {
+	var result AccountPayeeCheck
+	db := driver.GormDb
+	// 子查询获取 club_record 的 id
+	subquery := db.Table("club_record").
+		Select("id").
+		Where("random_id = ?", search).
+		Limit(1)
+
+	// 主查询在 pay_channel 和 club_pay_channel 中进行连接查询
+	query := db.Table("pay_channel t1").
+		Select("t1.id, t1.name"). // 如果需要其他字段，这里添加
+		Joins("JOIN club_pay_channel t2 ON t1.id = t2.channel_id").
+		Where("t2.club_id = (?)", subquery)
+
+	// 获取查询结果
+	if err := query.Debug().First(&result).Error; err != nil {
+		return result, err
+	}
+	return result, nil
 }

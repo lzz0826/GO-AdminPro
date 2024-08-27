@@ -458,3 +458,11 @@ func TestTestJoin(t *testing.T) {
 		t.Fatalf("TestTestJoin 失敗：%v", err)
 	}
 }
+
+func TestTestSubquery(t *testing.T) {
+	search := "xxx"
+	_, err := adminDao.TestSubquery(search)
+	if err != nil {
+		t.Fatalf("TestTestSubquery 失敗：%v", err)
+	}
+}
