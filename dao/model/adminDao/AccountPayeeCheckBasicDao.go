@@ -126,7 +126,7 @@ func TestJoin(channelId, start, size int, search *string) ([]AccountPayeeCheck, 
 	if search != nil {
 		query = query.Where("(t2.random_id LIKE ? OR t2.name LIKE ?)", "%"+*search+"%", "%"+*search+"%")
 	}
-	query = query.Order("created_on DESC").Offset(start).Limit(size)
+	query = query.Order("t2.created_on DESC").Offset(start).Limit(size)
 	if err := query.Find(&results).Error; err != nil {
 		return nil, err
 	}
