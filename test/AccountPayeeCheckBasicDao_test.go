@@ -432,3 +432,21 @@ func TestUpdateByPrimaryKey2(t *testing.T) {
 func TestSetMAXType(t *testing.T) {
 	adminDao.SetMAXType(64)
 }
+
+func TestSelectTypeLast(t *testing.T) {
+	result, err := adminDao.SelectTypeLast(4)
+	if err != nil {
+		t.Fatalf("TestSelectTypeLast 失敗：%v", err)
+	}
+	fmt.Println("----------------------------")
+	fmt.Printf("%+v\n", *result.ID)
+	fmt.Printf("%+v\n", *result.UID)
+	fmt.Printf("%+v\n", *result.Type)
+	fmt.Printf("%+v\n", *result.Description)
+	fmt.Printf("%+v\n", *result.Status)
+	fmt.Printf("%+v\n", *result.CheckID)
+	fmt.Printf("%+v\n", *result.CheckTime)
+	fmt.Printf("%+v\n", *result.UpdateTime)
+	fmt.Printf("%+v\n", *result.CreatedTime)
+	fmt.Println("----------------------------")
+}

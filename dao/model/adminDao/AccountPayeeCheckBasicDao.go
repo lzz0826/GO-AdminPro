@@ -12,7 +12,34 @@ import (
 type AccountPayeeCheckBasicDao struct {
 }
 
-// 使用原始SQL
+//Raw: 用于执行原生 SQL 查询并返回结果。
+//Exec: 用于执行非查询操作（如插入、更新、删除）。
+//First、Last、Find: 用于获取单条或多条记录。
+//Pluck: 用于提取单个字段的值。
+//Scan: 用于将查询结果映射到自定义结构体。
+//Count: 用于统计记录数。
+//Scopes: 用于复用查询条件。
+//ScanRows: 用于手动处理查询结果集的每一行。
+
+// 使用原始SQL查询
+func SelectTypeLast(typeValue int) (*AccountPayeeCheck, error) {
+	var result AccountPayeeCheck
+	db := driver.GormDb
+	sql := `
+        SELECT * 
+        FROM account_payee_check
+        WHERE type > ?
+        ORDER BY id desc
+        LIMIT 1
+    `
+	err := db.Debug().Raw(sql, typeValue).Scan(&result).Error
+	if err != nil {
+		return nil, err
+	}
+	return &result, nil
+}
+
+// 使用原始SQL 修改
 func SetMAXType(id int) error {
 	db := driver.GormDb
 	sql := `
