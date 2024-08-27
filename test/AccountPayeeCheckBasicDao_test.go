@@ -11,6 +11,73 @@ import (
 	"time"
 )
 
+func TestSelectByObjWhereReq(t *testing.T) {
+	var results []adminDao.AccountPayeeCheck
+	customizeSQL := func(db *gorm.DB) *gorm.DB {
+		db = db.Order("id desc")
+		return db
+	}
+	uid := 4
+	whereReq := adminDao.AccountPayeeCheck{
+		UID: &uid,
+	}
+	err := adminDao.SelectByObjWhereReq(customizeSQL, &whereReq, &results, adminDao.AccountPayeeCheck{})
+
+	if err != nil {
+		t.Fatalf("TestSelectByObjWhereReq 失敗：%v", err)
+	}
+
+	for _, result := range results {
+		fmt.Println("----------------------------")
+		fmt.Printf("%+v\n", *result.ID)
+		fmt.Printf("%+v\n", *result.UID)
+		fmt.Printf("%+v\n", *result.Type)
+		fmt.Printf("%+v\n", *result.Description)
+		fmt.Printf("%+v\n", *result.Status)
+		fmt.Printf("%+v\n", *result.CheckID)
+		fmt.Printf("%+v\n", *result.CheckTime)
+		fmt.Printf("%+v\n", *result.UpdateTime)
+		fmt.Printf("%+v\n", *result.CreatedTime)
+		fmt.Println("----------------------------")
+	}
+}
+
+func TestSelectByObjWhereReqPage(t *testing.T) {
+	var results []adminDao.AccountPayeeCheck
+	customizeSQL := func(db *gorm.DB) *gorm.DB {
+		db = db.Order("id asc")
+		return db
+	}
+	i := 4
+	whereReq := adminDao.AccountPayeeCheck{
+		UID:    &i,
+		Status: &i,
+	}
+	pagination := model.Pagination{Page: 1, Limit: 2}
+
+	total, err := adminDao.SelectByObjWhereReqPage(customizeSQL, &whereReq, &results, &pagination, adminDao.AccountPayeeCheck{})
+
+	if err != nil {
+		t.Fatalf("TestSelectByObjWhereReqPage 失敗：%v", err)
+	}
+
+	fmt.Printf("%+v\n total: ", total)
+
+	for _, result := range results {
+		fmt.Println("----------------------------")
+		fmt.Printf("%+v\n", *result.ID)
+		fmt.Printf("%+v\n", *result.UID)
+		fmt.Printf("%+v\n", *result.Type)
+		fmt.Printf("%+v\n", *result.Description)
+		fmt.Printf("%+v\n", *result.Status)
+		fmt.Printf("%+v\n", *result.CheckID)
+		fmt.Printf("%+v\n", *result.CheckTime)
+		fmt.Printf("%+v\n", *result.UpdateTime)
+		fmt.Printf("%+v\n", *result.CreatedTime)
+		fmt.Println("----------------------------")
+	}
+}
+
 func TestListAccountPayeeChecks(t *testing.T) {
 
 	userRandomId := "1"

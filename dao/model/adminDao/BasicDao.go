@@ -40,6 +40,34 @@ func SelectByExamplePage(customizeSQL func(db *gorm.DB) *gorm.DB, out interface{
 	return total, nil
 }
 
+func SelectByObjWhereReq(customizeSQL func(db *gorm.DB) *gorm.DB, whereReq, out interface{}, table Model) error {
+	db := driver.GormDb
+	query := db.Debug().Table(table.GetTableName()).Where(utils.BuildNotNullMap(whereReq)).Scopes(customizeSQL)
+	err := query.Find(out).Error
+	if err != nil {
+		return err
+	}
+	return nil
+}
+
+// customizeSQL db = db.Select("description")算总数会有问题
+func SelectByObjWhereReqPage(customizeSQL func(db *gorm.DB) *gorm.DB, whereReq, out interface{}, page *model.Pagination, table Model) (int64, error) {
+	var total int64
+	db := driver.GormDb
+
+	query := db.Debug().Table(table.GetTableName()).Where(utils.BuildNotNullMap(whereReq)).Scopes(customizeSQL)
+	err := query.Count(&total).Error
+	if err != nil {
+		return 0, nil
+	}
+	query = query.Where(utils.BuildNotNullMap(whereReq)).Scopes(utils.WithPagination(page))
+	err = query.Find(out).Error
+	if err != nil {
+		return 0, nil
+	}
+	return total, nil
+}
+
 func SelectByPrimaryKey(id int, out interface{}, table Model) error {
 	db := driver.GormDb
 	err := db.Debug().Table(table.GetTableName()).Where("id = ?", id).First(out).Error
@@ -145,7 +173,7 @@ func InsertSelective(insetCondition interface{}, table Model) (int64, error) {
 	return lastInsertID, nil
 }
 
-// InsertSelectiveList auto_increment 无须带id  插入 , 忽略空字段 (没带的属性 "不会" 添加到条件中) 返回所有主建
+// InsertSelectiveList 批量插入 auto_increment 无须带id  插入 , 忽略空字段 (没带的属性 "不会" 添加到条件中) 返回所有主建
 func InsertSelectiveList[T any](insetCondition []T, table Model) ([]int64, error) {
 	var idList []int64
 	db := driver.GormDb
@@ -153,7 +181,6 @@ func InsertSelectiveList[T any](insetCondition []T, table Model) ([]int64, error
 	if tx.Error != nil {
 		return nil, tx.Error
 	}
-
 	for _, v := range insetCondition {
 		if err := tx.Debug().Table(table.GetTableName()).Create(utils.BuildNotNullMap(v)).Error; err != nil {
 			tx.Rollback()
