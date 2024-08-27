@@ -428,3 +428,7 @@ func TestUpdateByPrimaryKey2(t *testing.T) {
 	}
 	fmt.Printf(strconv.FormatInt(rep, 10))
 }
+
+func TestSetMAXType(t *testing.T) {
+	adminDao.SetMAXType(64)
+}

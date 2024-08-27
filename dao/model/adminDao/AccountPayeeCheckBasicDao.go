@@ -12,6 +12,19 @@ import (
 type AccountPayeeCheckBasicDao struct {
 }
 
+// 使用原始SQL
+func SetMAXType(id int) error {
+	db := driver.GormDb
+	sql := `
+		UPDATE account_payee_check, 
+		(SELECT MAX(type) AS m FROM account_payee_check) b 
+		SET type = b.m + 1 
+		WHERE id = ?
+	`
+	err := db.Debug().Exec(sql, id).Error
+	return err
+}
+
 // ListAccountPayeeChecks
 func (dao *AccountPayeeCheckBasicDao) ListAccountPayeeChecks(userRandomId *string, status *enum.EAccountPayeeCheckStatusEnum, page *model.Pagination) ([]AccountPayeeCheck, error) {
 	var results []AccountPayeeCheck
