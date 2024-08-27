@@ -156,3 +156,20 @@ func TestSubquery(search string) (AccountPayeeCheck, error) {
 	}
 	return result, nil
 }
+
+// 测试 Raw subquery 子查询
+func TestRawSubquery(transType int) (int64, error) {
+	var result int64
+	db := driver.GormDb
+	subquery := "SELECT club_id FROM club_pay_channel"
+
+	db = db.Table("club_record").
+		Where("club_status = ?", 0).
+		Where("trans_type = ?", transType).
+		Where("id IN (?)", db.Raw(subquery))
+
+	if err := db.Debug().Count(&result).Error; err != nil {
+		return 0, err
+	}
+	return result, nil
+}

@@ -466,3 +466,11 @@ func TestTestSubquery(t *testing.T) {
 		t.Fatalf("TestTestSubquery 失敗：%v", err)
 	}
 }
+
+func TestRawSubquery(t *testing.T) {
+	search := 1
+	_, err := adminDao.TestRawSubquery(search)
+	if err != nil {
+		t.Fatalf("TestRawSubquery 失敗：%v", err)
+	}
+}
