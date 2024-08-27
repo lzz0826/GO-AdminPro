@@ -450,3 +450,11 @@ func TestSelectTypeLast(t *testing.T) {
 	fmt.Printf("%+v\n", *result.CreatedTime)
 	fmt.Println("----------------------------")
 }
+
+func TestTestJoin(t *testing.T) {
+	search := "xxx"
+	_, err := adminDao.TestJoin(1, 1, 1, &search)
+	if err != nil {
+		t.Fatalf("TestTestJoin 失敗：%v", err)
+	}
+}

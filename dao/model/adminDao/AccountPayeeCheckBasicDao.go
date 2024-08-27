@@ -115,3 +115,20 @@ func (dao *AccountPayeeCheckBasicDao) SumTotalStatusSUM(customizeSQL func(db *go
 
 	return &totalAmount, nil
 }
+
+func TestJoin(channelId, start, size int, search *string) ([]AccountPayeeCheck, error) {
+	var results []AccountPayeeCheck
+	db := driver.GormDb
+	query := db.Table("club_pay_channel t1").
+		Select("t2.name as clubName, t2.id, t2.random_id as clubId").
+		Joins("JOIN club_record t2 ON t1.club_id = t2.id").
+		Where("t1.channel_id = ?", channelId)
+	if search != nil {
+		query = query.Where("(t2.random_id LIKE ? OR t2.name LIKE ?)", "%"+*search+"%", "%"+*search+"%")
+	}
+	query = query.Order("created_on DESC").Offset(start).Limit(size)
+	if err := query.Find(&results).Error; err != nil {
+		return nil, err
+	}
+	return results, nil
+}
