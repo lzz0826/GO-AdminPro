@@ -173,3 +173,21 @@ func TestRawSubquery(transType int) (int64, error) {
 	}
 	return result, nil
 }
+
+func TestUpdateByExampleSelectivePoint(uid int, description string) (int64, error) {
+	updatesReq := AccountPayeeCheck{
+		UID: &uid,
+	}
+	whereReq := AccountPayeeCheck{
+		Description: &description,
+	}
+	customizeSQL := func(db *gorm.DB) *gorm.DB {
+		return db
+	}
+	result, err := UpdateByExampleSelective(updatesReq, whereReq, customizeSQL, &AccountPayeeCheck{})
+
+	if err != nil {
+		return 0, err
+	}
+	return result, nil
+}

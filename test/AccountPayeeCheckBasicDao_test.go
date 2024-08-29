@@ -474,3 +474,13 @@ func TestRawSubquery(t *testing.T) {
 		t.Fatalf("TestRawSubquery 失敗：%v", err)
 	}
 }
+
+func TestUpdateByExampleSelectivePoint(t *testing.T) {
+	uid := 1
+	description := "test"
+	total, err := adminDao.TestUpdateByExampleSelectivePoint(uid, description)
+	if err != nil {
+		t.Fatalf("TestUpdateByExampleSelectivePoint 失敗：%v", err)
+	}
+	fmt.Printf("%+v\n", total)
+}
