@@ -174,6 +174,28 @@ func TestRawSubquery(transType int) (int64, error) {
 	return result, nil
 }
 
+// 测试子查询更新
+func UpdateAccountStatusFoAdminAccountStatus(id int) (int64, error) {
+	db := driver.GormDb
+	// 构建子查询
+	subquery := db.Table("admin_admin t1").
+		Select("t1.account_status").
+		Where("t1.id = ?", id)
+
+	// 更新操作
+	query := db.Debug().Table("account_payee_check t2").
+		Where("t2.type = (?)", subquery).
+		Update("t2.status", 7)
+
+	affected := query.RowsAffected
+	// 执行并检查错误
+	if err := query.Error; err != nil {
+		return 0, err
+	}
+	return affected, nil
+}
+
+// 测试指针带入
 func TestUpdateByExampleSelectivePoint(uid int, description string) (int64, error) {
 	updatesReq := AccountPayeeCheck{
 		UID: &uid,

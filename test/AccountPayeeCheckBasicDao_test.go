@@ -475,6 +475,15 @@ func TestRawSubquery(t *testing.T) {
 	}
 }
 
+func TestUpdateUnUsedStatus(t *testing.T) {
+	id := 1
+	total, err := adminDao.UpdateAccountStatusFoAdminAccountStatus(id)
+	fmt.Printf("%+v\n", total)
+	if err != nil {
+		t.Fatalf("TestRawSubquery 失敗：%v", err)
+	}
+}
+
 func TestUpdateByExampleSelectivePoint(t *testing.T) {
 	uid := 1
 	description := "test"
