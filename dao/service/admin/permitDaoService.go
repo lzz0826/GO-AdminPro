@@ -36,8 +36,8 @@ func CheckPermitIdsExist(permitIds []string) (permits []adminDao.PermitDAO, err 
 func Convert() []adminDao.PermitDAO {
 
 	page := model.Pagination{
-		Page:  1,
-		Limit: 20,
+		Page: 1,
+		Size: 20,
 	}
 	permits, err := GetAllPermitList(&page)
 	if err != nil {

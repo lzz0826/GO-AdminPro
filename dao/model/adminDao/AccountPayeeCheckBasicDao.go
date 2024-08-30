@@ -10,8 +10,7 @@ import (
 )
 
 type AccountPayeeCheckBasicDao struct {
-	Pagination *model.Pagination
-	Total      int64
+	BasicDao
 }
 
 // Page 设置分页信息
@@ -20,11 +19,11 @@ func (dao *AccountPayeeCheckBasicDao) Page(pagination model.Pagination) *Account
 	return dao
 }
 
-// 执行额外操作后调用 SelectByExampleCheckPage
+// 使用构造判断是否使用分页 执行额外操作后调用
 func (dao *AccountPayeeCheckBasicDao) SelectByExampleCheckPage(customizeSQL func(db *gorm.DB) *gorm.DB, out interface{}, model Model) error {
 	if dao.Pagination != nil {
 		total, err := SelectByExamplePage(customizeSQL, out, dao.Pagination, model)
-		dao.Total = total
+		dao.PageBean.Set(total, dao.Pagination.Page, dao.Pagination.Size, out)
 		if err != nil {
 			return err
 		}
@@ -79,7 +78,7 @@ func SetMAXType(id int) error {
 }
 
 // ListAccountPayeeChecks
-func (dao *AccountPayeeCheckBasicDao) ListAccountPayeeChecks(userRandomId *string, status *enum.EAccountPayeeCheckStatusEnum) ([]AccountPayeeCheck, error) {
+func ListAccountPayeeChecks(userRandomId *string, status *enum.EAccountPayeeCheckStatusEnum) ([]AccountPayeeCheck, error) {
 	var results []AccountPayeeCheck
 	customizeSQL := func(db *gorm.DB) *gorm.DB {
 		if userRandomId != nil {
@@ -100,7 +99,7 @@ func (dao *AccountPayeeCheckBasicDao) ListAccountPayeeChecks(userRandomId *strin
 	return results, nil
 }
 
-func (dao *AccountPayeeCheckBasicDao) ListAccountPayeeChecksPage(userRandomId *string, status *enum.EAccountPayeeCheckStatusEnum, page *model.Pagination) (int64, []AccountPayeeCheck, error) {
+func ListAccountPayeeChecksPage(userRandomId *string, status *enum.EAccountPayeeCheckStatusEnum, page *model.Pagination) (int64, []AccountPayeeCheck, error) {
 	var results []AccountPayeeCheck
 	customizeSQL := func(db *gorm.DB) *gorm.DB {
 		if userRandomId != nil {
@@ -142,7 +141,7 @@ func (dao *AccountPayeeCheckBasicDao) SelectByExampleCheckPageTest(userRandomId 
 	return results, nil
 }
 
-func (dao *AccountPayeeCheckBasicDao) SumTotalStatusSUM(customizeSQL func(db *gorm.DB) *gorm.DB) (*decimal.Decimal, error) {
+func SumTotalStatusSUM(customizeSQL func(db *gorm.DB) *gorm.DB) (*decimal.Decimal, error) {
 	var totalAmount decimal.Decimal
 	db := driver.GormDb.Debug()
 	query := db.Table(AccountPayeeCheck{}.GetTableName()).

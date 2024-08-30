@@ -64,8 +64,8 @@ func (p *PermitDAO) GetPermitByByIds(ids []string) (permits []PermitDAO, err err
 }
 
 func (p *PermitDAO) GetAllPermitList(pagination *model.Pagination) (permits []PermitDAO, err error) {
-	offset := (pagination.Page - 1) * pagination.Limit
-	err = driver.GormDb.Table(p.TableName()).Limit(pagination.Limit).Offset(offset).Order(pagination.Sort).Find(&permits).Error
+	offset := (pagination.Page - 1) * pagination.Size
+	err = driver.GormDb.Table(p.TableName()).Limit(pagination.Size).Offset(offset).Order(pagination.Sort).Find(&permits).Error
 	if err != nil {
 		log.Println(err.Error())
 		return

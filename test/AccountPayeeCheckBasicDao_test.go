@@ -53,7 +53,7 @@ func TestSelectByObjWhereReqPage(t *testing.T) {
 		UID:    &i,
 		Status: &i,
 	}
-	pagination := model.Pagination{Page: 1, Limit: 2}
+	pagination := model.Pagination{Page: 1, Size: 2}
 
 	total, err := adminDao.SelectByObjWhereReqPage(customizeSQL, &whereReq, &results, &pagination, adminDao.AccountPayeeCheck{})
 
@@ -83,9 +83,7 @@ func TestListAccountPayeeChecks(t *testing.T) {
 	userRandomId := "1"
 	status := enum.WAIT
 
-	adminMember := adminDao.AccountPayeeCheckBasicDao{}
-
-	results, err := adminMember.ListAccountPayeeChecks(&userRandomId, &status)
+	results, err := adminDao.ListAccountPayeeChecks(&userRandomId, &status)
 
 	if err != nil {
 		t.Fatalf("TestSelectByExample 失敗：%v", err)
@@ -111,11 +109,9 @@ func TestListAccountPayeeChecksPage(t *testing.T) {
 	userRandomId := "1"
 	status := enum.WAIT
 
-	adminMember := adminDao.AccountPayeeCheckBasicDao{}
+	pagination := model.Pagination{Page: 2, Size: 4}
 
-	pagination := model.Pagination{Page: 2, Limit: 4}
-
-	total, results, err := adminMember.ListAccountPayeeChecksPage(&userRandomId, &status, &pagination)
+	total, results, err := adminDao.ListAccountPayeeChecksPage(&userRandomId, &status, &pagination)
 
 	if err != nil {
 		t.Fatalf("ListAccountPayeeChecksPage 失敗：%v", err)
@@ -145,12 +141,15 @@ func TestSelectByExampleCheckPageTest(t *testing.T) {
 
 	adminMember := adminDao.AccountPayeeCheckBasicDao{}
 
-	pagination := model.Pagination{Page: 4, Limit: 2}
+	pagination := model.Pagination{Page: 4, Size: 2}
 
 	results, err := adminMember.Page(pagination).SelectByExampleCheckPageTest(&userRandomId, &status)
-	fmt.Println("----------------------------")
-	fmt.Printf("%+v\n", adminMember.Total)
-	fmt.Println("----------------------------")
+	fmt.Println("--------------PageBean--------------")
+	fmt.Printf("%+v\n", adminMember.PageBean.Total)
+	fmt.Printf("%+v\n", adminMember.PageBean.Pages)
+	fmt.Printf("%+v\n", adminMember.PageBean.IsLastPage)
+	fmt.Printf("%+v\n", adminMember.PageBean.BeanList)
+	fmt.Println("--------------PageBean--------------")
 	if err != nil {
 		t.Fatalf("TestSelectByExampleCheckPageTest 失敗：%v", err)
 	}
@@ -171,13 +170,11 @@ func TestSelectByExampleCheckPageTest(t *testing.T) {
 
 func TestSumTotalStatusSUM(t *testing.T) {
 
-	adminMember := adminDao.AccountPayeeCheckBasicDao{}
-
 	customizeSQL := func(db *gorm.DB) *gorm.DB {
 		return db
 	}
 
-	price, err := adminMember.SumTotalStatusSUM(customizeSQL)
+	price, err := adminDao.SumTotalStatusSUM(customizeSQL)
 
 	if err != nil {
 		t.Fatalf("SumTotalStatusSUM 失敗：%v", err)

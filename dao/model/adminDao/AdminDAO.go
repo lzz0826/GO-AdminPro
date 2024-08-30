@@ -54,8 +54,8 @@ func (model *AdminDAO) GetAdminByUsername(username string) (admin AdminDAO, err 
 }
 
 func (model *AdminDAO) GetAllAdminList(pagination *model.Pagination) (admins []AdminDAO, err error) {
-	offset := (pagination.Page - 1) * pagination.Limit
-	err = driver.GormDb.Table(model.TableName()).Limit(pagination.Limit).Offset(offset).Order(pagination.Sort).Find(&admins).Error
+	offset := (pagination.Page - 1) * pagination.Size
+	err = driver.GormDb.Table(model.TableName()).Limit(pagination.Size).Offset(offset).Order(pagination.Sort).Find(&admins).Error
 	if err != nil {
 		log.Println(err.Error())
 		return

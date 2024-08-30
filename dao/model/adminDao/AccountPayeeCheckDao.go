@@ -319,7 +319,7 @@ func (apd *AccountPayeeCheckDao) FindRecordByStatusAndUey(status int, uid string
 		return bean, err
 	}
 
-	pageBean := model.Of(totalRecords, page.Page, page.Limit, example)
+	pageBean := model.Of(totalRecords, page.Page, page.Size, example)
 
 	return *pageBean, nil
 }
@@ -450,7 +450,7 @@ func CustomizeSQL(db *gorm.DB, clubIdLst []int64) ([]ClubOnUserStatistics, error
 //		query = query.Where("t1.status = ?", *status)
 //	}
 //	//QueryComplaintList
-//	if err := query.Order("t1.create_time desc").Offset(start).Limit(size).Scan(&results).Error; err != nil {
+//	if err := query.Order("t1.create_time desc").Offset(start).Size(size).Scan(&results).Error; err != nil {
 //		return nil, 0, err
 //	}
 //	return results, count, nil

@@ -8,6 +8,11 @@ import (
 	"gorm.io/gorm"
 )
 
+type BasicDao struct {
+	Pagination *model.Pagination
+	PageBean   model.PageBean
+}
+
 type Model interface {
 	GetTableName() string
 }

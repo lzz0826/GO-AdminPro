@@ -18,7 +18,7 @@ func TestSelectByExample(t *testing.T) {
 	i := 3
 	adminMember := adminDao.AccountPayeeCheckDao{}
 
-	pagination := model.Pagination{Page: 1, Limit: 2}
+	pagination := model.Pagination{Page: 1, Size: 2}
 
 	//排序 未审核的优先排前面 其余按创建时间倒续
 	sql := utils.WithOrderBySQL("case when status = 0 then 0 else 1 end asc, created_time desc, id desc")
@@ -51,7 +51,7 @@ func TestSelectByExampleSelectGeneric(t *testing.T) {
 	status := 0
 
 	p := model.Pagination{Page: 1,
-		Limit: 2}
+		Size: 2}
 
 	customizeSQL := func(db *gorm.DB) *gorm.DB {
 		db = db.Where("uid = ?", uid)
@@ -93,7 +93,7 @@ func TestSelectByExampleEX(t *testing.T) {
 	status := 0
 
 	p := model.Pagination{Page: 1,
-		Limit: 2}
+		Size: 2}
 
 	customizeSQL := func(db *gorm.DB) *gorm.DB {
 		db = db.Where("uid = ?", uid)
@@ -500,8 +500,8 @@ func TestFindRecordByStatusAndUey(t *testing.T) {
 	status := 2
 
 	p := model.Pagination{
-		Page:  1,
-		Limit: 2,
+		Page: 1,
+		Size: 2,
 	}
 
 	rep, err := adminMember.FindRecordByStatusAndUey(status, uid, &p)

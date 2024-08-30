@@ -243,8 +243,8 @@ func WithOffsetAndOrderBy(offset int, orderClause string) func(db *gorm.DB) *gor
 // WithPagination 應用分頁功能，使用頁面和限制
 func WithPagination(req *model.Pagination) func(db *gorm.DB) *gorm.DB {
 	return func(db *gorm.DB) *gorm.DB {
-		offset := (req.Page - 1) * req.Limit
-		return db.Offset(offset).Limit(req.Limit)
+		offset := (req.Page - 1) * req.Size
+		return db.Offset(offset).Limit(req.Size)
 	}
 }
 

@@ -37,8 +37,8 @@ func (r *RoleDAO) InsertRole() (err error) {
 
 func (r *RoleDAO) GetAllRoleList(pagination *model.Pagination) (roles []RoleDAO, err error) {
 	// 分页查询
-	offset := (pagination.Page - 1) * pagination.Limit
-	err = driver.GormDb.Table(r.TableName()).Limit(pagination.Limit).Offset(offset).Order(pagination.Sort).Find(&roles).Error
+	offset := (pagination.Page - 1) * pagination.Size
+	err = driver.GormDb.Table(r.TableName()).Limit(pagination.Size).Offset(offset).Order(pagination.Sort).Find(&roles).Error
 	if err != nil {
 		log.Println("GetRoleByIDs error:", err.Error())
 		return
