@@ -85,9 +85,7 @@ func TestListAccountPayeeChecks(t *testing.T) {
 
 	adminMember := adminDao.AccountPayeeCheckBasicDao{}
 
-	pagination := model.Pagination{Page: 4, Limit: 2}
-
-	results, err := adminMember.ListAccountPayeeChecks(&userRandomId, &status, &pagination)
+	results, err := adminMember.ListAccountPayeeChecks(&userRandomId, &status)
 
 	if err != nil {
 		t.Fatalf("TestSelectByExample 失敗：%v", err)
@@ -115,7 +113,7 @@ func TestListAccountPayeeChecksPage(t *testing.T) {
 
 	adminMember := adminDao.AccountPayeeCheckBasicDao{}
 
-	pagination := model.Pagination{Page: 4, Limit: 4}
+	pagination := model.Pagination{Page: 2, Limit: 4}
 
 	total, results, err := adminMember.ListAccountPayeeChecksPage(&userRandomId, &status, &pagination)
 
@@ -125,6 +123,37 @@ func TestListAccountPayeeChecksPage(t *testing.T) {
 
 	fmt.Printf(" total : %+v\n", total)
 
+	for _, result := range results {
+		fmt.Println("----------------------------")
+		fmt.Printf("%+v\n", *result.ID)
+		fmt.Printf("%+v\n", *result.UID)
+		fmt.Printf("%+v\n", *result.Type)
+		fmt.Printf("%+v\n", *result.Description)
+		fmt.Printf("%+v\n", *result.Status)
+		fmt.Printf("%+v\n", *result.CheckID)
+		fmt.Printf("%+v\n", *result.CheckTime)
+		fmt.Printf("%+v\n", *result.UpdateTime)
+		fmt.Printf("%+v\n", *result.CreatedTime)
+		fmt.Println("----------------------------")
+	}
+}
+
+func TestSelectByExampleCheckPageTest(t *testing.T) {
+
+	userRandomId := "1"
+	status := enum.WAIT
+
+	adminMember := adminDao.AccountPayeeCheckBasicDao{}
+
+	pagination := model.Pagination{Page: 4, Limit: 2}
+
+	results, err := adminMember.Page(pagination).SelectByExampleCheckPageTest(&userRandomId, &status)
+	fmt.Println("----------------------------")
+	fmt.Printf("%+v\n", adminMember.Total)
+	fmt.Println("----------------------------")
+	if err != nil {
+		t.Fatalf("TestSelectByExampleCheckPageTest 失敗：%v", err)
+	}
 	for _, result := range results {
 		fmt.Println("----------------------------")
 		fmt.Printf("%+v\n", *result.ID)

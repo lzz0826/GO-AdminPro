@@ -10,6 +10,32 @@ import (
 )
 
 type AccountPayeeCheckBasicDao struct {
+	Pagination *model.Pagination
+	Total      int64
+}
+
+// Page 设置分页信息
+func (dao *AccountPayeeCheckBasicDao) Page(pagination model.Pagination) *AccountPayeeCheckBasicDao {
+	dao.Pagination = &pagination
+	return dao
+}
+
+// 执行额外操作后调用 SelectByExampleCheckPage
+func (dao *AccountPayeeCheckBasicDao) SelectByExampleCheckPage(customizeSQL func(db *gorm.DB) *gorm.DB, out interface{}, model Model) error {
+	if dao.Pagination != nil {
+		total, err := SelectByExamplePage(customizeSQL, out, dao.Pagination, model)
+		dao.Total = total
+		if err != nil {
+			return err
+		}
+	} else {
+		// 调用原始的 SelectByExample
+		err := SelectByExample(customizeSQL, out, model)
+		if err != nil {
+			return err
+		}
+	}
+	return nil
 }
 
 //Raw: 用于执行原生 SQL 查询并返回结果。
@@ -53,7 +79,7 @@ func SetMAXType(id int) error {
 }
 
 // ListAccountPayeeChecks
-func (dao *AccountPayeeCheckBasicDao) ListAccountPayeeChecks(userRandomId *string, status *enum.EAccountPayeeCheckStatusEnum, page *model.Pagination) ([]AccountPayeeCheck, error) {
+func (dao *AccountPayeeCheckBasicDao) ListAccountPayeeChecks(userRandomId *string, status *enum.EAccountPayeeCheckStatusEnum) ([]AccountPayeeCheck, error) {
 	var results []AccountPayeeCheck
 	customizeSQL := func(db *gorm.DB) *gorm.DB {
 		if userRandomId != nil {
@@ -94,6 +120,26 @@ func (dao *AccountPayeeCheckBasicDao) ListAccountPayeeChecksPage(userRandomId *s
 		return 0, results, err
 	}
 	return total, results, nil
+}
+
+// 使用分页判断
+func (dao *AccountPayeeCheckBasicDao) SelectByExampleCheckPageTest(userRandomId *string, status *enum.EAccountPayeeCheckStatusEnum) ([]AccountPayeeCheck, error) {
+	var results []AccountPayeeCheck
+	customizeSQL := func(db *gorm.DB) *gorm.DB {
+		if userRandomId != nil {
+			db = db.Where("uid = ?", userRandomId)
+		}
+		if status != nil {
+			db = db.Where("status = ?", status)
+		}
+		db = db.Order("case when status = 0 then 0 else 1 end asc, created_time desc, id desc")
+		return db
+	}
+	err := dao.SelectByExampleCheckPage(customizeSQL, &results, &AccountPayeeCheck{})
+	if err != nil {
+		return results, err
+	}
+	return results, nil
 }
 
 func (dao *AccountPayeeCheckBasicDao) SumTotalStatusSUM(customizeSQL func(db *gorm.DB) *gorm.DB) (*decimal.Decimal, error) {
