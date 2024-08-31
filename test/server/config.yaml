@@ -15,3 +15,8 @@ rabbitmq:
   pwd: tony0204
   host: 127.0.0.1
   port: 5672
+
+redis:
+  addr: localhost:6379 #  Redis 地址
+  password : #  如果没有设置密码，则留空
+  db : 0 #使用默认的 DB
