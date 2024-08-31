@@ -31,4 +31,7 @@ redis:
   password : #  如果没有设置密码，则留空
   db : 0 #使用默认的 DB
 
+mongodb:
+  url: "mongodb://localhost:27017"
+
 

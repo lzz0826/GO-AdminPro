@@ -1,7 +1,7 @@
 package adminDao
 
 import (
-	"AdminPro/common/driver"
+	"AdminPro/common/mysql"
 	"errors"
 	"log"
 	"time"
@@ -24,7 +24,7 @@ func (ap *AdminPermitDAO) TableName() string {
 
 // InsertAdminPermit 插入 AdminPermitDAO 資料
 func (ap *AdminPermitDAO) InsertAdminPermit() (err error) {
-	err = driver.GormDb.Table(ap.TableName()).Create(ap).Error
+	err = mysql.GormDb.Table(ap.TableName()).Create(ap).Error
 	if err != nil {
 		log.Println(err.Error())
 		return
@@ -33,7 +33,7 @@ func (ap *AdminPermitDAO) InsertAdminPermit() (err error) {
 }
 
 func (ap *AdminPermitDAO) InsertAdminPermits(adminPermits []AdminPermitDAO) (err error) {
-	err = driver.GormDb.Table(adminPermits[0].TableName()).Omit("id").Create(&adminPermits).Error
+	err = mysql.GormDb.Table(adminPermits[0].TableName()).Omit("id").Create(&adminPermits).Error
 	if err != nil {
 		log.Println(err.Error())
 		return
@@ -43,7 +43,7 @@ func (ap *AdminPermitDAO) InsertAdminPermits(adminPermits []AdminPermitDAO) (err
 
 // GetAdminPermitByID 根據 ID 查詢 AdminPermitDAO
 func (ap *AdminPermitDAO) GetAdminPermitByID(id string) (adminPermit AdminPermitDAO, err error) {
-	err = driver.GormDb.Table(ap.TableName()).Where("id = ?", id).First(&adminPermit).Error
+	err = mysql.GormDb.Table(ap.TableName()).Where("id = ?", id).First(&adminPermit).Error
 	if err != nil {
 		log.Println(err.Error())
 		return
@@ -53,7 +53,7 @@ func (ap *AdminPermitDAO) GetAdminPermitByID(id string) (adminPermit AdminPermit
 
 // GetAdminPermitByAdminID 根據 AdminID 查詢 AdminPermits
 func (ap *AdminPermitDAO) GetAdminPermitByAdminID(adminID string) (adminPermit AdminPermitDAO, err error) {
-	err = driver.GormDb.Table(ap.TableName()).Where("admin_id = ?", adminID).First(&adminPermit).Error
+	err = mysql.GormDb.Table(ap.TableName()).Where("admin_id = ?", adminID).First(&adminPermit).Error
 	if err != nil {
 		log.Println(err.Error())
 		return
@@ -62,7 +62,7 @@ func (ap *AdminPermitDAO) GetAdminPermitByAdminID(adminID string) (adminPermit A
 }
 
 func (ap *AdminPermitDAO) GetAdminPermitByAdminIdAndPermitIds(adminID string, permitIds []string) (adminPermits []AdminPermitDAO, err error) {
-	err = driver.GormDb.Table(ap.TableName()).Where("admin_id = ? AND permit_id IN (?)", adminID, permitIds).Find(&adminPermits).Error
+	err = mysql.GormDb.Table(ap.TableName()).Where("admin_id = ? AND permit_id IN (?)", adminID, permitIds).Find(&adminPermits).Error
 	if err != nil {
 		log.Println(err.Error())
 		return
@@ -71,7 +71,7 @@ func (ap *AdminPermitDAO) GetAdminPermitByAdminIdAndPermitIds(adminID string, pe
 }
 
 func (ap *AdminPermitDAO) GetAdminPermitListByAdminID(adminID string) (adminPermits []AdminPermitDAO, err error) {
-	err = driver.GormDb.Table(ap.TableName()).Where("admin_id = ?", adminID).Find(&adminPermits).Error
+	err = mysql.GormDb.Table(ap.TableName()).Where("admin_id = ?", adminID).Find(&adminPermits).Error
 	if err != nil {
 		log.Println(err.Error())
 		return
@@ -83,7 +83,7 @@ func (ap *AdminPermitDAO) DeleteAdminPermit(ids []string) (err error) {
 	if len(ids) == 0 {
 		return errors.New("ids slice is empty")
 	}
-	err = driver.GormDb.Table(ap.TableName()).Where("id IN (?)", ids).Delete(&AdminPermitDAO{}).Error
+	err = mysql.GormDb.Table(ap.TableName()).Where("id IN (?)", ids).Delete(&AdminPermitDAO{}).Error
 	if err != nil {
 		log.Println("DeleteAdminPermit error:", err.Error())
 		return err

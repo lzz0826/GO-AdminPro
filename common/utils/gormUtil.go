@@ -1,8 +1,8 @@
 package utils
 
 import (
-	"AdminPro/common/driver"
 	"AdminPro/common/model"
+	"AdminPro/common/mysql"
 	"fmt"
 	"gorm.io/gorm"
 	"reflect"
@@ -12,7 +12,7 @@ import (
 
 // 通用SelectGeneric操作
 func SelectGeneric(tableName string, customizeSQL func(db *gorm.DB) *gorm.DB, model interface{}) error {
-	db := driver.GormDb
+	db := mysql.GormDb
 
 	query := db.Debug().Model(model).Table(tableName)
 

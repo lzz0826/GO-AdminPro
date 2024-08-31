@@ -1,8 +1,8 @@
 package adminDao
 
 import (
-	"AdminPro/common/driver"
 	"AdminPro/common/model"
+	"AdminPro/common/mysql"
 	"gorm.io/gorm"
 	_ "gorm.io/gorm"
 	"log"
@@ -36,7 +36,7 @@ func (model *AdminDAO) InsertAdmin(tx *gorm.DB) error {
 
 // GetAdminByID 根據 ID 查詢 AdminDAO
 func (model *AdminDAO) GetAdminByID(id string) (admin AdminDAO, err error) {
-	err = driver.GormDb.Table(model.TableName()).Where("id = ?", id).First(&admin).Error
+	err = mysql.GormDb.Table(model.TableName()).Where("id = ?", id).First(&admin).Error
 	if err != nil {
 		log.Println(err.Error())
 		return
@@ -45,7 +45,7 @@ func (model *AdminDAO) GetAdminByID(id string) (admin AdminDAO, err error) {
 }
 
 func (model *AdminDAO) GetAdminByUsername(username string) (admin AdminDAO, err error) {
-	err = driver.GormDb.Table(model.TableName()).Where("username = ?", username).First(&admin).Error
+	err = mysql.GormDb.Table(model.TableName()).Where("username = ?", username).First(&admin).Error
 	if err != nil {
 		log.Println(err.Error())
 		return
@@ -55,7 +55,7 @@ func (model *AdminDAO) GetAdminByUsername(username string) (admin AdminDAO, err 
 
 func (model *AdminDAO) GetAllAdminList(pagination *model.Pagination) (admins []AdminDAO, err error) {
 	offset := (pagination.Page - 1) * pagination.Size
-	err = driver.GormDb.Table(model.TableName()).Limit(pagination.Size).Offset(offset).Order(pagination.Sort).Find(&admins).Error
+	err = mysql.GormDb.Table(model.TableName()).Limit(pagination.Size).Offset(offset).Order(pagination.Sort).Find(&admins).Error
 	if err != nil {
 		log.Println(err.Error())
 		return

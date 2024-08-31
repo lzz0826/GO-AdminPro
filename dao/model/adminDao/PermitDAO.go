@@ -1,8 +1,8 @@
 package adminDao
 
 import (
-	"AdminPro/common/driver"
 	"AdminPro/common/model"
+	"AdminPro/common/mysql"
 	"log"
 	"time"
 )
@@ -26,7 +26,7 @@ func (p *PermitDAO) TableName() string {
 
 // InsertPermit 插入 AdminPermitDAO 資料
 func (p *PermitDAO) InsertPermit() (err error) {
-	err = driver.GormDb.Table(p.TableName()).Create(p).Error
+	err = mysql.GormDb.Table(p.TableName()).Create(p).Error
 	if err != nil {
 		log.Println("InsertPermit error:", err.Error())
 		return
@@ -36,7 +36,7 @@ func (p *PermitDAO) InsertPermit() (err error) {
 
 // GetPermitByID 根據 ID 查詢 AdminPermitDAO
 func (p *PermitDAO) GetPermitByID(id string) (permit PermitDAO, err error) {
-	err = driver.GormDb.Table(p.TableName()).Where("id = ?", id).First(&permit).Error
+	err = mysql.GormDb.Table(p.TableName()).Where("id = ?", id).First(&permit).Error
 	if err != nil {
 		log.Println("GetPermitByID error:", err.Error())
 		return
@@ -46,7 +46,7 @@ func (p *PermitDAO) GetPermitByID(id string) (permit PermitDAO, err error) {
 
 // GetPermitByPermitKey 根據 PermitKey 查詢 PermitDAO
 func (p *PermitDAO) GetPermitByPermitKey(permitKey string) (permit PermitDAO, err error) {
-	err = driver.GormDb.Table(p.TableName()).Where("permit_key = ?", permitKey).First(&permit).Error
+	err = mysql.GormDb.Table(p.TableName()).Where("permit_key = ?", permitKey).First(&permit).Error
 	if err != nil {
 		log.Println("GetPermitByPermitKey error:", err.Error())
 		return
@@ -55,7 +55,7 @@ func (p *PermitDAO) GetPermitByPermitKey(permitKey string) (permit PermitDAO, er
 }
 
 func (p *PermitDAO) GetPermitByByIds(ids []string) (permits []PermitDAO, err error) {
-	err = driver.GormDb.Table(p.TableName()).Where("id IN (?)", ids).Find(&permits).Error
+	err = mysql.GormDb.Table(p.TableName()).Where("id IN (?)", ids).Find(&permits).Error
 	if err != nil {
 		log.Println(err.Error())
 		return
@@ -65,7 +65,7 @@ func (p *PermitDAO) GetPermitByByIds(ids []string) (permits []PermitDAO, err err
 
 func (p *PermitDAO) GetAllPermitList(pagination *model.Pagination) (permits []PermitDAO, err error) {
 	offset := (pagination.Page - 1) * pagination.Size
-	err = driver.GormDb.Table(p.TableName()).Limit(pagination.Size).Offset(offset).Order(pagination.Sort).Find(&permits).Error
+	err = mysql.GormDb.Table(p.TableName()).Limit(pagination.Size).Offset(offset).Order(pagination.Sort).Find(&permits).Error
 	if err != nil {
 		log.Println(err.Error())
 		return

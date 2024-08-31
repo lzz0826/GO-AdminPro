@@ -1,7 +1,7 @@
 package service
 
 import (
-	"AdminPro/common/driver"
+	"AdminPro/common/mysql"
 	"AdminPro/common/tool"
 	"AdminPro/common/utils"
 	"golang.org/x/crypto/bcrypt"
@@ -18,7 +18,7 @@ import (
 
 // AddAdmin 添加管理員
 func AddAdmin(username string, password string, adminName string, nickName string, currentAdminId string) (err error) {
-	return driver.WithTransaction(func(tx *gorm.DB) error {
+	return mysql.WithTransaction(func(tx *gorm.DB) error {
 		_, err = admin.GetAdminByUsername(username)
 		if err == nil {
 			return errors.New(tool.AdminIsExits.Msg)

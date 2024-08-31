@@ -1,7 +1,7 @@
 package adminDao
 
 import (
-	"AdminPro/common/driver"
+	"AdminPro/common/mysql"
 	"log"
 	"time"
 )
@@ -23,7 +23,7 @@ func (ar *AdminRoleDAO) TableName() string {
 
 // InsertAdminRole 插入 AdminRoleDAO 資料
 func (ar *AdminRoleDAO) InsertAdminRole() (err error) {
-	err = driver.GormDb.Table(ar.TableName()).Create(ar).Error
+	err = mysql.GormDb.Table(ar.TableName()).Create(ar).Error
 	if err != nil {
 		log.Println("InsertAdminRole error:", err.Error())
 		return
@@ -32,7 +32,7 @@ func (ar *AdminRoleDAO) InsertAdminRole() (err error) {
 }
 
 func (ar *AdminRoleDAO) InsertAdminRoles(adminRoles []AdminRoleDAO) (err error) {
-	err = driver.GormDb.Table(adminRoles[0].TableName()).Omit("id").Create(&adminRoles).Error
+	err = mysql.GormDb.Table(adminRoles[0].TableName()).Omit("id").Create(&adminRoles).Error
 	if err != nil {
 		log.Println("InsertAdminRoles error:", err.Error())
 		return
@@ -41,7 +41,7 @@ func (ar *AdminRoleDAO) InsertAdminRoles(adminRoles []AdminRoleDAO) (err error) 
 }
 
 func (ar *AdminRoleDAO) GetAllAdminRole() (adminRole []AdminRoleDAO, err error) {
-	err = driver.GormDb.Table(ar.TableName()).Find(&adminRole).Error
+	err = mysql.GormDb.Table(ar.TableName()).Find(&adminRole).Error
 	if err != nil {
 		log.Println("GetAdminRoleByID error:", err.Error())
 		return
@@ -51,7 +51,7 @@ func (ar *AdminRoleDAO) GetAllAdminRole() (adminRole []AdminRoleDAO, err error) 
 
 // GetAdminRoleByID 根據 ID 查詢 AdminRoleDAO
 func (ar *AdminRoleDAO) GetAdminRoleByID(id string) (adminRole AdminRoleDAO, err error) {
-	err = driver.GormDb.Table(ar.TableName()).Where("id = ?", id).First(&adminRole).Error
+	err = mysql.GormDb.Table(ar.TableName()).Where("id = ?", id).First(&adminRole).Error
 	if err != nil {
 		log.Println("GetAdminRoleByID error:", err.Error())
 		return
@@ -60,7 +60,7 @@ func (ar *AdminRoleDAO) GetAdminRoleByID(id string) (adminRole AdminRoleDAO, err
 }
 
 func (ar *AdminRoleDAO) GetAdminRoleByAdminId(adminId string) (adminRoles []AdminRoleDAO, err error) {
-	err = driver.GormDb.Table(ar.TableName()).Where("admin_id IN (?)", adminId).Find(&adminRoles).Error
+	err = mysql.GormDb.Table(ar.TableName()).Where("admin_id IN (?)", adminId).Find(&adminRoles).Error
 	if err != nil {
 		log.Println("GetAdminRoleByID error:", err.Error())
 		return
@@ -69,7 +69,7 @@ func (ar *AdminRoleDAO) GetAdminRoleByAdminId(adminId string) (adminRoles []Admi
 }
 
 func (ar *AdminRoleDAO) GetAdminRoleByAdminIdAndRoleIds(admins string, roleIds []string) (adminRoles []AdminRoleDAO, err error) {
-	err = driver.GormDb.Table(ar.TableName()).Where("admin_id = ? AND role_id IN (?)", admins, roleIds).Find(&adminRoles).Error
+	err = mysql.GormDb.Table(ar.TableName()).Where("admin_id = ? AND role_id IN (?)", admins, roleIds).Find(&adminRoles).Error
 	if err != nil {
 		log.Println("GetAdminRoleByAdminIdAndRoleIds error:", err.Error())
 		return
@@ -78,7 +78,7 @@ func (ar *AdminRoleDAO) GetAdminRoleByAdminIdAndRoleIds(admins string, roleIds [
 }
 
 func (ar *AdminRoleDAO) DeleteAdminRoleByIds(ids []string) (err error) {
-	err = driver.GormDb.Table(ar.TableName()).Where("id IN (?)", ids).Delete(&AdminRoleDAO{}).Error
+	err = mysql.GormDb.Table(ar.TableName()).Where("id IN (?)", ids).Delete(&AdminRoleDAO{}).Error
 	if err != nil {
 		log.Println("DeleteAdminRoleByIds error:", err.Error())
 		return err

@@ -1,7 +1,7 @@
 package main
 
 import (
-	"AdminPro/common/driver"
+	"AdminPro/common/mysql"
 	"AdminPro/server/server/server"
 	"github.com/gin-gonic/gin"
 )
@@ -12,8 +12,8 @@ func main() {
 
 	// 服务停止时清理数据库链接
 	defer func() {
-		if driver.GormDb != nil {
-			sqlDB, err := driver.GormDb.DB()
+		if mysql.GormDb != nil {
+			sqlDB, err := mysql.GormDb.DB()
 			if err != nil {
 				panic("failed to get DB instance: " + err.Error())
 			}

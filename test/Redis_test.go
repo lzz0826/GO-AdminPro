@@ -1,7 +1,7 @@
 package test
 
 import (
-	"AdminPro/common/driver"
+	"AdminPro/common/redis"
 	"context"
 	"fmt"
 	"log"
@@ -16,7 +16,7 @@ func TestSetExpireKV(t *testing.T) {
 	// 使用上下文
 	ctx := context.Background()
 	// 调用 SetExpireKV 方法
-	err := driver.AdminRedisDb.SetExpireKV(ctx, key, value, expire)
+	err := redis.AdminRedisDb.SetExpireKV(ctx, key, value, expire)
 	if err != nil {
 		t.Fatalf("Error setting key with expiration: %v", err)
 	}
@@ -26,7 +26,7 @@ func TestGetKey(t *testing.T) {
 
 	ctx := context.Background()
 	key := "example_key"
-	value, err := driver.AdminRedisDb.GetKey(ctx, key)
+	value, err := redis.AdminRedisDb.GetKey(ctx, key)
 	if err != nil {
 		log.Fatalf("Error getting key: %v", err)
 	}

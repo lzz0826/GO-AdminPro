@@ -1,9 +1,9 @@
 package adminDao
 
 import (
-	"AdminPro/common/driver"
 	"AdminPro/common/enum"
 	"AdminPro/common/model"
+	"AdminPro/common/mysql"
 	"fmt"
 	"github.com/shopspring/decimal"
 	"gorm.io/gorm"
@@ -49,7 +49,7 @@ func (dao *AccountPayeeCheckBasicDao) SelectByExampleCheckPage(customizeSQL func
 // 使用原始SQL查询
 func SelectTypeLast(typeValue int) (*AccountPayeeCheck, error) {
 	var result AccountPayeeCheck
-	db := driver.GormDb
+	db := mysql.GormDb
 	sql := `
         SELECT * 
         FROM account_payee_check
@@ -66,7 +66,7 @@ func SelectTypeLast(typeValue int) (*AccountPayeeCheck, error) {
 
 // 使用原始SQL 修改
 func SetMAXType(id int) error {
-	db := driver.GormDb
+	db := mysql.GormDb
 	sql := `
 		UPDATE account_payee_check, 
 		(SELECT MAX(type) AS m FROM account_payee_check) b 
@@ -143,7 +143,7 @@ func (dao *AccountPayeeCheckBasicDao) SelectByExampleCheckPageTest(userRandomId 
 
 func SumTotalStatusSUM(customizeSQL func(db *gorm.DB) *gorm.DB) (*decimal.Decimal, error) {
 	var totalAmount decimal.Decimal
-	db := driver.GormDb.Debug()
+	db := mysql.GormDb.Debug()
 	query := db.Table(AccountPayeeCheck{}.GetTableName()).
 		Select("IFNULL(SUM(status), 0) AS total_amount").
 		Scopes(customizeSQL)
@@ -164,7 +164,7 @@ func SumTotalStatusSUM(customizeSQL func(db *gorm.DB) *gorm.DB) (*decimal.Decima
 // JOIN 测试
 func TestJoin(channelId, start, size int, search *string) ([]AccountPayeeCheck, error) {
 	var results []AccountPayeeCheck
-	db := driver.GormDb
+	db := mysql.GormDb
 	query := db.Table("club_pay_channel t1").
 		Select("t2.name as clubName, t2.id, t2.random_id as clubId").
 		Joins("JOIN club_record t2 ON t1.club_id = t2.id").
@@ -182,7 +182,7 @@ func TestJoin(channelId, start, size int, search *string) ([]AccountPayeeCheck, 
 // 子查询 测试
 func TestSubquery(search string) (AccountPayeeCheck, error) {
 	var result AccountPayeeCheck
-	db := driver.GormDb
+	db := mysql.GormDb
 	// 子查询获取 club_record 的 id
 	subquery := db.Table("club_record").
 		Select("id").
@@ -205,7 +205,7 @@ func TestSubquery(search string) (AccountPayeeCheck, error) {
 // 测试 Raw subquery 子查询
 func TestRawSubquery(transType int) (int64, error) {
 	var result int64
-	db := driver.GormDb
+	db := mysql.GormDb
 	subquery := "SELECT club_id FROM club_pay_channel"
 
 	db = db.Table("club_record").
@@ -221,7 +221,7 @@ func TestRawSubquery(transType int) (int64, error) {
 
 // 测试子查询更新
 func UpdateAccountStatusFoAdminAccountStatus(id int) (int64, error) {
-	db := driver.GormDb
+	db := mysql.GormDb
 	// 构建子查询
 	subquery := db.Table("admin_admin t1").
 		Select("t1.account_status").

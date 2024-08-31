@@ -1,8 +1,8 @@
 package test
 
 import (
-	"AdminPro/common/driver"
 	"AdminPro/common/model"
+	"AdminPro/common/mysql"
 	"AdminPro/common/utils"
 	"AdminPro/dao/model/adminDao"
 	"encoding/json"
@@ -593,7 +593,7 @@ func TestAddAccountPayeeCheck(t *testing.T) {
 }
 
 func TestOnUserOfClub(t *testing.T) {
-	db := driver.GormDb
+	db := mysql.GormDb
 
 	clubIdLst := []int64{1, 2, 3}
 

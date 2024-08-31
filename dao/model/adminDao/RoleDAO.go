@@ -1,8 +1,8 @@
 package adminDao
 
 import (
-	"AdminPro/common/driver"
 	"AdminPro/common/model"
+	"AdminPro/common/mysql"
 	"log"
 	"time"
 )
@@ -27,7 +27,7 @@ func (r *RoleDAO) TableName() string {
 
 // InsertRole 插入 RoleDAO 資料
 func (r *RoleDAO) InsertRole() (err error) {
-	err = driver.GormDb.Table(r.TableName()).Omit("id").Create(r).Error
+	err = mysql.GormDb.Table(r.TableName()).Omit("id").Create(r).Error
 	if err != nil {
 		log.Println("InsertRole error:", err.Error())
 		return
@@ -38,7 +38,7 @@ func (r *RoleDAO) InsertRole() (err error) {
 func (r *RoleDAO) GetAllRoleList(pagination *model.Pagination) (roles []RoleDAO, err error) {
 	// 分页查询
 	offset := (pagination.Page - 1) * pagination.Size
-	err = driver.GormDb.Table(r.TableName()).Limit(pagination.Size).Offset(offset).Order(pagination.Sort).Find(&roles).Error
+	err = mysql.GormDb.Table(r.TableName()).Limit(pagination.Size).Offset(offset).Order(pagination.Sort).Find(&roles).Error
 	if err != nil {
 		log.Println("GetRoleByIDs error:", err.Error())
 		return
@@ -48,7 +48,7 @@ func (r *RoleDAO) GetAllRoleList(pagination *model.Pagination) (roles []RoleDAO,
 
 // GetRoleByID 根據 ID 查詢 RoleDAO
 func (r *RoleDAO) GetRoleByID(id string) (role RoleDAO, err error) {
-	err = driver.GormDb.Table(r.TableName()).Where("id = ?", id).First(&role).Error
+	err = mysql.GormDb.Table(r.TableName()).Where("id = ?", id).First(&role).Error
 	if err != nil {
 		log.Println("GetRoleByID error:", err.Error())
 		return
@@ -58,7 +58,7 @@ func (r *RoleDAO) GetRoleByID(id string) (role RoleDAO, err error) {
 
 // GetRoleByRoleKey 根據 RoleKey 查詢 RoleDAO
 func (r *RoleDAO) GetRoleByRoleKey(roleKey string) (role RoleDAO, err error) {
-	err = driver.GormDb.Table(r.TableName()).Where("role_key = ?", roleKey).First(&role).Error
+	err = mysql.GormDb.Table(r.TableName()).Where("role_key = ?", roleKey).First(&role).Error
 	if err != nil {
 		log.Println("GetRoleByRoleKey error:", err.Error())
 		return
@@ -67,7 +67,7 @@ func (r *RoleDAO) GetRoleByRoleKey(roleKey string) (role RoleDAO, err error) {
 }
 
 func (r *RoleDAO) GetRoleByIDs(ids []string) (roles []RoleDAO, err error) {
-	err = driver.GormDb.Table(r.TableName()).Where("id IN (?)", ids).Find(&roles).Error
+	err = mysql.GormDb.Table(r.TableName()).Where("id IN (?)", ids).Find(&roles).Error
 
 	if err != nil {
 		log.Println("GetRoleByIDs error:", err.Error())

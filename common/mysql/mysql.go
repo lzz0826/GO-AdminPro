@@ -1,5 +1,5 @@
 // mysql db drives
-package driver
+package mysql
 
 import (
 	"AdminPro/server/config"

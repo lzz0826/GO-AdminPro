@@ -1,4 +1,4 @@
-package driver
+package mysql
 
 import (
 	"gorm.io/gorm"
@@ -25,7 +25,7 @@ func WithTransaction(txFunc func(*gorm.DB) error) (err error) {
 //
 //import (
 //	"fmt"
-//	"gorm.io/driver/sqlite"
+//	"gorm.io/mysql/sqlite"
 //	"gorm.io/gorm"
 //)
 //

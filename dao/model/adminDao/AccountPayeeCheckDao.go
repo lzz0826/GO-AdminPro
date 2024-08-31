@@ -1,8 +1,8 @@
 package adminDao
 
 import (
-	"AdminPro/common/driver"
 	"AdminPro/common/model"
+	"AdminPro/common/mysql"
 	"AdminPro/common/utils"
 	"database/sql"
 	"fmt"
@@ -18,7 +18,7 @@ func (apd *AccountPayeeCheckDao) TableName() string {
 
 func (apd *AccountPayeeCheckDao) SelectByExample(uid *int, status *int, customizeSQL func(db *gorm.DB) *gorm.DB, page *model.Pagination) ([]AccountPayeeCheck, error) {
 	var results []AccountPayeeCheck
-	db := driver.GormDb
+	db := mysql.GormDb
 
 	query := db.Debug().Model(AccountPayeeCheck{}).Table(apd.TableName())
 
@@ -56,7 +56,7 @@ func (apd *AccountPayeeCheckDao) SelectByExampleSelectGeneric(customizeSQL func(
 func (apd *AccountPayeeCheckDao) SelectByExampleCustomizeSQL(customizeSQL func(db *gorm.DB) *gorm.DB) ([]AccountPayeeCheck, error) {
 	var results []AccountPayeeCheck
 
-	db := driver.GormDb
+	db := mysql.GormDb
 
 	query := db.Debug().Model(AccountPayeeCheck{}).Table(apd.TableName())
 
@@ -74,7 +74,7 @@ func (apd *AccountPayeeCheckDao) SelectByExampleCustomizeSQL(customizeSQL func(d
 
 func (apd *AccountPayeeCheckDao) SelectByPrimaryKey(id int) (AccountPayeeCheck, error) {
 	var result AccountPayeeCheck
-	db := driver.GormDb
+	db := mysql.GormDb
 
 	err := db.Debug().Model(AccountPayeeCheck{}).Table(apd.TableName()).Where("id = ?", id).First(&result).Error
 	if err != nil {
@@ -85,7 +85,7 @@ func (apd *AccountPayeeCheckDao) SelectByPrimaryKey(id int) (AccountPayeeCheck, 
 }
 
 func (apd *AccountPayeeCheckDao) DeleteByExample(id int) error {
-	db := driver.GormDb
+	db := mysql.GormDb
 
 	err := db.Debug().Table(apd.TableName()).Delete(&AccountPayeeCheck{}, "id = ?", id).Error
 	if err != nil {
@@ -95,7 +95,7 @@ func (apd *AccountPayeeCheckDao) DeleteByExample(id int) error {
 }
 
 func (apd *AccountPayeeCheckDao) DeleteByCustomizeSQL(customizeSQL func(db *gorm.DB) *gorm.DB) error {
-	db := driver.GormDb
+	db := mysql.GormDb
 
 	err := db.Debug().Table(apd.TableName()).Scopes(customizeSQL).Delete(&AccountPayeeCheck{}).Error
 	if err != nil {
@@ -110,7 +110,7 @@ func (apd *AccountPayeeCheckDao) Insert(a AccountPayeeCheck) (int64, error) {
 	// 创建记录时忽略 ID 字段
 	a.ID = nil
 
-	db := driver.GormDb
+	db := mysql.GormDb
 
 	// 开始一个事务
 	tx := db.Begin()
@@ -137,7 +137,7 @@ func (apd *AccountPayeeCheckDao) InsertSelective(a AccountPayeeCheck) (int64, er
 	// 创建记录时忽略 ID 字段
 	a.ID = nil
 
-	db := driver.GormDb
+	db := mysql.GormDb
 
 	// 开始一个事务
 	tx := db.Begin()
@@ -168,7 +168,7 @@ func (apd *AccountPayeeCheckDao) InsertSelective(a AccountPayeeCheck) (int64, er
 
 // CountByExample Count(没带的属性 "不会" 添加到条件中)
 func (apd *AccountPayeeCheckDao) CountByExample(a AccountPayeeCheck) (int64, error) {
-	db := driver.GormDb
+	db := mysql.GormDb
 	var count int64
 	result := db.Debug().Table(apd.TableName()).Where(utils.BuildNotNullMap(a)).Count(&count)
 	if result.Error != nil {
@@ -178,7 +178,7 @@ func (apd *AccountPayeeCheckDao) CountByExample(a AccountPayeeCheck) (int64, err
 }
 
 func (apd *AccountPayeeCheckDao) CountByCustomizeSQL(customizeSQL func(db *gorm.DB) *gorm.DB) (int64, error) {
-	db := driver.GormDb
+	db := mysql.GormDb
 	var count int64
 	result := db.Debug().Model(AccountPayeeCheck{}).Table(apd.TableName()).Scopes(customizeSQL).Count(&count)
 	if result.Error != nil {
@@ -189,7 +189,7 @@ func (apd *AccountPayeeCheckDao) CountByCustomizeSQL(customizeSQL func(db *gorm.
 
 // UpdateByExampleSelective 更新 (没带的属性 "不会" 添加到条件中)
 func (apd *AccountPayeeCheckDao) UpdateByExampleSelective(updatesReq AccountPayeeCheck, whereReq AccountPayeeCheck) (int64, error) {
-	db := driver.GormDb
+	db := mysql.GormDb
 	result := db.Debug().Table(apd.TableName()).Where(utils.BuildNotNullMap(whereReq)).Updates(updatesReq)
 
 	if result.Error != nil {
@@ -201,7 +201,7 @@ func (apd *AccountPayeeCheckDao) UpdateByExampleSelective(updatesReq AccountPaye
 
 // UpdateByCustomizeSQL 更新 (没带的属性 "不会" 添加到条件中)
 func (apd *AccountPayeeCheckDao) UpdateByCustomizeSQL(updatesReq AccountPayeeCheck, whereReq AccountPayeeCheck, customizeSQL func(db *gorm.DB) *gorm.DB) (int64, error) {
-	db := driver.GormDb
+	db := mysql.GormDb
 	result := db.Debug().Table(apd.TableName()).Where(utils.BuildNotNullMap(whereReq)).Scopes(customizeSQL).Updates(updatesReq)
 	if result.Error != nil {
 		return 0, result.Error
@@ -211,7 +211,7 @@ func (apd *AccountPayeeCheckDao) UpdateByCustomizeSQL(updatesReq AccountPayeeChe
 
 // UpdateByExample 更新 (没带的属性 "会" 添加至条件中在 DB NULL)
 func (apd *AccountPayeeCheckDao) UpdateByExample(updatesReq AccountPayeeCheck, whereReq AccountPayeeCheck) (int64, error) {
-	db := driver.GormDb
+	db := mysql.GormDb
 	upReq := utils.BuildNullMap(updatesReq)
 	//更新条件去掉id
 	delete(upReq, "id")
@@ -223,7 +223,7 @@ func (apd *AccountPayeeCheckDao) UpdateByExample(updatesReq AccountPayeeCheck, w
 }
 
 func (apd *AccountPayeeCheckDao) UpdateByExampleCustomizeSQL(updatesReq AccountPayeeCheck, whereReq AccountPayeeCheck, customizeSQL func(db *gorm.DB) *gorm.DB) (int64, error) {
-	db := driver.GormDb
+	db := mysql.GormDb
 	upReq := utils.BuildNullMap(updatesReq)
 	//更新条件去掉id
 	delete(upReq, "id")
@@ -236,7 +236,7 @@ func (apd *AccountPayeeCheckDao) UpdateByExampleCustomizeSQL(updatesReq AccountP
 
 // UpdateByPrimaryKeySelective 更新 (没带的属性 "不会" 添加到条件中)
 func (apd *AccountPayeeCheckDao) UpdateByPrimaryKeySelective(id int, updatesReq AccountPayeeCheck) error {
-	db := driver.GormDb
+	db := mysql.GormDb
 	err := db.Debug().Table(apd.TableName()).Where("id = ?", id).Updates(updatesReq).Error
 	if err != nil {
 		return err
@@ -246,7 +246,7 @@ func (apd *AccountPayeeCheckDao) UpdateByPrimaryKeySelective(id int, updatesReq 
 
 // UpdateByPrimaryKey 更新  (没带的属性 "会" 添加至条件中在 DB NULL)
 func (apd *AccountPayeeCheckDao) UpdateByPrimaryKey(id int, updatesReq AccountPayeeCheck) (int64, error) {
-	db := driver.GormDb
+	db := mysql.GormDb
 	upReq := utils.BuildNullMap(updatesReq)
 	//更新条件去掉id
 	delete(upReq, "id")
@@ -279,7 +279,7 @@ func (apd *AccountPayeeCheckDao) UpdateDBNullTest(uid, status, checkID *int, des
 		return 0, fmt.Errorf("no fields to update")
 	}
 
-	db := driver.GormDb
+	db := mysql.GormDb
 	//uid check_id 查询条件会自动代收寻条件  WHERE uid = NULL AND check_id = 3
 	result := db.Debug().Table(apd.TableName()).Where("uid = ? AND check_id = ?", uid, checkID).Updates(updates)
 	if result.Error != nil {
@@ -326,7 +326,7 @@ func (apd *AccountPayeeCheckDao) FindRecordByStatusAndUey(status int, uid string
 
 // accountStatus 指針會有 WHERE aa.account_status = 1 或 WHERE aa.account_status = NULL的情況
 func (apd *AccountPayeeCheckDao) SelectByAccountStatus(accountStatus *int) ([]ClubOnUserStatistics, error) {
-	db := driver.GormDb
+	db := mysql.GormDb
 	query := `
 		SELECT
 			aa.id AS clubId,
@@ -349,7 +349,7 @@ func (apd *AccountPayeeCheckDao) SelectByAccountStatus(accountStatus *int) ([]Cl
 
 // 返回最後自增ID DB會有 NULL 情況
 func (apd *AccountPayeeCheckDao) AddAccountPayeeCheck(a AccountPayeeCheck) (int64, error) {
-	db := driver.GormDb
+	db := mysql.GormDb
 
 	// 开始一个事务
 	tx := db.Begin()

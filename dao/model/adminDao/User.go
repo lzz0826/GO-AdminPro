@@ -1,7 +1,7 @@
 package adminDao
 
 import (
-	"AdminPro/common/driver"
+	"AdminPro/common/mysql"
 	"github.com/google/uuid"
 	"gorm.io/gorm"
 	"log"
@@ -11,7 +11,7 @@ import (
 // models package's db obj
 // all db operation should be done in models pkg
 // so db is a pkg inner var
-var db *gorm.DB = driver.GormDb
+var db *gorm.DB = mysql.GormDb
 
 // User 代理 /**
 type User struct {

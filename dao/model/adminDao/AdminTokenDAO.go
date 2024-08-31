@@ -1,7 +1,7 @@
 package adminDao
 
 import (
-	"AdminPro/common/driver"
+	"AdminPro/common/mysql"
 	"gorm.io/gorm"
 	"log"
 	"time"
@@ -29,7 +29,7 @@ func (at *AdminTokenDAO) InsertAdminToken(tx *gorm.DB) error {
 
 // GetAdminTokenByID 根據 ID 查詢 AdminTokenDAO
 func (at *AdminTokenDAO) GetAdminTokenByID(id string) (adminToken AdminTokenDAO, err error) {
-	err = driver.GormDb.Table(at.TableName()).Where("id = ?", id).First(&adminToken).Error
+	err = mysql.GormDb.Table(at.TableName()).Where("id = ?", id).First(&adminToken).Error
 	if err != nil {
 		log.Println("GetAdminTokenByID error:", err.Error())
 		return
@@ -38,7 +38,7 @@ func (at *AdminTokenDAO) GetAdminTokenByID(id string) (adminToken AdminTokenDAO,
 }
 
 func (at *AdminTokenDAO) GetAdminTokenByAdminID(adminID string) (adminToken AdminTokenDAO, err error) {
-	err = driver.GormDb.Table(at.TableName()).Where("admin_id = ?", adminID).First(&adminToken).Error
+	err = mysql.GormDb.Table(at.TableName()).Where("admin_id = ?", adminID).First(&adminToken).Error
 	if err != nil {
 		log.Println("GetAdminTokenByID error:", err.Error())
 		return
@@ -48,7 +48,7 @@ func (at *AdminTokenDAO) GetAdminTokenByAdminID(adminID string) (adminToken Admi
 
 // GetAdminTokensByAdminID 根據 AdminID 查詢 AdminTokens
 func (at *AdminTokenDAO) GetAdminTokensByAdminID(adminID string) (adminTokens []AdminTokenDAO, err error) {
-	err = driver.GormDb.Table(at.TableName()).Where("admin_id = ?", adminID).Find(&adminTokens).Error
+	err = mysql.GormDb.Table(at.TableName()).Where("admin_id = ?", adminID).Find(&adminTokens).Error
 	if err != nil {
 		log.Println("GetAdminTokensByAdminID error:", err.Error())
 		return
