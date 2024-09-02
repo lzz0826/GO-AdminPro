@@ -14,12 +14,36 @@ type BasicDao struct {
 }
 
 type Model interface {
-	GetTableName() string
+	GetDbTableName() string
+}
+
+// Page 设置分页信息
+func (dao *BasicDao) Page(pagination model.Pagination) *BasicDao {
+	dao.Pagination = &pagination
+	return dao
+}
+
+// 使用构造判断是否使用分页 执行额外操作后调用
+func (dao *BasicDao) SelectByExampleCheckPage(customizeSQL func(db *gorm.DB) *gorm.DB, out interface{}, model Model) error {
+	if dao.Pagination != nil {
+		total, err := SelectByExamplePage(customizeSQL, out, dao.Pagination, model)
+		dao.PageBean.Set(total, dao.Pagination.Page, dao.Pagination.Size, out)
+		if err != nil {
+			return err
+		}
+	} else {
+		// 调用原始的 SelectByExample
+		err := SelectByExample(customizeSQL, out, model)
+		if err != nil {
+			return err
+		}
+	}
+	return nil
 }
 
 func SelectByExample(customizeSQL func(db *gorm.DB) *gorm.DB, out interface{}, table Model) error {
 	db := mysql.GormDb
-	query := db.Debug().Table(table.GetTableName()).Scopes(customizeSQL)
+	query := db.Debug().Table(table.GetDbTableName()).Scopes(customizeSQL)
 	err := query.Find(out).Error
 	if err != nil {
 		return err
@@ -32,7 +56,7 @@ func SelectByExamplePage(customizeSQL func(db *gorm.DB) *gorm.DB, out interface{
 	var total int64
 	db := mysql.GormDb
 
-	query := db.Debug().Table(table.GetTableName()).Scopes(customizeSQL)
+	query := db.Debug().Table(table.GetDbTableName()).Scopes(customizeSQL)
 	err := query.Count(&total).Error
 	if err != nil {
 		return 0, nil
@@ -47,7 +71,7 @@ func SelectByExamplePage(customizeSQL func(db *gorm.DB) *gorm.DB, out interface{
 
 func SelectByObjWhereReq(customizeSQL func(db *gorm.DB) *gorm.DB, whereReq, out interface{}, table Model) error {
 	db := mysql.GormDb
-	query := db.Debug().Table(table.GetTableName()).Where(utils.BuildNotNullMap(whereReq)).Scopes(customizeSQL)
+	query := db.Debug().Table(table.GetDbTableName()).Where(utils.BuildNotNullMap(whereReq)).Scopes(customizeSQL)
 	err := query.Find(out).Error
 	if err != nil {
 		return err
@@ -60,7 +84,7 @@ func SelectByObjWhereReqPage(customizeSQL func(db *gorm.DB) *gorm.DB, whereReq, 
 	var total int64
 	db := mysql.GormDb
 
-	query := db.Debug().Table(table.GetTableName()).Where(utils.BuildNotNullMap(whereReq)).Scopes(customizeSQL)
+	query := db.Debug().Table(table.GetDbTableName()).Where(utils.BuildNotNullMap(whereReq)).Scopes(customizeSQL)
 	err := query.Count(&total).Error
 	if err != nil {
 		return 0, nil
@@ -75,7 +99,7 @@ func SelectByObjWhereReqPage(customizeSQL func(db *gorm.DB) *gorm.DB, whereReq, 
 
 func SelectByPrimaryKey(id int, out interface{}, table Model) error {
 	db := mysql.GormDb
-	err := db.Debug().Table(table.GetTableName()).Where("id = ?", id).First(out).Error
+	err := db.Debug().Table(table.GetDbTableName()).Where("id = ?", id).First(out).Error
 	if err != nil {
 		return err
 	}
@@ -85,7 +109,7 @@ func SelectByPrimaryKey(id int, out interface{}, table Model) error {
 // 返回受影响(删除的比数)
 func DeleteByPrimaryKey(id int, table Model) (int64, error) {
 	db := mysql.GormDb
-	result := db.Debug().Table(table.GetTableName()).Delete(table, "id = ?", id)
+	result := db.Debug().Table(table.GetDbTableName()).Delete(table, "id = ?", id)
 	if result.Error != nil {
 		return 0, result.Error
 	}
@@ -97,7 +121,7 @@ func DeleteByList(columnName string, list []int, table Model) (int64, error) {
 	db := mysql.GormDb
 	// 使用 fmt.Sprintf 确保正确插入列名
 	query := fmt.Sprintf("%s IN ?", columnName)
-	result := db.Debug().Table(table.GetTableName()).Where(query, list).Delete(table)
+	result := db.Debug().Table(table.GetDbTableName()).Where(query, list).Delete(table)
 	if result.Error != nil {
 		return 0, result.Error
 	}
@@ -107,7 +131,7 @@ func DeleteByList(columnName string, list []int, table Model) (int64, error) {
 // 返回受影响(删除的比数)
 func DeleteByExample(customizeSQL func(db *gorm.DB) *gorm.DB, table Model) (int64, error) {
 	db := mysql.GormDb
-	result := db.Debug().Table(table.GetTableName()).Scopes(customizeSQL).Delete(table)
+	result := db.Debug().Table(table.GetDbTableName()).Scopes(customizeSQL).Delete(table)
 
 	if result.Error != nil {
 		return 0, result.Error
@@ -119,7 +143,7 @@ func DeleteByExample(customizeSQL func(db *gorm.DB) *gorm.DB, table Model) (int6
 func CountByExample(customizeSQL func(db *gorm.DB) *gorm.DB, table Model) (int64, error) {
 	db := mysql.GormDb
 	var count int64
-	result := db.Debug().Table(table.GetTableName()).Scopes(customizeSQL).Count(&count)
+	result := db.Debug().Table(table.GetDbTableName()).Scopes(customizeSQL).Count(&count)
 	if result.Error != nil {
 		return 0, result.Error
 	}
@@ -137,7 +161,7 @@ func Insert(insetCondition interface{}, table Model) (int64, error) {
 	}
 
 	// 使用 newValue 来创建记录
-	if err := tx.Debug().Table(table.GetTableName()).Create(insetCondition).Error; err != nil {
+	if err := tx.Debug().Table(table.GetDbTableName()).Create(insetCondition).Error; err != nil {
 		tx.Rollback()
 		return 0, err
 	}
@@ -161,7 +185,7 @@ func InsertSelective(insetCondition interface{}, table Model) (int64, error) {
 		return 0, tx.Error
 	}
 
-	if err := tx.Debug().Table(table.GetTableName()).Create(utils.BuildNotNullMap(insetCondition)).Error; err != nil {
+	if err := tx.Debug().Table(table.GetDbTableName()).Create(utils.BuildNotNullMap(insetCondition)).Error; err != nil {
 		tx.Rollback()
 		return 0, err
 	}
@@ -187,7 +211,7 @@ func InsertSelectiveList[T any](insetCondition []T, table Model) ([]int64, error
 		return nil, tx.Error
 	}
 	for _, v := range insetCondition {
-		if err := tx.Debug().Table(table.GetTableName()).Create(utils.BuildNotNullMap(v)).Error; err != nil {
+		if err := tx.Debug().Table(table.GetDbTableName()).Create(utils.BuildNotNullMap(v)).Error; err != nil {
 			tx.Rollback()
 			return nil, err
 		}
@@ -208,7 +232,7 @@ func InsertSelectiveList[T any](insetCondition []T, table Model) ([]int64, error
 // UpdateByExampleSelective 更新 (没带的属性 "不会" 添加到条件中)
 func UpdateByExampleSelective(updatesReq interface{}, whereReq interface{}, customizeSQL func(db *gorm.DB) *gorm.DB, table Model) (int64, error) {
 	db := mysql.GormDb
-	result := db.Debug().Table(table.GetTableName()).Where(utils.BuildNotNullMap(whereReq)).Scopes(customizeSQL).Updates(updatesReq)
+	result := db.Debug().Table(table.GetDbTableName()).Where(utils.BuildNotNullMap(whereReq)).Scopes(customizeSQL).Updates(updatesReq)
 	if result.Error != nil {
 		return 0, result.Error
 	}
@@ -221,7 +245,7 @@ func UpdateByExample(updatesReq interface{}, whereReq interface{}, customizeSQL 
 	upReq := utils.BuildNullMap(updatesReq)
 	//更新条件去掉id
 	delete(upReq, "id")
-	result := db.Debug().Table(table.GetTableName()).Where(utils.BuildNotNullMap(whereReq)).Scopes(customizeSQL).Updates(upReq)
+	result := db.Debug().Table(table.GetDbTableName()).Where(utils.BuildNotNullMap(whereReq)).Scopes(customizeSQL).Updates(upReq)
 	if result.Error != nil {
 		return 0, result.Error
 	}
@@ -231,7 +255,7 @@ func UpdateByExample(updatesReq interface{}, whereReq interface{}, customizeSQL 
 // UpdateByPrimaryKeySelective 更新 (没带的属性 "不会" 添加到条件中)
 func UpdateByPrimaryKeySelective(id int, updatesReq interface{}, table Model) (int64, error) {
 	db := mysql.GormDb
-	result := db.Debug().Table(table.GetTableName()).Where("id = ?", id).Updates(updatesReq)
+	result := db.Debug().Table(table.GetDbTableName()).Where("id = ?", id).Updates(updatesReq)
 	if result.Error != nil {
 		return 0, result.Error
 	}
@@ -244,7 +268,7 @@ func UpdateByPrimaryKey(id int, updatesReq interface{}, table Model) (int64, err
 	upReq := utils.BuildNullMap(updatesReq)
 	//更新条件去掉id
 	delete(upReq, "id")
-	result := db.Table(table.GetTableName()).Where("id = ?", id).Updates(upReq)
+	result := db.Table(table.GetDbTableName()).Where("id = ?", id).Updates(upReq)
 	if result.Error != nil {
 		return 0, result.Error
 	}

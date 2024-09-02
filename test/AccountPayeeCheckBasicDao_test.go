@@ -139,16 +139,17 @@ func TestSelectByExampleCheckPageTest(t *testing.T) {
 	userRandomId := "1"
 	status := enum.WAIT
 
-	adminMember := adminDao.AccountPayeeCheckBasicDao{}
+	basicDao := adminDao.BasicDao{}
 
 	pagination := model.Pagination{Page: 4, Size: 2}
 
-	results, err := adminMember.Page(pagination).SelectByExampleCheckPageTest(&userRandomId, &status)
+	results, err := basicDao.Page(pagination).SelectByExampleCheckPageTest(&userRandomId, &status)
+
 	fmt.Println("--------------PageBean--------------")
-	fmt.Printf("%+v\n", adminMember.PageBean.Total)
-	fmt.Printf("%+v\n", adminMember.PageBean.Pages)
-	fmt.Printf("%+v\n", adminMember.PageBean.IsLastPage)
-	fmt.Printf("%+v\n", adminMember.PageBean.BeanList)
+	fmt.Printf("%+v\n", basicDao.PageBean.Total)
+	fmt.Printf("%+v\n", basicDao.PageBean.Pages)
+	fmt.Printf("%+v\n", basicDao.PageBean.IsLastPage)
+	fmt.Printf("%+v\n", basicDao.PageBean.BeanList)
 	fmt.Println("--------------PageBean--------------")
 	if err != nil {
 		t.Fatalf("TestSelectByExampleCheckPageTest 失敗：%v", err)

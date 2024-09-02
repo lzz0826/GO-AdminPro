@@ -16,6 +16,6 @@ type AccountPayeeCheck struct {
 	CreatedTime *time.Time `gorm:"column:created_time;comment:'创建时间'" json:"createdTime"`
 }
 
-func (AccountPayeeCheck) GetTableName() string {
+func (AccountPayeeCheck) GetDbTableName() string {
 	return "account_payee_check"
 }
