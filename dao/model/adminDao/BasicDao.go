@@ -13,6 +13,7 @@ type BasicDao struct {
 	PageBean   model.PageBean
 }
 
+// 给GORM映射的表 需要实验 GetDbTableName
 type Model interface {
 	GetDbTableName() string
 }
