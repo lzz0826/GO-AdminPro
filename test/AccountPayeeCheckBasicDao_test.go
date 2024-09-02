@@ -139,11 +139,10 @@ func TestSelectByExampleCheckPageTest(t *testing.T) {
 	userRandomId := "1"
 	status := enum.WAIT
 
-	basicDao := adminDao.BasicDao{}
-
+	basicDao := adminDao.AccountPayeeCheckBasicDao{}
 	pagination := model.Pagination{Page: 4, Size: 2}
-
-	results, err := basicDao.Page(pagination).SelectByExampleCheckPageTest(&userRandomId, &status)
+	basicDao.Page(pagination)
+	results, err := basicDao.SelectByExampleCheckPageTest(&userRandomId, &status)
 
 	fmt.Println("--------------PageBean--------------")
 	fmt.Printf("%+v\n", basicDao.PageBean.Total)

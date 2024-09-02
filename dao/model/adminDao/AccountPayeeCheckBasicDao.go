@@ -9,8 +9,12 @@ import (
 	"gorm.io/gorm"
 )
 
+type AccountPayeeCheckBasicDao struct {
+	BasicDao
+}
+
 // 使用分页判断
-func (dao *BasicDao) SelectByExampleCheckPageTest(userRandomId *string, status *enum.EAccountPayeeCheckStatusEnum) ([]AccountPayeeCheck, error) {
+func (dao *AccountPayeeCheckBasicDao) SelectByExampleCheckPageTest(userRandomId *string, status *enum.EAccountPayeeCheckStatusEnum) ([]AccountPayeeCheck, error) {
 	var results []AccountPayeeCheck
 	customizeSQL := func(db *gorm.DB) *gorm.DB {
 		if userRandomId != nil {
