@@ -8,6 +8,7 @@ import (
 	"gorm.io/gorm"
 )
 
+// 需要分功能的方法 可以用接收者来实现分页
 type BasicDao struct {
 	Pagination *model.Pagination
 	PageBean   model.PageBean
