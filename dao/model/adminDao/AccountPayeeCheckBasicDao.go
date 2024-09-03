@@ -33,6 +33,26 @@ func (dao *AccountPayeeCheckBasicDao) SelectByExampleCheckPageTest(userRandomId 
 	return results, nil
 }
 
+func (dao *AccountPayeeCheckBasicDao) JoinSelectByExampleCheckPage(checkId int, search *string) ([]Join, error) {
+	var results []Join
+	customizeSQL := func(db *gorm.DB) *gorm.DB {
+		db = db.Table("account_payee_check t1")
+		db = db.Select("t2.username as username, t1.id, t1.description as description")
+		db = db.Joins("JOIN admin_admin t2 ON t1.uid = t2.id")
+		db = db.Where("t1.check_id = ?", checkId)
+		if search != nil {
+			db = db.Where("(t1.description LIKE ? OR t2.nickname LIKE ?)", "%"+*search+"%", "%"+*search+"%")
+		}
+		db = db.Order("t1.created_time DESC")
+		return db
+	}
+	err := dao.SelectByExampleCheckPage(customizeSQL, &results, &Join{})
+	if err != nil {
+		return results, err
+	}
+	return results, nil
+}
+
 //Raw: 用于执行原生 SQL 查询并返回结果。
 //Exec: 用于执行非查询操作（如插入、更新、删除）。
 //First、Last、Find: 用于获取单条或多条记录。
@@ -137,18 +157,18 @@ func SumTotalStatusSUM(customizeSQL func(db *gorm.DB) *gorm.DB) (*decimal.Decima
 }
 
 // JOIN 测试
-func TestJoin(channelId, start, size int, search *string) ([]AccountPayeeCheck, error) {
-	var results []AccountPayeeCheck
+func TestJoin(checkId, start, size int, search *string) ([]Join, error) {
+	var results []Join
 	db := mysql.GormDb
-	query := db.Table("club_pay_channel t1").
-		Select("t2.name as clubName, t2.id, t2.random_id as clubId").
-		Joins("JOIN club_record t2 ON t1.club_id = t2.id").
-		Where("t1.channel_id = ?", channelId)
+	query := db.Table("account_payee_check t1").
+		Select("t2.username as username, t1.id, t1.description as description").
+		Joins("JOIN admin_admin t2 ON t1.uid = t2.id").
+		Where("t1.check_id = ?", checkId)
 	if search != nil {
-		query = query.Where("(t2.random_id LIKE ? OR t2.name LIKE ?)", "%"+*search+"%", "%"+*search+"%")
+		query = query.Where("(t1.description LIKE ? OR t2.nickname LIKE ?)", "%"+*search+"%", "%"+*search+"%")
 	}
-	query = query.Order("t2.created_on DESC").Offset(start).Limit(size)
-	if err := query.Find(&results).Error; err != nil {
+	query = query.Order("t1.created_time DESC").Offset(start).Limit(size)
+	if err := query.Debug().Find(&results).Error; err != nil {
 		return nil, err
 	}
 	return results, nil

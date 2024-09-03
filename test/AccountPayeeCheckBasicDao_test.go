@@ -169,6 +169,35 @@ func TestSelectByExampleCheckPageTest(t *testing.T) {
 	}
 }
 
+func TestJoinSelectByExampleCheckPage(t *testing.T) {
+
+	search := "es"
+	checkId := 4
+
+	basicDao := adminDao.AccountPayeeCheckBasicDao{}
+	pagination := model.Pagination{Page: 2, Size: 2}
+	basicDao.Page(pagination)
+	results, err := basicDao.JoinSelectByExampleCheckPage(checkId, &search)
+
+	fmt.Println("--------------PageBean--------------")
+	fmt.Printf("%+v\n", basicDao.PageBean.Total)
+	fmt.Printf("%+v\n", basicDao.PageBean.Pages)
+	fmt.Printf("%+v\n", basicDao.PageBean.IsLastPage)
+	fmt.Printf("%+v\n", basicDao.PageBean.BeanList)
+	fmt.Println("--------------PageBean--------------")
+	if err != nil {
+		t.Fatalf("TestJoinSelectByExampleCheckPage 失敗：%v", err)
+	}
+	for _, result := range results {
+		fmt.Println("----------------------------")
+		fmt.Printf("%+v\n", *result.ID)
+		fmt.Printf("%+v\n", *result.Username)
+		fmt.Printf("%+v\n", *result.Description)
+
+		fmt.Println("----------------------------")
+	}
+}
+
 func TestSumTotalStatusSUM(t *testing.T) {
 
 	customizeSQL := func(db *gorm.DB) *gorm.DB {
@@ -479,10 +508,17 @@ func TestSelectTypeLast(t *testing.T) {
 }
 
 func TestTestJoin(t *testing.T) {
-	search := "xxx"
-	_, err := adminDao.TestJoin(1, 1, 1, &search)
+	search := "es"
+	res, err := adminDao.TestJoin(4, 1, 2, &search)
 	if err != nil {
 		t.Fatalf("TestTestJoin 失敗：%v", err)
+	}
+	for _, rueslt := range res {
+		fmt.Println("----------------------------")
+		fmt.Printf("%+v\n", *rueslt.Description)
+		fmt.Printf("%+v\n", *rueslt.ID)
+		fmt.Printf("%+v\n", *rueslt.Username)
+		fmt.Println("----------------------------")
 	}
 }
 

@@ -19,3 +19,13 @@ type AccountPayeeCheck struct {
 func (AccountPayeeCheck) GetDbTableName() string {
 	return "account_payee_check"
 }
+
+type Join struct {
+	ID          *int    `gorm:"column:id;primaryKey;autoIncrement;comment:'id'" json:"id"`
+	Username    *string `gorm:"column:username;comment:'使用者名称'" json:"username"`
+	Description *string `gorm:"column:description;comment:'审核内容" json:"description"`
+}
+
+func (Join) GetDbTableName() string {
+	return "join"
+}
