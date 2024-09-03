@@ -14,7 +14,7 @@ type AccountPayeeCheckBasicDao struct {
 }
 
 // 使用分页判断
-func (dao *AccountPayeeCheckBasicDao) SelectByExampleCheckPageTest(userRandomId *string, status *enum.EAccountPayeeCheckStatusEnum) ([]AccountPayeeCheck, error) {
+func (dao *AccountPayeeCheckBasicDao) SelectCustomizeSqlCheckPageTest(userRandomId *string, status *enum.EAccountPayeeCheckStatusEnum) ([]AccountPayeeCheck, error) {
 	var results []AccountPayeeCheck
 	customizeSQL := func(db *gorm.DB) *gorm.DB {
 		if userRandomId != nil {
@@ -26,14 +26,14 @@ func (dao *AccountPayeeCheckBasicDao) SelectByExampleCheckPageTest(userRandomId 
 		db = db.Order("case when status = 0 then 0 else 1 end asc, created_time desc, id desc")
 		return db
 	}
-	err := dao.SelectByExampleCheckPage(customizeSQL, &results, &AccountPayeeCheck{})
+	err := dao.SelectCustomizeSqlCheckPage(customizeSQL, &results, &AccountPayeeCheck{})
 	if err != nil {
 		return results, err
 	}
 	return results, nil
 }
 
-func (dao *AccountPayeeCheckBasicDao) JoinSelectByExampleCheckPage(checkId int, search *string) ([]Join, error) {
+func (dao *AccountPayeeCheckBasicDao) JoinSelectCustomizeSqlCheckPage(checkId int, search *string) ([]Join, error) {
 	var results []Join
 	customizeSQL := func(db *gorm.DB) *gorm.DB {
 		db = db.Table("account_payee_check t1")
@@ -46,7 +46,7 @@ func (dao *AccountPayeeCheckBasicDao) JoinSelectByExampleCheckPage(checkId int, 
 		db = db.Order("t1.created_time DESC")
 		return db
 	}
-	err := dao.SelectByExampleCheckPage(customizeSQL, &results, &Join{})
+	err := dao.SelectCustomizeSqlCheckPage(customizeSQL, &results, &Join{})
 	if err != nil {
 		return results, err
 	}
@@ -106,7 +106,7 @@ func ListAccountPayeeChecks(userRandomId *string, status *enum.EAccountPayeeChec
 		db = db.Order("case when status = 0 then 0 else 1 end asc, created_time desc, id desc")
 		return db
 	}
-	err := SelectByExample(customizeSQL, &results, &AccountPayeeCheck{})
+	err := SelectCustomizeSql(customizeSQL, &results, &AccountPayeeCheck{})
 
 	if err != nil {
 		return results, err
@@ -128,7 +128,7 @@ func ListAccountPayeeChecksPage(userRandomId *string, status *enum.EAccountPayee
 		db = db.Order("case when status = 0 then 0 else 1 end asc, created_time desc, id desc")
 		return db
 	}
-	total, err := SelectByExamplePage(customizeSQL, &results, page, &AccountPayeeCheck{})
+	total, err := SelectCustomizeSqlPage(customizeSQL, &results, page, &AccountPayeeCheck{})
 
 	if err != nil {
 		return 0, results, err
@@ -246,7 +246,7 @@ func TestUpdateByExampleSelectivePoint(uid int, description string) (int64, erro
 	customizeSQL := func(db *gorm.DB) *gorm.DB {
 		return db
 	}
-	result, err := UpdateByExampleSelective(updatesReq, whereReq, customizeSQL, &AccountPayeeCheck{})
+	result, err := UpdateIgnoringNull(updatesReq, whereReq, customizeSQL, &AccountPayeeCheck{})
 
 	if err != nil {
 		return 0, err

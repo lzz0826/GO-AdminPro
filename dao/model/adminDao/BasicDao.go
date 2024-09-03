@@ -26,16 +26,16 @@ func (dao *BasicDao) Page(pagination model.Pagination) *BasicDao {
 }
 
 // 使用构造判断是否使用分页 执行额外操作后调用
-func (dao *BasicDao) SelectByExampleCheckPage(customizeSQL func(db *gorm.DB) *gorm.DB, out interface{}, model Model) error {
+func (dao *BasicDao) SelectCustomizeSqlCheckPage(customizeSQL func(db *gorm.DB) *gorm.DB, out interface{}, model Model) error {
 	if dao.Pagination != nil {
-		total, err := SelectByExamplePage(customizeSQL, out, dao.Pagination, model)
+		total, err := SelectCustomizeSqlPage(customizeSQL, out, dao.Pagination, model)
 		dao.PageBean.Set(total, dao.Pagination.Page, dao.Pagination.Size, out)
 		if err != nil {
 			return err
 		}
 	} else {
-		// 调用原始的 SelectByExample
-		err := SelectByExample(customizeSQL, out, model)
+		// 调用原始的 SelectCustomizeSql
+		err := SelectCustomizeSql(customizeSQL, out, model)
 		if err != nil {
 			return err
 		}
@@ -43,7 +43,7 @@ func (dao *BasicDao) SelectByExampleCheckPage(customizeSQL func(db *gorm.DB) *go
 	return nil
 }
 
-func SelectByExample(customizeSQL func(db *gorm.DB) *gorm.DB, out interface{}, table Model) error {
+func SelectCustomizeSql(customizeSQL func(db *gorm.DB) *gorm.DB, out interface{}, table Model) error {
 	db := mysql.GormDb
 	query := db.Debug().Table(table.GetDbTableName()).Scopes(customizeSQL)
 	err := query.Find(out).Error
@@ -54,7 +54,7 @@ func SelectByExample(customizeSQL func(db *gorm.DB) *gorm.DB, out interface{}, t
 }
 
 // customizeSQL
-func SelectByExamplePage(customizeSQL func(db *gorm.DB) *gorm.DB, out interface{}, page *model.Pagination, table Model) (int64, error) {
+func SelectCustomizeSqlPage(customizeSQL func(db *gorm.DB) *gorm.DB, out interface{}, page *model.Pagination, table Model) (int64, error) {
 	var total int64
 	db := mysql.GormDb
 
@@ -137,7 +137,7 @@ func DeleteByList(columnName string, list []int, table Model) (int64, error) {
 }
 
 // 返回受影响(删除的比数)
-func DeleteByExample(customizeSQL func(db *gorm.DB) *gorm.DB, table Model) (int64, error) {
+func DeleteCustomizeSql(customizeSQL func(db *gorm.DB) *gorm.DB, table Model) (int64, error) {
 	db := mysql.GormDb
 	result := db.Debug().Table(table.GetDbTableName()).Scopes(customizeSQL).Delete(table)
 
@@ -148,7 +148,7 @@ func DeleteByExample(customizeSQL func(db *gorm.DB) *gorm.DB, table Model) (int6
 	return result.RowsAffected, nil
 }
 
-func CountByExample(customizeSQL func(db *gorm.DB) *gorm.DB, table Model) (int64, error) {
+func CountCustomizeSql(customizeSQL func(db *gorm.DB) *gorm.DB, table Model) (int64, error) {
 	db := mysql.GormDb
 	var count int64
 	result := db.Debug().Table(table.GetDbTableName()).Scopes(customizeSQL).Count(&count)
@@ -158,8 +158,8 @@ func CountByExample(customizeSQL func(db *gorm.DB) *gorm.DB, table Model) (int64
 	return count, nil
 }
 
-// Insert 插入 DB auto_increment 无须带id ,包含空值(没带的属性 "会" 添加至条件中在 DB NULL)
-func Insert(insetCondition interface{}, table Model) (int64, error) {
+// InsertAllowingNull 插入 DB auto_increment 无须带id ,包含空值(没带的属性 "会" 添加至条件中在 DB NULL)
+func InsertAllowingNull(insetCondition interface{}, table Model) (int64, error) {
 
 	var lastInsertID int64
 	db := mysql.GormDb
@@ -168,7 +168,6 @@ func Insert(insetCondition interface{}, table Model) (int64, error) {
 		return 0, tx.Error
 	}
 
-	// 使用 newValue 来创建记录
 	if err := tx.Debug().Table(table.GetDbTableName()).Create(insetCondition).Error; err != nil {
 		tx.Rollback()
 		return 0, err
@@ -185,8 +184,33 @@ func Insert(insetCondition interface{}, table Model) (int64, error) {
 	return lastInsertID, nil
 }
 
-// InsertSelective auto_increment 无须带id  插入 , 忽略空字段 (没带的属性 "不会" 添加到条件中)
-func InsertSelective(insetCondition interface{}, table Model) (int64, error) {
+// InsertAllowingNullCustomizeSQL 插入 DB auto_increment 无须带id ,包含空值(没带的属性 "会" 添加至条件中在 DB NULL)
+func InsertAllowingNullCustomizeSQL(customizeSQL func(db *gorm.DB) *gorm.DB, insetCondition interface{}, table Model) (int64, error) {
+	var lastInsertID int64
+	db := mysql.GormDb
+	tx := db.Begin()
+	if tx.Error != nil {
+		return 0, tx.Error
+	}
+
+	if err := tx.Debug().Table(table.GetDbTableName()).Scopes(customizeSQL).Create(insetCondition).Error; err != nil {
+		tx.Rollback()
+		return 0, err
+	}
+
+	if err := tx.Raw("SELECT LAST_INSERT_ID()").Row().Scan(&lastInsertID); err != nil {
+		tx.Rollback()
+		return 0, err
+	}
+	if err := tx.Commit().Error; err != nil {
+		return 0, err
+	}
+
+	return lastInsertID, nil
+}
+
+// InsertIgnoringNull auto_increment 无须带id  插入 , 忽略空字段 (没带的属性 "不会" 添加到条件中)
+func InsertIgnoringNull(insetCondition interface{}, table Model) (int64, error) {
 	db := mysql.GormDb
 	tx := db.Begin()
 	if tx.Error != nil {
@@ -210,8 +234,8 @@ func InsertSelective(insetCondition interface{}, table Model) (int64, error) {
 	return lastInsertID, nil
 }
 
-// InsertSelectiveList 批量插入 auto_increment 无须带id  插入 , 忽略空字段 (没带的属性 "不会" 添加到条件中) 返回所有主建
-func InsertSelectiveList[T any](insetCondition []T, table Model) ([]int64, error) {
+// InsertIgnoringNullList 批量插入 auto_increment 无须带id  插入 , 忽略空字段 (没带的属性 "不会" 添加到条件中) 返回所有主建
+func InsertIgnoringNullList[T any](insetCondition []T, table Model) ([]int64, error) {
 	var idList []int64
 	db := mysql.GormDb
 	tx := db.Begin()
@@ -237,8 +261,8 @@ func InsertSelectiveList[T any](insetCondition []T, table Model) ([]int64, error
 	return idList, nil
 }
 
-// UpdateByExampleSelective 更新 (没带的属性 "不会" 添加到条件中)
-func UpdateByExampleSelective(updatesReq interface{}, whereReq interface{}, customizeSQL func(db *gorm.DB) *gorm.DB, table Model) (int64, error) {
+// UpdateIgnoringNull 更新 (没带的属性 "不会" 添加到条件中)
+func UpdateIgnoringNull(updatesReq interface{}, whereReq interface{}, customizeSQL func(db *gorm.DB) *gorm.DB, table Model) (int64, error) {
 	db := mysql.GormDb
 	result := db.Debug().Table(table.GetDbTableName()).Where(utils.BuildNotNullMap(whereReq)).Scopes(customizeSQL).Updates(updatesReq)
 	if result.Error != nil {
@@ -247,8 +271,8 @@ func UpdateByExampleSelective(updatesReq interface{}, whereReq interface{}, cust
 	return result.RowsAffected, nil
 }
 
-// UpdateByExample 更新 (没带的属性 "会" 添加至条件中在 DB NULL)
-func UpdateByExample(updatesReq interface{}, whereReq interface{}, customizeSQL func(db *gorm.DB) *gorm.DB, table Model) (int64, error) {
+// UpdateAllowingNull 更新 (没带的属性 "会" 添加至条件中在 DB NULL)
+func UpdateAllowingNull(updatesReq interface{}, whereReq interface{}, customizeSQL func(db *gorm.DB) *gorm.DB, table Model) (int64, error) {
 	db := mysql.GormDb
 	upReq := utils.BuildNullMap(updatesReq)
 	//更新条件去掉id
@@ -260,8 +284,8 @@ func UpdateByExample(updatesReq interface{}, whereReq interface{}, customizeSQL 
 	return result.RowsAffected, nil
 }
 
-// UpdateByPrimaryKeySelective 更新 (没带的属性 "不会" 添加到条件中)
-func UpdateByPrimaryKeySelective(id int, updatesReq interface{}, table Model) (int64, error) {
+// UpdateIgnoringNullByPrimaryKey 更新 (没带的属性 "不会" 添加到条件中)
+func UpdateIgnoringNullByPrimaryKey(id int, updatesReq interface{}, table Model) (int64, error) {
 	db := mysql.GormDb
 	result := db.Debug().Table(table.GetDbTableName()).Where("id = ?", id).Updates(updatesReq)
 	if result.Error != nil {
@@ -270,8 +294,8 @@ func UpdateByPrimaryKeySelective(id int, updatesReq interface{}, table Model) (i
 	return result.RowsAffected, nil
 }
 
-// UpdateByPrimaryKey 更新  (没带的属性 "会" 添加至条件中在 DB NULL)
-func UpdateByPrimaryKey(id int, updatesReq interface{}, table Model) (int64, error) {
+// UpdateAllowingNullByPrimaryKey 更新  (没带的属性 "会" 添加至条件中在 DB NULL)
+func UpdateAllowingNullByPrimaryKey(id int, updatesReq interface{}, table Model) (int64, error) {
 	db := mysql.GormDb.Debug()
 	upReq := utils.BuildNullMap(updatesReq)
 	//更新条件去掉id

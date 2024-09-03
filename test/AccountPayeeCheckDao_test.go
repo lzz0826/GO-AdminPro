@@ -158,7 +158,7 @@ func TestDeleteByExample(t *testing.T) {
 	err := adminMember.DeleteByExample(i)
 
 	if err != nil {
-		t.Fatalf("DeleteByExample 失敗：%v", err)
+		t.Fatalf("DeleteCustomizeSql 失敗：%v", err)
 	}
 
 }
@@ -176,7 +176,7 @@ func TestDeleteByCustomizeSQL(t *testing.T) {
 	err := adminMember.DeleteByCustomizeSQL(customizeSQL)
 
 	if err != nil {
-		t.Fatalf("DeleteByExample 失敗：%v", err)
+		t.Fatalf("DeleteCustomizeSql 失敗：%v", err)
 	}
 
 }
@@ -199,7 +199,7 @@ func TestInsert(t *testing.T) {
 	}
 	insert, err := adminMember.Insert(ap)
 	if err != nil {
-		t.Fatalf("Insert 失敗：%v", err)
+		t.Fatalf("InsertAllowingNull 失敗：%v", err)
 	}
 
 	fmt.Println("----------------------------")
@@ -229,7 +229,7 @@ func TestInsertSelective(t *testing.T) {
 	}
 	insert, err := adminMember.InsertSelective(ap)
 	if err != nil {
-		t.Fatalf("InsertSelective 失敗：%v", err)
+		t.Fatalf("InsertIgnoringNull 失敗：%v", err)
 	}
 
 	fmt.Println("----------------------------")
@@ -248,7 +248,7 @@ func TestCountByExample(t *testing.T) {
 	}
 	example, err := adminMember.CountByExample(ap)
 	if err != nil {
-		t.Fatalf("CountByExample 失敗：%v", err)
+		t.Fatalf("CountCustomizeSql 失敗：%v", err)
 	}
 
 	fmt.Printf(strconv.FormatInt(example, 10))
@@ -298,7 +298,7 @@ func TestUpdateByExampleSelective(t *testing.T) {
 	}
 	selective, err := adminMember.UpdateByExampleSelective(updatesReq, whereReq)
 	if err != nil {
-		t.Fatalf("UpdateByExampleSelective 失敗：%v", err)
+		t.Fatalf("UpdateIgnoringNull 失敗：%v", err)
 	}
 
 	fmt.Printf(strconv.FormatInt(selective, 10))
@@ -375,7 +375,7 @@ func TestUpdateByExample(t *testing.T) {
 
 	example, err := adminMember.UpdateByExample(updatesReq, whereReq)
 	if err != nil {
-		t.Fatalf("UpdateByExample 失敗：%v", err)
+		t.Fatalf("UpdateAllowingNull 失敗：%v", err)
 	}
 	fmt.Printf(strconv.FormatInt(example, 10))
 
@@ -444,7 +444,7 @@ func TestUpdateByPrimaryKeySelective(t *testing.T) {
 
 	err := adminMember.UpdateByPrimaryKeySelective(id, updatesReq)
 	if err != nil {
-		t.Fatalf("UpdateByPrimaryKeySelective 失敗：%v", err)
+		t.Fatalf("UpdateIgnoringNullByPrimaryKey 失敗：%v", err)
 	}
 }
 
@@ -468,7 +468,7 @@ func TestUpdateByPrimaryKey(t *testing.T) {
 
 	rep, err := adminMember.UpdateByPrimaryKey(id, updatesReq)
 	if err != nil {
-		t.Fatalf("UpdateByPrimaryKeySelective 失敗：%v", err)
+		t.Fatalf("UpdateIgnoringNullByPrimaryKey 失敗：%v", err)
 	}
 	fmt.Printf(strconv.FormatInt(rep, 10))
 }
@@ -489,7 +489,7 @@ func TestUpdateDBNullTest(t *testing.T) {
 	checkID := 3
 	rep, err := adminMember.UpdateDBNullTest(&uid, status, &checkID, &description)
 	if err != nil {
-		t.Fatalf("UpdateByPrimaryKeySelective 失敗：%v", err)
+		t.Fatalf("UpdateIgnoringNullByPrimaryKey 失敗：%v", err)
 	}
 	fmt.Printf(strconv.FormatInt(rep, 10))
 }

@@ -87,7 +87,7 @@ func TestListAccountPayeeChecks(t *testing.T) {
 	results, err := adminDao.ListAccountPayeeChecks(&userRandomId, &status)
 
 	if err != nil {
-		t.Fatalf("TestSelectByExample 失敗：%v", err)
+		t.Fatalf("ListAccountPayeeChecks 失敗：%v", err)
 	}
 
 	for _, result := range results {
@@ -115,7 +115,7 @@ func TestListAccountPayeeChecksPage(t *testing.T) {
 	total, results, err := adminDao.ListAccountPayeeChecksPage(&userRandomId, &status, &pagination)
 
 	if err != nil {
-		t.Fatalf("ListAccountPayeeChecksPage 失敗：%v", err)
+		t.Fatalf("TestListAccountPayeeChecksPage 失敗：%v", err)
 	}
 
 	fmt.Printf(" total : %+v\n", total)
@@ -135,7 +135,7 @@ func TestListAccountPayeeChecksPage(t *testing.T) {
 	}
 }
 
-func TestSelectByExampleCheckPageTest(t *testing.T) {
+func TestSelectCustomizeSqlCheckPageTest(t *testing.T) {
 
 	userRandomId := "1"
 	status := enum.WAIT
@@ -143,7 +143,7 @@ func TestSelectByExampleCheckPageTest(t *testing.T) {
 	basicDao := adminDao.AccountPayeeCheckBasicDao{}
 	pagination := model.Pagination{Page: 4, Size: 2}
 	basicDao.Page(pagination)
-	results, err := basicDao.SelectByExampleCheckPageTest(&userRandomId, &status)
+	results, err := basicDao.SelectCustomizeSqlCheckPageTest(&userRandomId, &status)
 
 	fmt.Println("--------------PageBean--------------")
 	fmt.Printf("%+v\n", basicDao.PageBean.Total)
@@ -152,7 +152,7 @@ func TestSelectByExampleCheckPageTest(t *testing.T) {
 	fmt.Printf("%+v\n", basicDao.PageBean.BeanList)
 	fmt.Println("--------------PageBean--------------")
 	if err != nil {
-		t.Fatalf("TestSelectByExampleCheckPageTest 失敗：%v", err)
+		t.Fatalf("TestSelectCustomizeSqlCheckPageTest 失敗：%v", err)
 	}
 	for _, result := range results {
 		fmt.Println("----------------------------")
@@ -169,7 +169,7 @@ func TestSelectByExampleCheckPageTest(t *testing.T) {
 	}
 }
 
-func TestJoinSelectByExampleCheckPage(t *testing.T) {
+func TestJoinSelectCustomizeSqlCheckPage(t *testing.T) {
 
 	search := "es"
 	checkId := 4
@@ -177,7 +177,7 @@ func TestJoinSelectByExampleCheckPage(t *testing.T) {
 	basicDao := adminDao.AccountPayeeCheckBasicDao{}
 	pagination := model.Pagination{Page: 2, Size: 2}
 	basicDao.Page(pagination)
-	results, err := basicDao.JoinSelectByExampleCheckPage(checkId, &search)
+	results, err := basicDao.JoinSelectCustomizeSqlCheckPage(checkId, &search)
 
 	fmt.Println("--------------PageBean--------------")
 	fmt.Printf("%+v\n", basicDao.PageBean.Total)
@@ -186,7 +186,7 @@ func TestJoinSelectByExampleCheckPage(t *testing.T) {
 	fmt.Printf("%+v\n", basicDao.PageBean.BeanList)
 	fmt.Println("--------------PageBean--------------")
 	if err != nil {
-		t.Fatalf("TestJoinSelectByExampleCheckPage 失敗：%v", err)
+		t.Fatalf("TestJoinSelectCustomizeSqlCheckPage 失敗：%v", err)
 	}
 	for _, result := range results {
 		fmt.Println("----------------------------")
@@ -217,12 +217,12 @@ func TestSumTotalStatusSUM(t *testing.T) {
 func TestSelectByPrimaryKey2(t *testing.T) {
 	var result adminDao.AccountPayeeCheck
 
-	primaryKey := 1
+	primaryKey := 4
 
 	err := adminDao.SelectByPrimaryKey(primaryKey, &result, &adminDao.AccountPayeeCheck{})
 
 	if err != nil {
-		t.Fatalf("TestSelectByExample 失敗：%v", err)
+		t.Fatalf("TestSelectByPrimaryKey2 失敗：%v", err)
 	}
 	fmt.Println("----------------------------")
 	fmt.Printf("%+v\n", *result.ID)
@@ -238,17 +238,17 @@ func TestSelectByPrimaryKey2(t *testing.T) {
 }
 
 func TestDeleteByPrimaryKey2(t *testing.T) {
-	primaryKey := 10
+	primaryKey := 40
 	i, err := adminDao.DeleteByPrimaryKey(primaryKey, &adminDao.AccountPayeeCheck{})
 	if err != nil {
-		t.Fatalf("TestSelectByExample 失敗：%v", err)
+		t.Fatalf("TestDeleteByPrimaryKey2 失敗：%v", err)
 	}
 	fmt.Printf("%+v\n", i)
 }
 
 func TestDeleteByList(t *testing.T) {
 	columnName := "check_id"
-	list := []int{22, 4}
+	list := []int{51, 52}
 	i, err := adminDao.DeleteByList(columnName, list, &adminDao.AccountPayeeCheck{})
 	if err != nil {
 		t.Fatalf("TestDeleteByList 失敗：%v", err)
@@ -262,14 +262,14 @@ func TestDeleteByExample2(t *testing.T) {
 		db = db.Where("uid = ?", uir)
 		return db
 	}
-	i, err := adminDao.DeleteByExample(customizeSQL, &adminDao.AccountPayeeCheck{})
+	i, err := adminDao.DeleteCustomizeSql(customizeSQL, &adminDao.AccountPayeeCheck{})
 	if err != nil {
-		t.Fatalf("TestSelectByExample 失敗：%v", err)
+		t.Fatalf("TestDeleteByExample2 失敗：%v", err)
 	}
 	fmt.Printf("%+v\n", i)
 }
 
-func TestInsert2(t *testing.T) {
+func TestInsertAllowingNull(t *testing.T) {
 	i := 4
 	s := "test"
 	time := time.Now()
@@ -285,9 +285,9 @@ func TestInsert2(t *testing.T) {
 		CreatedTime: &time,
 	}
 
-	insert, err := adminDao.Insert(&ap, &adminDao.AccountPayeeCheck{})
+	insert, err := adminDao.InsertAllowingNull(&ap, &adminDao.AccountPayeeCheck{})
 	if err != nil {
-		t.Fatalf("TestSelectByExample 失敗：%v", err)
+		t.Fatalf("TestInsertAllowingNull 失敗：%v", err)
 	}
 
 	fmt.Println("----------------------------")
@@ -295,25 +295,28 @@ func TestInsert2(t *testing.T) {
 	fmt.Println("----------------------------")
 }
 
-func TestInsertSelective2(t *testing.T) {
+func TestInsertAllowingNullCustomizeSQL(t *testing.T) {
 	i := 4
-	s := "test"
+	//s := "test"
 	time := time.Now()
 	ap := adminDao.AccountPayeeCheck{
-		ID:          &i,
+		//ID:          &i,
 		UID:         &i,
 		Type:        &i,
-		Description: &s,
+		Description: nil,
 		Status:      &i,
 		CheckID:     &i,
 		CheckTime:   &time,
 		UpdateTime:  &time,
 		CreatedTime: &time,
 	}
-
-	insert, err := adminDao.InsertSelective(ap, &adminDao.AccountPayeeCheck{})
+	customizeSQL := func(db *gorm.DB) *gorm.DB {
+		db = db.Table("account_payee_check")
+		return db
+	}
+	insert, err := adminDao.InsertAllowingNullCustomizeSQL(customizeSQL, &ap, &adminDao.AccountPayeeCheck{})
 	if err != nil {
-		t.Fatalf("TestSelectByExample 失敗：%v", err)
+		t.Fatalf("TestInsertAllowingNullCustomizeSQL 失敗：%v", err)
 	}
 
 	fmt.Println("----------------------------")
@@ -321,7 +324,33 @@ func TestInsertSelective2(t *testing.T) {
 	fmt.Println("----------------------------")
 }
 
-func TestInsertSelectiveList(t *testing.T) {
+func TestInsertIgnoringNull(t *testing.T) {
+	i := 4
+	s := "test"
+	time := time.Now()
+	ap := adminDao.AccountPayeeCheck{
+		//ID:          &i,
+		UID:         &i,
+		Type:        &i,
+		Description: &s,
+		//Status:      &i,
+		CheckID:     &i,
+		CheckTime:   &time,
+		UpdateTime:  &time,
+		CreatedTime: &time,
+	}
+
+	insert, err := adminDao.InsertIgnoringNull(ap, &adminDao.AccountPayeeCheck{})
+	if err != nil {
+		t.Fatalf("TestInsertIgnoringNull 失敗：%v", err)
+	}
+
+	fmt.Println("----------------------------")
+	fmt.Printf("%+v\n", insert)
+	fmt.Println("----------------------------")
+}
+
+func TestInsertIgnoringNullList(t *testing.T) {
 
 	var q []adminDao.AccountPayeeCheck
 	i := 4
@@ -349,9 +378,9 @@ func TestInsertSelectiveList(t *testing.T) {
 	}
 	q = append(q, ap, ap2)
 
-	insert, err := adminDao.InsertSelectiveList(q, &adminDao.AccountPayeeCheck{})
+	insert, err := adminDao.InsertIgnoringNullList(q, &adminDao.AccountPayeeCheck{})
 	if err != nil {
-		t.Fatalf("InsertSelectiveList 失敗：%v", err)
+		t.Fatalf("TestInsertIgnoringNullList 失敗：%v", err)
 	}
 
 	fmt.Println("----------------------------")
@@ -359,8 +388,8 @@ func TestInsertSelectiveList(t *testing.T) {
 	fmt.Println("----------------------------")
 }
 
-func TestUpdateByExampleSelective2(t *testing.T) {
-	uid := 66
+func TestUpdateIgnoringNull(t *testing.T) {
+	//uid := 66
 	typet := 6
 	description := "test77"
 	status := 6
@@ -368,7 +397,7 @@ func TestUpdateByExampleSelective2(t *testing.T) {
 	timeAdmin := time.Now()
 
 	updatesReq := adminDao.AccountPayeeCheck{
-		UID:         &uid,
+		UID:         nil,
 		Type:        &typet,
 		Description: &description,
 		Status:      &status,
@@ -391,27 +420,27 @@ func TestUpdateByExampleSelective2(t *testing.T) {
 		//db = db.Where("status = ?", 1)
 		return db
 	}
-	rep, err := adminDao.UpdateByExampleSelective(&updatesReq, &whereReq, customizeSQL, &adminDao.AccountPayeeCheck{})
+	rep, err := adminDao.UpdateIgnoringNull(&updatesReq, &whereReq, customizeSQL, &adminDao.AccountPayeeCheck{})
 	if err != nil {
-		t.Fatalf("UpdateByCustomizeSQL 失敗：%v", err)
+		t.Fatalf("TestUpdateIgnoringNull 失敗：%v", err)
 	}
 	fmt.Printf(strconv.FormatInt(rep, 10))
 }
 
-func TestUpdateByExample2(t *testing.T) {
+func TestUpdateAllowingNull(t *testing.T) {
 
 	uid := 888
 	typet := 8
 	description := "test888"
 	status := 888
-	checkID := 8
+	//checkID := 8
 	timeA := time.Now()
 	updatesReq := adminDao.AccountPayeeCheck{
 		UID:         &uid,
 		Type:        &typet,
 		Description: &description,
 		Status:      &status,
-		CheckID:     &checkID,
+		CheckID:     nil,
 		CheckTime:   &timeA,
 		UpdateTime:  &timeA,
 		CreatedTime: &timeA,
@@ -431,16 +460,16 @@ func TestUpdateByExample2(t *testing.T) {
 
 		return db
 	}
-	rep, err := adminDao.UpdateByExample(updatesReq, whereReq, customizeSQL, &adminDao.AccountPayeeCheck{})
+	rep, err := adminDao.UpdateAllowingNull(updatesReq, whereReq, customizeSQL, &adminDao.AccountPayeeCheck{})
 	if err != nil {
-		t.Fatalf("UpdateByExampleCustomizeSQL 失敗：%v", err)
+		t.Fatalf("TestUpdateAllowingNull 失敗：%v", err)
 	}
 
 	fmt.Printf(strconv.FormatInt(rep, 10))
 
 }
 
-func TestUpdateByPrimaryKeySelective2(t *testing.T) {
+func TestUpdateIgnoringNullByPrimaryKey(t *testing.T) {
 	uid := 55
 	typet := 55
 	description := "test55"
@@ -454,15 +483,15 @@ func TestUpdateByPrimaryKeySelective2(t *testing.T) {
 		CreatedTime: &time,
 	}
 	id := 10
-	selective, err := adminDao.UpdateByPrimaryKeySelective(id, updatesReq, &adminDao.AccountPayeeCheck{})
+	selective, err := adminDao.UpdateIgnoringNullByPrimaryKey(id, updatesReq, &adminDao.AccountPayeeCheck{})
 	if err != nil {
-		t.Fatalf("UpdateByPrimaryKeySelective 失敗：%v", err)
+		t.Fatalf("TestUpdateIgnoringNullByPrimaryKey 失敗：%v", err)
 	}
 	fmt.Printf(strconv.FormatInt(selective, 10))
 
 }
 
-func TestUpdateByPrimaryKey2(t *testing.T) {
+func TestUpdateAllowingNullByPrimaryKey(t *testing.T) {
 	uid := 55
 	typet := 55
 	description := "test55"
@@ -478,9 +507,9 @@ func TestUpdateByPrimaryKey2(t *testing.T) {
 
 	id := 10
 
-	rep, err := adminDao.UpdateByPrimaryKey(id, updatesReq, &adminDao.AccountPayeeCheck{})
+	rep, err := adminDao.UpdateAllowingNullByPrimaryKey(id, updatesReq, &adminDao.AccountPayeeCheck{})
 	if err != nil {
-		t.Fatalf("UpdateByPrimaryKeySelective 失敗：%v", err)
+		t.Fatalf("TestUpdateAllowingNullByPrimaryKey 失敗：%v", err)
 	}
 	fmt.Printf(strconv.FormatInt(rep, 10))
 }
@@ -538,12 +567,12 @@ func TestRawSubquery(t *testing.T) {
 	}
 }
 
-func TestUpdateUnUsedStatus(t *testing.T) {
+func TestUpdateAccountStatusFoAdminAccountStatus(t *testing.T) {
 	id := 1
 	total, err := adminDao.UpdateAccountStatusFoAdminAccountStatus(id)
 	fmt.Printf("%+v\n", total)
 	if err != nil {
-		t.Fatalf("TestRawSubquery 失敗：%v", err)
+		t.Fatalf("TestUpdateAccountStatusFoAdminAccountStatus 失敗：%v", err)
 	}
 }
 
