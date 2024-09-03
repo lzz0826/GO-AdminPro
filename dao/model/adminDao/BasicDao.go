@@ -53,20 +53,23 @@ func SelectByExample(customizeSQL func(db *gorm.DB) *gorm.DB, out interface{}, t
 	return nil
 }
 
-// customizeSQL db = db.Select("description")算总数会有问题
+// customizeSQL
 func SelectByExamplePage(customizeSQL func(db *gorm.DB) *gorm.DB, out interface{}, page *model.Pagination, table Model) (int64, error) {
 	var total int64
 	db := mysql.GormDb
 
-	query := db.Debug().Table(table.GetDbTableName()).Scopes(customizeSQL)
-	err := query.Count(&total).Error
+	countQuery := db.Debug().Table(table.GetDbTableName()).Scopes(customizeSQL)
+	// 执行 Count 操作
+	err := countQuery.Scopes(utils.WithSelect("COUNT(*)")).Row().Scan(&total)
 	if err != nil {
-		return 0, nil
+		return 0, err
 	}
+
+	query := db.Debug().Table(table.GetDbTableName()).Scopes(customizeSQL)
 	query = query.Scopes(utils.WithPagination(page))
 	err = query.Find(out).Error
 	if err != nil {
-		return 0, nil
+		return 0, err
 	}
 	return total, nil
 }
@@ -86,11 +89,14 @@ func SelectByObjWhereReqPage(customizeSQL func(db *gorm.DB) *gorm.DB, whereReq, 
 	var total int64
 	db := mysql.GormDb
 
-	query := db.Debug().Table(table.GetDbTableName()).Where(utils.BuildNotNullMap(whereReq)).Scopes(customizeSQL)
-	err := query.Count(&total).Error
+	countQuery := db.Debug().Table(table.GetDbTableName()).Where(utils.BuildNotNullMap(whereReq)).Scopes(customizeSQL)
+	// 执行 Count 操作
+	err := countQuery.Scopes(utils.WithSelect("COUNT(*)")).Row().Scan(&total)
 	if err != nil {
 		return 0, nil
 	}
+
+	query := db.Debug().Table(table.GetDbTableName()).Where(utils.BuildNotNullMap(whereReq)).Scopes(customizeSQL)
 	query = query.Where(utils.BuildNotNullMap(whereReq)).Scopes(utils.WithPagination(page))
 	err = query.Find(out).Error
 	if err != nil {

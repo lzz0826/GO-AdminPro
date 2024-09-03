@@ -45,12 +45,13 @@ func TestSelectByObjWhereReq(t *testing.T) {
 func TestSelectByObjWhereReqPage(t *testing.T) {
 	var results []adminDao.AccountPayeeCheck
 	customizeSQL := func(db *gorm.DB) *gorm.DB {
+		db = db.Select("description")
 		db = db.Order("id asc")
 		return db
 	}
 	i := 4
 	whereReq := adminDao.AccountPayeeCheck{
-		UID:    &i,
+		//UID:    &i,
 		Status: &i,
 	}
 	pagination := model.Pagination{Page: 1, Size: 2}
@@ -65,15 +66,15 @@ func TestSelectByObjWhereReqPage(t *testing.T) {
 
 	for _, result := range results {
 		fmt.Println("----------------------------")
-		fmt.Printf("%+v\n", *result.ID)
-		fmt.Printf("%+v\n", *result.UID)
-		fmt.Printf("%+v\n", *result.Type)
+		//fmt.Printf("%+v\n", *result.ID)
+		//fmt.Printf("%+v\n", *result.UID)
+		//fmt.Printf("%+v\n", *result.Type)
 		fmt.Printf("%+v\n", *result.Description)
-		fmt.Printf("%+v\n", *result.Status)
-		fmt.Printf("%+v\n", *result.CheckID)
-		fmt.Printf("%+v\n", *result.CheckTime)
-		fmt.Printf("%+v\n", *result.UpdateTime)
-		fmt.Printf("%+v\n", *result.CreatedTime)
+		//fmt.Printf("%+v\n", *result.Status)
+		//fmt.Printf("%+v\n", *result.CheckID)
+		//fmt.Printf("%+v\n", *result.CheckTime)
+		//fmt.Printf("%+v\n", *result.UpdateTime)
+		//fmt.Printf("%+v\n", *result.CreatedTime)
 		fmt.Println("----------------------------")
 	}
 }
@@ -121,15 +122,15 @@ func TestListAccountPayeeChecksPage(t *testing.T) {
 
 	for _, result := range results {
 		fmt.Println("----------------------------")
-		fmt.Printf("%+v\n", *result.ID)
-		fmt.Printf("%+v\n", *result.UID)
-		fmt.Printf("%+v\n", *result.Type)
+		//fmt.Printf("%+v\n", *result.ID)
+		//fmt.Printf("%+v\n", *result.UID)
+		//fmt.Printf("%+v\n", *result.Type)
 		fmt.Printf("%+v\n", *result.Description)
-		fmt.Printf("%+v\n", *result.Status)
-		fmt.Printf("%+v\n", *result.CheckID)
-		fmt.Printf("%+v\n", *result.CheckTime)
-		fmt.Printf("%+v\n", *result.UpdateTime)
-		fmt.Printf("%+v\n", *result.CreatedTime)
+		//fmt.Printf("%+v\n", *result.Status)
+		//fmt.Printf("%+v\n", *result.CheckID)
+		//fmt.Printf("%+v\n", *result.CheckTime)
+		//fmt.Printf("%+v\n", *result.UpdateTime)
+		//fmt.Printf("%+v\n", *result.CreatedTime)
 		fmt.Println("----------------------------")
 	}
 }
