@@ -84,7 +84,7 @@ func SelectByObjWhereReq(customizeSQL func(db *gorm.DB) *gorm.DB, whereReq, out 
 	return nil
 }
 
-// customizeSQL db = db.Select("description")算总数会有问题
+// customizeSQL
 func SelectByObjWhereReqPage(customizeSQL func(db *gorm.DB) *gorm.DB, whereReq, out interface{}, page *model.Pagination, table Model) (int64, error) {
 	var total int64
 	db := mysql.GormDb
