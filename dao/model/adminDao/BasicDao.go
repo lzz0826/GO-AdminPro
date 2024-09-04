@@ -158,7 +158,7 @@ func CountCustomizeSql(customizeSQL func(db *gorm.DB) *gorm.DB, table Model) (in
 	return count, nil
 }
 
-// InsertAllowingNull 插入 DB auto_increment 无须带id ,包含空值(没带的属性 "会" 添加至条件中在 DB NULL)
+// InsertAllowingNull 插入 DB auto_increment 无须带id ,包含空值(没带的属性 "会" 添加至Insert条件中 some_column = NULL)
 func InsertAllowingNull(insetCondition interface{}, table Model) (int64, error) {
 
 	var lastInsertID int64
@@ -184,7 +184,7 @@ func InsertAllowingNull(insetCondition interface{}, table Model) (int64, error) 
 	return lastInsertID, nil
 }
 
-// InsertAllowingNullCustomizeSQL 插入 DB auto_increment 无须带id ,包含空值(没带的属性 "会" 添加至条件中在 DB NULL)
+// InsertAllowingNullCustomizeSQL 插入 DB auto_increment 无须带id ,包含空值(没带的属性 "会" 添加至Insert条件中 some_column = NULL)
 func InsertAllowingNullCustomizeSQL(customizeSQL func(db *gorm.DB) *gorm.DB, insetCondition interface{}, table Model) (int64, error) {
 	var lastInsertID int64
 	db := mysql.GormDb
@@ -209,7 +209,7 @@ func InsertAllowingNullCustomizeSQL(customizeSQL func(db *gorm.DB) *gorm.DB, ins
 	return lastInsertID, nil
 }
 
-// InsertIgnoringNull auto_increment 无须带id  插入 , 忽略空字段 (没带的属性 "不会" 添加到条件中)
+// InsertIgnoringNull auto_increment 无须带id  插入 , 忽略空字段 (没带的属性 "不会" 添加到Insert条件中)
 func InsertIgnoringNull(insetCondition interface{}, table Model) (int64, error) {
 	db := mysql.GormDb
 	tx := db.Begin()
@@ -234,7 +234,7 @@ func InsertIgnoringNull(insetCondition interface{}, table Model) (int64, error) 
 	return lastInsertID, nil
 }
 
-// InsertIgnoringNullList 批量插入 auto_increment 无须带id  插入 , 忽略空字段 (没带的属性 "不会" 添加到条件中) 返回所有主建
+// InsertIgnoringNullList 批量插入 auto_increment 无须带id  插入 , 忽略空字段 (没带的属性 "不会" 添加到Insert条件中) 返回所有主建
 func InsertIgnoringNullList[T any](insetCondition []T, table Model) ([]int64, error) {
 	var idList []int64
 	db := mysql.GormDb
@@ -261,7 +261,7 @@ func InsertIgnoringNullList[T any](insetCondition []T, table Model) ([]int64, er
 	return idList, nil
 }
 
-// UpdateIgnoringNull 更新 (没带的属性 "不会" 添加到条件中)
+// UpdateIgnoringNull 更新 (没带的属性 "不会" 添加到Update条件中)
 func UpdateIgnoringNull(updatesReq interface{}, whereReq interface{}, customizeSQL func(db *gorm.DB) *gorm.DB, table Model) (int64, error) {
 	db := mysql.GormDb
 	result := db.Debug().Table(table.GetDbTableName()).Where(utils.BuildNotNullMap(whereReq)).Scopes(customizeSQL).Updates(updatesReq)
@@ -271,7 +271,7 @@ func UpdateIgnoringNull(updatesReq interface{}, whereReq interface{}, customizeS
 	return result.RowsAffected, nil
 }
 
-// UpdateAllowingNull 更新 (没带的属性 "会" 添加至条件中在 DB NULL)
+// UpdateAllowingNull 更新 (没带的属性 "会" 添加至Update条件中 some_column = NULL)
 func UpdateAllowingNull(updatesReq interface{}, whereReq interface{}, customizeSQL func(db *gorm.DB) *gorm.DB, table Model) (int64, error) {
 	db := mysql.GormDb
 	upReq := utils.BuildNullMap(updatesReq)
@@ -284,7 +284,7 @@ func UpdateAllowingNull(updatesReq interface{}, whereReq interface{}, customizeS
 	return result.RowsAffected, nil
 }
 
-// UpdateIgnoringNullByPrimaryKey 更新 (没带的属性 "不会" 添加到条件中)
+// UpdateIgnoringNullByPrimaryKey 更新 (没带的属性 "不会" 添加Update到条件中)
 func UpdateIgnoringNullByPrimaryKey(id int, updatesReq interface{}, table Model) (int64, error) {
 	db := mysql.GormDb
 	result := db.Debug().Table(table.GetDbTableName()).Where("id = ?", id).Updates(updatesReq)
@@ -294,7 +294,7 @@ func UpdateIgnoringNullByPrimaryKey(id int, updatesReq interface{}, table Model)
 	return result.RowsAffected, nil
 }
 
-// UpdateAllowingNullByPrimaryKey 更新  (没带的属性 "会" 添加至条件中在 DB NULL)
+// UpdateAllowingNullByPrimaryKey 更新  (没带的属性 "会" 添加至Update条件中 some_column = NULL)
 func UpdateAllowingNullByPrimaryKey(id int, updatesReq interface{}, table Model) (int64, error) {
 	db := mysql.GormDb.Debug()
 	upReq := utils.BuildNullMap(updatesReq)
