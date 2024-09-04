@@ -234,6 +234,30 @@ func InsertIgnoringNull(insetCondition interface{}, table Model) (int64, error) 
 	return lastInsertID, nil
 }
 
+// InsertIgnoringNullCustomizeSQL auto_increment 无须带id  插入 , 忽略空字段 (没带的属性 "不会" 添加到Insert条件中)
+func InsertIgnoringNullCustomizeSQL(customizeSQL func(db *gorm.DB) *gorm.DB, insetCondition interface{}, table Model) (int64, error) {
+	db := mysql.GormDb
+	tx := db.Begin()
+	if tx.Error != nil {
+		return 0, tx.Error
+	}
+
+	if err := tx.Debug().Table(table.GetDbTableName()).Scopes(customizeSQL).Create(utils.BuildNotNullMap(insetCondition)).Error; err != nil {
+		tx.Rollback()
+		return 0, err
+	}
+	var lastInsertID int64
+	if err := tx.Raw("SELECT LAST_INSERT_ID()").Row().Scan(&lastInsertID); err != nil {
+		tx.Rollback()
+		return 0, err
+	}
+	if err := tx.Commit().Error; err != nil {
+		return 0, err
+	}
+
+	return lastInsertID, nil
+}
+
 // InsertIgnoringNullList 批量插入 auto_increment 无须带id  插入 , 忽略空字段 (没带的属性 "不会" 添加到Insert条件中) 返回所有主建
 func InsertIgnoringNullList[T any](insetCondition []T, table Model) ([]int64, error) {
 	var idList []int64

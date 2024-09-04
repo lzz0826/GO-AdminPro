@@ -301,9 +301,9 @@ func TestInsertAllowingNullCustomizeSQL(t *testing.T) {
 	time := time.Now()
 	ap := adminDao.AccountPayeeCheck{
 		//ID:          &i,
-		UID:         &i,
-		Type:        &i,
-		Description: nil,
+		UID:  &i,
+		Type: &i,
+		//Description: nil,
 		Status:      &i,
 		CheckID:     &i,
 		CheckTime:   &time,
@@ -343,6 +343,37 @@ func TestInsertIgnoringNull(t *testing.T) {
 	insert, err := adminDao.InsertIgnoringNull(ap, &adminDao.AccountPayeeCheck{})
 	if err != nil {
 		t.Fatalf("TestInsertIgnoringNull 失敗：%v", err)
+	}
+
+	fmt.Println("----------------------------")
+	fmt.Printf("%+v\n", insert)
+	fmt.Println("----------------------------")
+}
+
+func TestInsertIgnoringNullCustomizeSQL(t *testing.T) {
+	i := 4
+	s := "test"
+	time := time.Now()
+	ap := adminDao.AccountPayeeCheck{
+		//ID:          &i,
+		UID:         &i,
+		Type:        &i,
+		Description: &s,
+		//Status:      &i,
+		CheckID:     &i,
+		CheckTime:   &time,
+		UpdateTime:  &time,
+		CreatedTime: &time,
+	}
+
+	customizeSQL := func(db *gorm.DB) *gorm.DB {
+		db = db.Table("xxx")
+		return db
+	}
+
+	insert, err := adminDao.InsertIgnoringNullCustomizeSQL(customizeSQL, ap, &adminDao.AccountPayeeCheck{})
+	if err != nil {
+		t.Fatalf("TestInsertIgnoringNullCustomizeSQL 失敗：%v", err)
 	}
 
 	fmt.Println("----------------------------")
