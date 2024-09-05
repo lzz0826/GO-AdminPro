@@ -489,7 +489,7 @@ func TestUpdateAllowingNull(t *testing.T) {
 		CreatedTime: &timeA,
 	}
 
-	id := 4
+	id := 56
 	whereReq := adminDao.AccountPayeeCheck{
 		ID: &id,
 	}
@@ -508,6 +508,42 @@ func TestUpdateAllowingNull(t *testing.T) {
 		t.Fatalf("TestUpdateAllowingNull 失敗：%v", err)
 	}
 
+	fmt.Printf(strconv.FormatInt(rep, 10))
+
+}
+
+func TestUpdateAllowingNullWhereMap(t *testing.T) {
+
+	uid := 888
+	typet := 8
+	description := "test888"
+	status := 888
+	//checkID := 8
+	timeA := time.Now()
+	updatesReq := adminDao.AccountPayeeCheck{
+		UID:         &uid,
+		Type:        &typet,
+		Description: &description,
+		Status:      &status,
+		CheckID:     nil,
+		CheckTime:   &timeA,
+		UpdateTime:  &timeA,
+		CreatedTime: &timeA,
+	}
+
+	id := 54
+	whereOption := map[string]interface{}{"id": id}
+
+	customizeSQL := func(db *gorm.DB) *gorm.DB {
+		return db
+	}
+	rep, err := adminDao.UpdateAllowingNull(updatesReq, whereOption, customizeSQL)
+	if err != nil {
+		t.Fatalf("TestUpdateAllowingNull 失敗：%v", err)
+	}
+
+	//whereOption := map[string]interface{}{"id": *check.ID, "status": webEnum.WAIT}
+	//return basicDao.UpdateByExampleSelective(check, whereOption, nil)
 	fmt.Printf(strconv.FormatInt(rep, 10))
 
 }

@@ -294,13 +294,16 @@ func WithSelectDistinct(fields ...string) func(db *gorm.DB) *gorm.DB {
   动态拼接
 */
 //MAP 空直判断 忽略空值 (构造用指针)
-func BuildNotNullMap(obj interface{}) map[string]interface{} {
+func BuildNotNullMap(obj interface{}) interface{} {
 	insertMap := make(map[string]interface{})
 	v := reflect.ValueOf(obj)
+	//原本就是MAP就直接返回
+	if v.Kind() == reflect.Map {
+		return obj
+	}
 	if v.Kind() == reflect.Ptr {
 		v = v.Elem()
 	}
-
 	if v.Kind() != reflect.Struct {
 		return insertMap
 	}
