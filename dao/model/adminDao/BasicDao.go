@@ -45,7 +45,7 @@ func (dao *BasicDao) SelectCustomizeSqlCheckPage(customizeSQL func(db *gorm.DB) 
 
 func SelectCustomizeSql(customizeSQL func(db *gorm.DB) *gorm.DB, out interface{}) error {
 	db := mysql.GormDb
-	query := db.Debug().Scopes(customizeSQL)
+	query := db.Debug().Scopes(CheckoutCustomizeSQL(customizeSQL))
 	err := query.Find(out).Error
 	if err != nil {
 		return err
@@ -58,14 +58,14 @@ func SelectCustomizeSqlPage(customizeSQL func(db *gorm.DB) *gorm.DB, out interfa
 	var total int64
 	db := mysql.GormDb
 
-	countQuery := db.Debug().Scopes(customizeSQL)
+	countQuery := db.Debug().Scopes(CheckoutCustomizeSQL(customizeSQL))
 	// 执行 Count 操作
 	err := countQuery.Model(out).Scopes(utils.WithSelect("COUNT(*)")).Row().Scan(&total)
 	if err != nil {
 		return 0, err
 	}
 
-	query := db.Debug().Model(out).Scopes(customizeSQL)
+	query := db.Debug().Model(out).Scopes(CheckoutCustomizeSQL(customizeSQL))
 	query = query.Scopes(utils.WithPagination(page))
 	err = query.Find(out).Error
 	if err != nil {
@@ -76,7 +76,7 @@ func SelectCustomizeSqlPage(customizeSQL func(db *gorm.DB) *gorm.DB, out interfa
 
 func SelectByObjWhereReq(customizeSQL func(db *gorm.DB) *gorm.DB, whereReq, out interface{}) error {
 	db := mysql.GormDb
-	query := db.Debug().Where(utils.BuildNotNullMap(whereReq)).Scopes(customizeSQL)
+	query := db.Debug().Where(utils.BuildNotNullMap(whereReq)).Scopes(CheckoutCustomizeSQL(customizeSQL))
 	err := query.Find(out).Error
 	if err != nil {
 		return err
@@ -89,14 +89,14 @@ func SelectByObjWhereReqPage(customizeSQL func(db *gorm.DB) *gorm.DB, whereReq, 
 	var total int64
 	db := mysql.GormDb
 
-	countQuery := db.Debug().Model(out).Where(utils.BuildNotNullMap(whereReq)).Scopes(customizeSQL)
+	countQuery := db.Debug().Model(out).Where(utils.BuildNotNullMap(whereReq)).Scopes(CheckoutCustomizeSQL(customizeSQL))
 	// 执行 Count 操作
 	err := countQuery.Scopes(utils.WithSelect("COUNT(*)")).Row().Scan(&total)
 	if err != nil {
 		return 0, nil
 	}
 
-	query := db.Debug().Model(out).Where(utils.BuildNotNullMap(whereReq)).Scopes(customizeSQL)
+	query := db.Debug().Model(out).Where(utils.BuildNotNullMap(whereReq)).Scopes(CheckoutCustomizeSQL(customizeSQL))
 	query = query.Where(utils.BuildNotNullMap(whereReq)).Scopes(utils.WithPagination(page))
 	err = query.Find(out).Error
 	if err != nil {
@@ -139,7 +139,7 @@ func DeleteByList(columnName string, list []int, table interface{}) (int64, erro
 // 返回受影响(删除的比数)
 func DeleteCustomizeSql(customizeSQL func(db *gorm.DB) *gorm.DB, table interface{}) (int64, error) {
 	db := mysql.GormDb
-	result := db.Debug().Model(table).Scopes(customizeSQL).Delete(table)
+	result := db.Debug().Model(table).Scopes(CheckoutCustomizeSQL(customizeSQL)).Delete(table)
 
 	if result.Error != nil {
 		return 0, result.Error
@@ -151,7 +151,7 @@ func DeleteCustomizeSql(customizeSQL func(db *gorm.DB) *gorm.DB, table interface
 func CountCustomizeSql(customizeSQL func(db *gorm.DB) *gorm.DB, table interface{}) (int64, error) {
 	db := mysql.GormDb
 	var count int64
-	result := db.Debug().Model(table).Scopes(customizeSQL).Count(&count)
+	result := db.Debug().Model(table).Scopes(CheckoutCustomizeSQL(customizeSQL)).Count(&count)
 	if result.Error != nil {
 		return 0, result.Error
 	}
@@ -192,7 +192,7 @@ func InsertAllowingNullCustomizeSQL(customizeSQL func(db *gorm.DB) *gorm.DB, ins
 		return 0, tx.Error
 	}
 
-	if err := tx.Debug().Scopes(customizeSQL).Create(insetCondition).Error; err != nil {
+	if err := tx.Debug().Scopes(CheckoutCustomizeSQL(customizeSQL)).Create(insetCondition).Error; err != nil {
 		tx.Rollback()
 		return 0, err
 	}
@@ -241,7 +241,7 @@ func InsertIgnoringNullCustomizeSQL(customizeSQL func(db *gorm.DB) *gorm.DB, ins
 		return 0, tx.Error
 	}
 
-	if err := tx.Debug().Model(insetCondition).Scopes(customizeSQL).Create(utils.BuildNotNullMap(insetCondition)).Error; err != nil {
+	if err := tx.Debug().Model(insetCondition).Scopes(CheckoutCustomizeSQL(customizeSQL)).Create(utils.BuildNotNullMap(insetCondition)).Error; err != nil {
 		tx.Rollback()
 		return 0, err
 	}
@@ -287,7 +287,7 @@ func InsertIgnoringNullList[T any](insetCondition []T) ([]int64, error) {
 // UpdateIgnoringNull 更新 (没带的属性 "不会" 添加到Update条件中)
 func UpdateIgnoringNull(updatesReq interface{}, whereReq interface{}, customizeSQL func(db *gorm.DB) *gorm.DB) (int64, error) {
 	db := mysql.GormDb
-	result := db.Debug().Where(utils.BuildNotNullMap(whereReq)).Scopes(customizeSQL).Updates(updatesReq)
+	result := db.Debug().Where(utils.BuildNotNullMap(whereReq)).Scopes(CheckoutCustomizeSQL(customizeSQL)).Updates(updatesReq)
 	if result.Error != nil {
 		return 0, result.Error
 	}
@@ -300,7 +300,8 @@ func UpdateAllowingNull(updatesReq interface{}, whereReq interface{}, customizeS
 	upReq := utils.BuildNullMap(updatesReq)
 	//更新条件去掉id
 	delete(upReq, "id")
-	result := db.Debug().Model(updatesReq).Where(utils.BuildNotNullMap(whereReq)).Scopes(customizeSQL).Updates(upReq)
+
+	result := db.Debug().Model(updatesReq).Where(utils.BuildNotNullMap(whereReq)).Scopes(CheckoutCustomizeSQL(customizeSQL)).Updates(upReq)
 	if result.Error != nil {
 		return 0, result.Error
 	}
@@ -328,4 +329,13 @@ func UpdateAllowingNullByPrimaryKey(id int, updatesReq interface{}) (int64, erro
 		return 0, result.Error
 	}
 	return result.RowsAffected, nil
+}
+
+func CheckoutCustomizeSQL(customizeSQL func(db *gorm.DB) *gorm.DB) func(db *gorm.DB) *gorm.DB {
+	if customizeSQL == nil {
+		return func(db *gorm.DB) *gorm.DB {
+			return db
+		}
+	}
+	return customizeSQL
 }

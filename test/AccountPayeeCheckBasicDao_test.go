@@ -377,7 +377,6 @@ func TestInsertIgnoringNullCustomizeSQL(t *testing.T) {
 		UpdateTime:  &time,
 		CreatedTime: &time,
 	}
-
 	customizeSQL := func(db *gorm.DB) *gorm.DB {
 		//db = db.Table("xxx")
 		return db
@@ -534,16 +533,15 @@ func TestUpdateAllowingNullWhereMap(t *testing.T) {
 	id := 54
 	whereOption := map[string]interface{}{"id": id}
 
-	customizeSQL := func(db *gorm.DB) *gorm.DB {
-		return db
-	}
-	rep, err := adminDao.UpdateAllowingNull(updatesReq, whereOption, customizeSQL)
+	//customizeSQL := func(db *gorm.DB) *gorm.DB {
+	//	db = db.Table("sdvsdvdsv")
+	//	return db
+	//}
+	rep, err := adminDao.UpdateAllowingNull(updatesReq, whereOption, nil)
 	if err != nil {
 		t.Fatalf("TestUpdateAllowingNull 失敗：%v", err)
 	}
 
-	//whereOption := map[string]interface{}{"id": *check.ID, "status": webEnum.WAIT}
-	//return basicDao.UpdateByExampleSelective(check, whereOption, nil)
 	fmt.Printf(strconv.FormatInt(rep, 10))
 
 }
