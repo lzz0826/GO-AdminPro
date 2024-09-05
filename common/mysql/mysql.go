@@ -7,6 +7,7 @@ import (
 	"github.com/spf13/viper"
 	"gorm.io/driver/mysql"
 	"gorm.io/gorm"
+	"gorm.io/gorm/schema"
 	"strconv"
 	"time"
 )
@@ -27,7 +28,13 @@ func init() {
 	)
 
 	// open GORM connection
-	GormDb, GormDbErr = gorm.Open(mysql.Open(dbDSN), &gorm.Config{})
+	GormDb, GormDbErr = gorm.Open(mysql.Open(dbDSN),
+		//GORM配置
+		&gorm.Config{
+			NamingStrategy: schema.NamingStrategy{
+				SingularTable: true, //表名保持与模型名一致而不进行复数化
+			},
+		})
 	if GormDbErr != nil {
 		panic("failed to connect to database: " + GormDbErr.Error())
 	}

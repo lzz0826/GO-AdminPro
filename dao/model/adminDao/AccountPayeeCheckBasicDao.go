@@ -7,6 +7,8 @@ import (
 	"fmt"
 	"github.com/shopspring/decimal"
 	"gorm.io/gorm"
+	"strings"
+	"time"
 )
 
 type AccountPayeeCheckBasicDao struct {
@@ -26,7 +28,7 @@ func (dao *AccountPayeeCheckBasicDao) SelectCustomizeSqlCheckPageTest(userRandom
 		db = db.Order("case when status = 0 then 0 else 1 end asc, created_time desc, id desc")
 		return db
 	}
-	err := dao.SelectCustomizeSqlCheckPage(customizeSQL, &results, &AccountPayeeCheck{})
+	err := dao.SelectCustomizeSqlCheckPage(customizeSQL, &results)
 	if err != nil {
 		return results, err
 	}
@@ -46,7 +48,7 @@ func (dao *AccountPayeeCheckBasicDao) JoinSelectCustomizeSqlCheckPage(checkId in
 		db = db.Order("t1.created_time DESC")
 		return db
 	}
-	err := dao.SelectCustomizeSqlCheckPage(customizeSQL, &results, &Join{})
+	err := dao.SelectCustomizeSqlCheckPage(customizeSQL, &results)
 	if err != nil {
 		return results, err
 	}
@@ -106,7 +108,7 @@ func ListAccountPayeeChecks(userRandomId *string, status *enum.EAccountPayeeChec
 		db = db.Order("case when status = 0 then 0 else 1 end asc, created_time desc, id desc")
 		return db
 	}
-	err := SelectCustomizeSql(customizeSQL, &results, &AccountPayeeCheck{})
+	err := SelectCustomizeSql(customizeSQL, &results)
 
 	if err != nil {
 		return results, err
@@ -128,7 +130,7 @@ func ListAccountPayeeChecksPage(userRandomId *string, status *enum.EAccountPayee
 		db = db.Order("case when status = 0 then 0 else 1 end asc, created_time desc, id desc")
 		return db
 	}
-	total, err := SelectCustomizeSqlPage(customizeSQL, &results, page, &AccountPayeeCheck{})
+	total, err := SelectCustomizeSqlPage(customizeSQL, &results, page)
 
 	if err != nil {
 		return 0, results, err
@@ -246,10 +248,28 @@ func TestUpdateByExampleSelectivePoint(uid int, description string) (int64, erro
 	customizeSQL := func(db *gorm.DB) *gorm.DB {
 		return db
 	}
-	result, err := UpdateIgnoringNull(updatesReq, whereReq, customizeSQL, &AccountPayeeCheck{})
+	result, err := UpdateIgnoringNull(updatesReq, whereReq, customizeSQL)
 
 	if err != nil {
 		return 0, err
 	}
 	return result, nil
+}
+
+// TODO
+func BatchInsertChannelLog(db *gorm.DB, payChannelId int, clubIds []int, logType int, createBy int, createTime time.Time) error {
+	var values []string
+	for _, clubID := range clubIds {
+		values = append(values, fmt.Sprintf("(%d, %d, %d, %d, '%s')", payChannelId, clubID, logType, createBy, createTime.Format("2006-01-02 15:04:05")))
+	}
+	valuesStr := strings.Join(values, ", ")
+	sql := fmt.Sprintf(
+		"INSERT INTO club_pay_channel_log (pay_channel_id, club_id, type, op_id, created_time) VALUES %s",
+		valuesStr,
+	)
+	if err := db.Exec(sql).Error; err != nil {
+		return err
+	}
+
+	return nil
 }

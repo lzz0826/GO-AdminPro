@@ -56,7 +56,7 @@ func TestSelectByObjWhereReqPage(t *testing.T) {
 	}
 	pagination := model.Pagination{Page: 1, Size: 2}
 
-	total, err := adminDao.SelectByObjWhereReqPage(customizeSQL, &whereReq, &results, &pagination, adminDao.AccountPayeeCheck{})
+	total, err := adminDao.SelectByObjWhereReqPage(customizeSQL, &whereReq, &results, &pagination)
 
 	if err != nil {
 		t.Fatalf("TestSelectByObjWhereReqPage 失敗：%v", err)
@@ -219,7 +219,7 @@ func TestSelectByPrimaryKey2(t *testing.T) {
 
 	primaryKey := 4
 
-	err := adminDao.SelectByPrimaryKey(primaryKey, &result, &adminDao.AccountPayeeCheck{})
+	err := adminDao.SelectByPrimaryKey(primaryKey, &result)
 
 	if err != nil {
 		t.Fatalf("TestSelectByPrimaryKey2 失敗：%v", err)
@@ -270,7 +270,7 @@ func TestDeleteByExample2(t *testing.T) {
 }
 
 func TestInsertAllowingNull(t *testing.T) {
-	i := 4
+	i := 466
 	s := "test"
 	time := time.Now()
 	ap := adminDao.AccountPayeeCheck{
@@ -285,7 +285,7 @@ func TestInsertAllowingNull(t *testing.T) {
 		CreatedTime: &time,
 	}
 
-	insert, err := adminDao.InsertAllowingNull(&ap, &adminDao.AccountPayeeCheck{})
+	insert, err := adminDao.InsertAllowingNull(&ap)
 	if err != nil {
 		t.Fatalf("TestInsertAllowingNull 失敗：%v", err)
 	}
@@ -314,7 +314,7 @@ func TestInsertAllowingNullCustomizeSQL(t *testing.T) {
 		db = db.Table("account_payee_check")
 		return db
 	}
-	insert, err := adminDao.InsertAllowingNullCustomizeSQL(customizeSQL, &ap, &adminDao.AccountPayeeCheck{})
+	insert, err := adminDao.InsertAllowingNullCustomizeSQL(customizeSQL, &ap)
 	if err != nil {
 		t.Fatalf("TestInsertAllowingNullCustomizeSQL 失敗：%v", err)
 	}
@@ -340,7 +340,7 @@ func TestInsertIgnoringNull(t *testing.T) {
 		CreatedTime: &time,
 	}
 
-	insert, err := adminDao.InsertIgnoringNull(ap, &adminDao.AccountPayeeCheck{})
+	insert, err := adminDao.InsertIgnoringNull(ap)
 	if err != nil {
 		t.Fatalf("TestInsertIgnoringNull 失敗：%v", err)
 	}
@@ -367,11 +367,11 @@ func TestInsertIgnoringNullCustomizeSQL(t *testing.T) {
 	}
 
 	customizeSQL := func(db *gorm.DB) *gorm.DB {
-		db = db.Table("xxx")
+		//db = db.Table("xxx")
 		return db
 	}
 
-	insert, err := adminDao.InsertIgnoringNullCustomizeSQL(customizeSQL, ap, &adminDao.AccountPayeeCheck{})
+	insert, err := adminDao.InsertIgnoringNullCustomizeSQL(customizeSQL, ap)
 	if err != nil {
 		t.Fatalf("TestInsertIgnoringNullCustomizeSQL 失敗：%v", err)
 	}
@@ -409,7 +409,7 @@ func TestInsertIgnoringNullList(t *testing.T) {
 	}
 	q = append(q, ap, ap2)
 
-	insert, err := adminDao.InsertIgnoringNullList(q, &adminDao.AccountPayeeCheck{})
+	insert, err := adminDao.InsertIgnoringNullList(q)
 	if err != nil {
 		t.Fatalf("TestInsertIgnoringNullList 失敗：%v", err)
 	}
@@ -451,7 +451,7 @@ func TestUpdateIgnoringNull(t *testing.T) {
 		//db = db.Where("status = ?", 1)
 		return db
 	}
-	rep, err := adminDao.UpdateIgnoringNull(&updatesReq, &whereReq, customizeSQL, &adminDao.AccountPayeeCheck{})
+	rep, err := adminDao.UpdateIgnoringNull(&updatesReq, &whereReq, customizeSQL)
 	if err != nil {
 		t.Fatalf("TestUpdateIgnoringNull 失敗：%v", err)
 	}
@@ -491,7 +491,7 @@ func TestUpdateAllowingNull(t *testing.T) {
 
 		return db
 	}
-	rep, err := adminDao.UpdateAllowingNull(updatesReq, whereReq, customizeSQL, &adminDao.AccountPayeeCheck{})
+	rep, err := adminDao.UpdateAllowingNull(updatesReq, whereReq, customizeSQL)
 	if err != nil {
 		t.Fatalf("TestUpdateAllowingNull 失敗：%v", err)
 	}
@@ -514,7 +514,7 @@ func TestUpdateIgnoringNullByPrimaryKey(t *testing.T) {
 		CreatedTime: &time,
 	}
 	id := 10
-	selective, err := adminDao.UpdateIgnoringNullByPrimaryKey(id, updatesReq, &adminDao.AccountPayeeCheck{})
+	selective, err := adminDao.UpdateIgnoringNullByPrimaryKey(id, updatesReq)
 	if err != nil {
 		t.Fatalf("TestUpdateIgnoringNullByPrimaryKey 失敗：%v", err)
 	}
@@ -538,7 +538,7 @@ func TestUpdateAllowingNullByPrimaryKey(t *testing.T) {
 
 	id := 10
 
-	rep, err := adminDao.UpdateAllowingNullByPrimaryKey(id, updatesReq, &adminDao.AccountPayeeCheck{})
+	rep, err := adminDao.UpdateAllowingNullByPrimaryKey(id, updatesReq)
 	if err != nil {
 		t.Fatalf("TestUpdateAllowingNullByPrimaryKey 失敗：%v", err)
 	}
