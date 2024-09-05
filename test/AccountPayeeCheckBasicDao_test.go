@@ -17,11 +17,11 @@ func TestSelectByObjWhereReq(t *testing.T) {
 		db = db.Order("id desc")
 		return db
 	}
-	uid := 4
+	uid := 5
 	whereReq := adminDao.AccountPayeeCheck{
 		UID: &uid,
 	}
-	err := adminDao.SelectByObjWhereReq(customizeSQL, &whereReq, &results, adminDao.AccountPayeeCheck{})
+	err := adminDao.SelectByObjWhereReq(customizeSQL, &whereReq, &results)
 
 	if err != nil {
 		t.Fatalf("TestSelectByObjWhereReq 失敗：%v", err)

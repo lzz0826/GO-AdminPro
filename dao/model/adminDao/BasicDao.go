@@ -74,9 +74,9 @@ func SelectCustomizeSqlPage(customizeSQL func(db *gorm.DB) *gorm.DB, out interfa
 	return total, nil
 }
 
-func SelectByObjWhereReq(customizeSQL func(db *gorm.DB) *gorm.DB, whereReq, out interface{}, table Model) error {
+func SelectByObjWhereReq(customizeSQL func(db *gorm.DB) *gorm.DB, whereReq, out interface{}) error {
 	db := mysql.GormDb
-	query := db.Debug().Table(table.GetDbTableName()).Where(utils.BuildNotNullMap(whereReq)).Scopes(customizeSQL)
+	query := db.Debug().Where(utils.BuildNotNullMap(whereReq)).Scopes(customizeSQL)
 	err := query.Find(out).Error
 	if err != nil {
 		return err
