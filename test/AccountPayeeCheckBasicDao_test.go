@@ -256,6 +256,18 @@ func TestDeleteByList(t *testing.T) {
 	fmt.Printf("%+v\n", i)
 }
 
+func TestCountCustomizeSql(t *testing.T) {
+	customizeSQL := func(db *gorm.DB) *gorm.DB {
+		db = db.Where("id = 44")
+		return db
+	}
+	i, err := adminDao.CountCustomizeSql(customizeSQL, &adminDao.AccountPayeeCheck{})
+	if err != nil {
+		t.Fatalf("TestCountCustomizeSql 失敗：%v", err)
+	}
+	fmt.Printf("%+v\n", i)
+}
+
 func TestDeleteByExample2(t *testing.T) {
 	uir := 4
 	customizeSQL := func(db *gorm.DB) *gorm.DB {

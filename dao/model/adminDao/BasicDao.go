@@ -115,9 +115,9 @@ func SelectByPrimaryKey(id int, out interface{}) error {
 }
 
 // 返回受影响(删除的比数)
-func DeleteByPrimaryKey(id int, table Model) (int64, error) {
+func DeleteByPrimaryKey(id int, table interface{}) (int64, error) {
 	db := mysql.GormDb
-	result := db.Debug().Table(table.GetDbTableName()).Delete(table, "id = ?", id)
+	result := db.Debug().Model(table).Delete(table, "id = ?", id)
 	if result.Error != nil {
 		return 0, result.Error
 	}
@@ -125,11 +125,11 @@ func DeleteByPrimaryKey(id int, table Model) (int64, error) {
 }
 
 // 返回受影响(删除的比数)
-func DeleteByList(columnName string, list []int, table Model) (int64, error) {
+func DeleteByList(columnName string, list []int, table interface{}) (int64, error) {
 	db := mysql.GormDb
 	// 使用 fmt.Sprintf 确保正确插入列名
 	query := fmt.Sprintf("%s IN ?", columnName)
-	result := db.Debug().Table(table.GetDbTableName()).Where(query, list).Delete(table)
+	result := db.Debug().Model(table).Where(query, list).Delete(table)
 	if result.Error != nil {
 		return 0, result.Error
 	}
@@ -137,9 +137,9 @@ func DeleteByList(columnName string, list []int, table Model) (int64, error) {
 }
 
 // 返回受影响(删除的比数)
-func DeleteCustomizeSql(customizeSQL func(db *gorm.DB) *gorm.DB, table Model) (int64, error) {
+func DeleteCustomizeSql(customizeSQL func(db *gorm.DB) *gorm.DB, table interface{}) (int64, error) {
 	db := mysql.GormDb
-	result := db.Debug().Table(table.GetDbTableName()).Scopes(customizeSQL).Delete(table)
+	result := db.Debug().Model(table).Scopes(customizeSQL).Delete(table)
 
 	if result.Error != nil {
 		return 0, result.Error
@@ -148,10 +148,10 @@ func DeleteCustomizeSql(customizeSQL func(db *gorm.DB) *gorm.DB, table Model) (i
 	return result.RowsAffected, nil
 }
 
-func CountCustomizeSql(customizeSQL func(db *gorm.DB) *gorm.DB, table Model) (int64, error) {
+func CountCustomizeSql(customizeSQL func(db *gorm.DB) *gorm.DB, table interface{}) (int64, error) {
 	db := mysql.GormDb
 	var count int64
-	result := db.Debug().Table(table.GetDbTableName()).Scopes(customizeSQL).Count(&count)
+	result := db.Debug().Model(table).Scopes(customizeSQL).Count(&count)
 	if result.Error != nil {
 		return 0, result.Error
 	}
