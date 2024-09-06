@@ -6,7 +6,6 @@ import (
 	"AdminPro/common/mysql"
 	"AdminPro/dao/model/adminDao"
 	"fmt"
-	"gorm.io/gorm"
 	"strconv"
 	"testing"
 	"time"
@@ -98,17 +97,10 @@ func TestSelectCheckPageTest(t *testing.T) {
 }
 
 func TestSumTotalStatusSUM(t *testing.T) {
-
-	customizeSQL := func(db *gorm.DB) *gorm.DB {
-		return db
-	}
-
-	price, err := adminDao.SumTotalStatusSUM(customizeSQL)
-
+	price, err := adminDao.SumTotalStatusSUM()
 	if err != nil {
 		t.Fatalf("SumTotalStatusSUM 失敗：%v", err)
 	}
-
 	fmt.Printf(" setus SUM : %+v\n", price)
 
 }
@@ -136,6 +128,16 @@ func TestCount(t *testing.T) {
 	db := mysql.GormDb
 	db = db.Where("uid = 4")
 	i, err := adminDao.Count(db, &adminDao.AccountPayeeCheck{})
+	if err != nil {
+		t.Fatalf("TestCount 失敗：%v", err)
+	}
+	fmt.Printf("%+v\n", i)
+}
+
+func TestCountTable(t *testing.T) {
+	db := mysql.GormDb
+	db = db.Table("account_payee_check").Where("uid = 4")
+	i, err := adminDao.Count(db, nil)
 	if err != nil {
 		t.Fatalf("TestCount 失敗：%v", err)
 	}

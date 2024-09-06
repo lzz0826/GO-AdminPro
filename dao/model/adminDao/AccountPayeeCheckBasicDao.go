@@ -131,23 +131,14 @@ func ListAccountPayeeChecksPage(userRandomId *string, status *enum.EAccountPayee
 	return total, results, nil
 }
 
-func SumTotalStatusSUM(customizeSQL func(db *gorm.DB) *gorm.DB) (*decimal.Decimal, error) {
+func SumTotalStatusSUM() (*decimal.Decimal, error) {
 	var totalAmount decimal.Decimal
 	db := mysql.GormDb.Debug()
-	query := db.Table(AccountPayeeCheck{}.GetDbTableName()).
-		Select("IFNULL(SUM(status), 0) AS total_amount").
-		Scopes(customizeSQL)
-
-	var totalAmountStr string
-	if err := query.Scan(&totalAmountStr).Error; err != nil {
-		return nil, err
-	}
-
-	totalAmount, err := decimal.NewFromString(totalAmountStr)
+	db = db.Table("account_payee_check").Select("IFNULL(SUM(status), 0) AS total_amount")
+	err := Select(db, &totalAmount)
 	if err != nil {
 		return nil, fmt.Errorf("failed to convert total amount to decimal: %w", err)
 	}
-
 	return &totalAmount, nil
 }
 
