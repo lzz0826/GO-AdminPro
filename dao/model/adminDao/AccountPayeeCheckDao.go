@@ -104,69 +104,7 @@ func (apd *AccountPayeeCheckDao) DeleteByCustomizeSQL(customizeSQL func(db *gorm
 	return nil
 }
 
-// InsertAllowingNull 插入,包含空值(没带的属性 "会" 添加至条件中在 DB NULL)
-func (apd *AccountPayeeCheckDao) Insert(a AccountPayeeCheck) (int64, error) {
-
-	// 创建记录时忽略 ID 字段
-	a.ID = nil
-
-	db := mysql.GormDb
-
-	// 开始一个事务
-	tx := db.Begin()
-	if tx.Error != nil {
-		return 0, tx.Error
-	}
-
-	if err := tx.Debug().Table(apd.TableName()).Create(&a).Error; err != nil {
-		tx.Rollback() // 发生错误回滚
-		return 0, err
-	}
-
-	// 提交事务
-	if err := tx.Commit().Error; err != nil {
-		return 0, err
-	}
-
-	// 返回最后插入的自增 ID
-	return int64(*a.ID), nil
-}
-
-// InsertIgnoringNull 插入 , 忽略空字段 (没带的属性 "不会" 添加到条件中)
-func (apd *AccountPayeeCheckDao) InsertSelective(a AccountPayeeCheck) (int64, error) {
-	// 创建记录时忽略 ID 字段
-	a.ID = nil
-
-	db := mysql.GormDb
-
-	// 开始一个事务
-	tx := db.Begin()
-	if tx.Error != nil {
-		return 0, tx.Error
-	}
-
-	// 将非空字段插入数据库 因使用MAP GORM 不会映射 ID
-	if err := tx.Debug().Table(apd.TableName()).Create(utils.BuildNotNullMap(&a)).Error; err != nil {
-		tx.Rollback() // 发生错误回滚
-		return 0, err
-	}
-
-	// 获取自增 ID
-	var lastInsertID int64
-	if err := tx.Raw("SELECT LAST_INSERT_ID()").Row().Scan(&lastInsertID); err != nil {
-		tx.Rollback() // 发生错误回滚
-		return 0, err
-	}
-
-	// 提交事务
-	if err := tx.Commit().Error; err != nil {
-		return 0, err
-	}
-
-	return lastInsertID, nil
-}
-
-// CountCustomizeSql Count(没带的属性 "不会" 添加到条件中)
+// Count Count(没带的属性 "不会" 添加到条件中)
 func (apd *AccountPayeeCheckDao) CountByExample(a AccountPayeeCheck) (int64, error) {
 	db := mysql.GormDb
 	var count int64
@@ -187,7 +125,7 @@ func (apd *AccountPayeeCheckDao) CountByCustomizeSQL(customizeSQL func(db *gorm.
 	return count, nil
 }
 
-// UpdateIgnoringNull 更新 (没带的属性 "不会" 添加到条件中)
+// Updates 更新 (没带的属性 "不会" 添加到条件中)
 func (apd *AccountPayeeCheckDao) UpdateByExampleSelective(updatesReq AccountPayeeCheck, whereReq AccountPayeeCheck) (int64, error) {
 	db := mysql.GormDb
 	result := db.Debug().Table(apd.TableName()).Where(utils.BuildNotNullMap(whereReq)).Updates(updatesReq)
@@ -234,7 +172,7 @@ func (apd *AccountPayeeCheckDao) UpdateByExampleCustomizeSQL(updatesReq AccountP
 	return result.RowsAffected, nil
 }
 
-// UpdateIgnoringNullByPrimaryKey 更新 (没带的属性 "不会" 添加到条件中)
+// UpdateByPrimaryKey 更新 (没带的属性 "不会" 添加到条件中)
 func (apd *AccountPayeeCheckDao) UpdateByPrimaryKeySelective(id int, updatesReq AccountPayeeCheck) error {
 	db := mysql.GormDb
 	err := db.Debug().Table(apd.TableName()).Where("id = ?", id).Updates(updatesReq).Error

@@ -16,19 +16,17 @@ type AccountPayeeCheckBasicDao struct {
 }
 
 // 使用分页判断
-func (dao *AccountPayeeCheckBasicDao) SelectCustomizeSqlCheckPageTest(userRandomId *string, status *enum.EAccountPayeeCheckStatusEnum) ([]AccountPayeeCheck, error) {
+func (dao *AccountPayeeCheckBasicDao) SelectCheckPageTest(userRandomId *string, status *enum.EAccountPayeeCheckStatusEnum) ([]AccountPayeeCheck, error) {
 	var results []AccountPayeeCheck
-	customizeSQL := func(db *gorm.DB) *gorm.DB {
-		if userRandomId != nil {
-			db = db.Where("uid = ?", userRandomId)
-		}
-		if status != nil {
-			db = db.Where("status = ?", status)
-		}
-		db = db.Order("case when status = 0 then 0 else 1 end asc, created_time desc, id desc")
-		return db
+	db := mysql.GormDb
+	if userRandomId != nil {
+		db = db.Where("uid = ?", userRandomId)
 	}
-	err := dao.SelectCustomizeSqlCheckPage(customizeSQL, &results)
+	if status != nil {
+		db = db.Where("status = ?", status)
+	}
+	db = db.Order("case when status = 0 then 0 else 1 end asc, created_time desc, id desc")
+	err := dao.SelectCheckPage(db, &results)
 	if err != nil {
 		return results, err
 	}
@@ -37,18 +35,17 @@ func (dao *AccountPayeeCheckBasicDao) SelectCustomizeSqlCheckPageTest(userRandom
 
 func (dao *AccountPayeeCheckBasicDao) JoinSelectCustomizeSqlCheckPage(checkId int, search *string) ([]Join, error) {
 	var results []Join
-	customizeSQL := func(db *gorm.DB) *gorm.DB {
-		db = db.Table("account_payee_check t1")
-		db = db.Select("t2.username as username, t1.id, t1.description as description")
-		db = db.Joins("JOIN admin_admin t2 ON t1.uid = t2.id")
-		db = db.Where("t1.check_id = ?", checkId)
-		if search != nil {
-			db = db.Where("(t1.description LIKE ? OR t2.nickname LIKE ?)", "%"+*search+"%", "%"+*search+"%")
-		}
-		db = db.Order("t1.created_time DESC")
-		return db
+	db := mysql.GormDb
+
+	db = db.Table("account_payee_check t1")
+	db = db.Select("t2.username as username, t1.id, t1.description as description")
+	db = db.Joins("JOIN admin_admin t2 ON t1.uid = t2.id")
+	db = db.Where("t1.check_id = ?", checkId)
+	if search != nil {
+		db = db.Where("(t1.description LIKE ? OR t2.nickname LIKE ?)", "%"+*search+"%", "%"+*search+"%")
 	}
-	err := dao.SelectCustomizeSqlCheckPage(customizeSQL, &results)
+	db = db.Order("t1.created_time DESC")
+	err := dao.SelectCheckPage(db, &results)
 	if err != nil {
 		return results, err
 	}
@@ -98,18 +95,16 @@ func SetMAXType(id int) error {
 // ListAccountPayeeChecks
 func ListAccountPayeeChecks(userRandomId *string, status *enum.EAccountPayeeCheckStatusEnum) ([]AccountPayeeCheck, error) {
 	var results []AccountPayeeCheck
-	customizeSQL := func(db *gorm.DB) *gorm.DB {
-		if userRandomId != nil {
-			db = db.Where("uid = ?", userRandomId)
-		}
-		if status != nil {
-			db = db.Where("status = ?", status)
-		}
-		db = db.Order("case when status = 0 then 0 else 1 end asc, created_time desc, id desc")
-		return db
-	}
-	err := SelectCustomizeSql(customizeSQL, &results)
+	db := mysql.GormDb
 
+	if userRandomId != nil {
+		db = db.Where("uid = ?", userRandomId)
+	}
+	if status != nil {
+		db = db.Where("status = ?", status)
+	}
+	db = db.Order("case when status = 0 then 0 else 1 end asc, created_time desc, id desc")
+	err := Select(db, &results)
 	if err != nil {
 		return results, err
 	}
@@ -119,18 +114,16 @@ func ListAccountPayeeChecks(userRandomId *string, status *enum.EAccountPayeeChec
 
 func ListAccountPayeeChecksPage(userRandomId *string, status *enum.EAccountPayeeCheckStatusEnum, page *model.Pagination) (int64, []AccountPayeeCheck, error) {
 	var results []AccountPayeeCheck
-	customizeSQL := func(db *gorm.DB) *gorm.DB {
-		if userRandomId != nil {
-			db = db.Select("description")
-			db = db.Where("uid = ?", userRandomId)
-		}
-		if status != nil {
-			db = db.Where("status = ?", status)
-		}
-		db = db.Order("case when status = 0 then 0 else 1 end asc, created_time desc, id desc")
-		return db
+	db := mysql.GormDb
+	if userRandomId != nil {
+		db = db.Select("description")
+		db = db.Where("uid = ?", userRandomId)
 	}
-	total, err := SelectCustomizeSqlPage(customizeSQL, &results, page)
+	if status != nil {
+		db = db.Where("status = ?", status)
+	}
+	db = db.Order("case when status = 0 then 0 else 1 end asc, created_time desc, id desc")
+	total, err := SelectPage(db, &results, page)
 
 	if err != nil {
 		return 0, results, err
@@ -240,15 +233,11 @@ func UpdateAccountStatusFoAdminAccountStatus(id int) (int64, error) {
 // 测试指针带入
 func TestUpdateByExampleSelectivePoint(uid int, description string) (int64, error) {
 	updatesReq := AccountPayeeCheck{
-		UID: &uid,
+		UID: uid,
 	}
-	whereReq := AccountPayeeCheck{
-		Description: &description,
-	}
-	customizeSQL := func(db *gorm.DB) *gorm.DB {
-		return db
-	}
-	result, err := UpdateIgnoringNull(updatesReq, whereReq, customizeSQL)
+	whereReq := map[string]interface{}{"description": description}
+	db = mysql.GormDb
+	result, err := Updates(db, updatesReq, whereReq)
 
 	if err != nil {
 		return 0, err
