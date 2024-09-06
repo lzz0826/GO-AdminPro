@@ -256,7 +256,8 @@ func TestUpdates(t *testing.T) {
 
 func TestUpdateByPrimaryKey(t *testing.T) {
 	uid := 55
-	typet := 55
+	//typet := 0 int 0會被UPDATE忽略
+	typet := 1
 	status := 0
 	//description := "test55"
 	time := time.Now()
