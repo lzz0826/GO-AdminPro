@@ -254,6 +254,36 @@ func TestUpdates(t *testing.T) {
 	fmt.Printf(strconv.FormatInt(rep, 10))
 }
 
+func TestUpdatesMap(t *testing.T) {
+	db := mysql.GormDb
+	idList := []int{51, 52}
+	//idList := &[]int{51, 52}
+
+	var localDateTime *time.Time
+
+	date := time.Date(2023, time.September, 15, 12, 0, 0, 0, time.UTC)
+	//localDateTime := new(time.Time)
+	localDateTime = &date
+	status := new(int)
+	*status = 4
+	updateFields := make(map[string]interface{})
+	if status != nil {
+		updateFields["status"] = *status
+	}
+	if localDateTime != nil {
+		updateFields["update_time"] = *localDateTime
+	}
+
+	if len(updateFields) == 0 {
+		fmt.Printf("updateFields 空")
+	}
+	db = db.Table("account_payee_check")
+	if len(idList) > 0 {
+		db = db.Where("id IN (?)", idList)
+	}
+	adminDao.Updates(db, updateFields, nil)
+}
+
 func TestUpdateByPrimaryKey(t *testing.T) {
 	uid := 55
 	//typet := 0 int 0會被UPDATE忽略
