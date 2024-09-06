@@ -156,12 +156,14 @@ func TestCount(t *testing.T) {
 func TestInsertReturnLastId(t *testing.T) {
 	i := 4
 	status := 0
+	typeValue := 1
 	//s := "test"
 	time := time.Now()
 	ap := adminDao.AccountPayeeCheck{
 		//ID:          &i,
-		UID:  i,
-		Type: i,
+		UID: i,
+		//Type: typeValue, 注解会默认type 0
+		Type: typeValue,
 		//Description: nil,
 		Status:      &status,
 		CheckID:     i,
