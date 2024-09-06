@@ -137,7 +137,7 @@ func InsertReturnLastId(db *gorm.DB, insetCondition interface{}) (int64, error) 
 	return lastInsertID, nil
 }
 
-// InsertReturnLastIds 批量插入 返回ID List
+// InsertReturnLastIds 批量插入 返回ID Lists
 func InsertsReturnLastIds[T any](db *gorm.DB, insetCondition []T) ([]int64, error) {
 	CheckGormDb(db)
 	var idList []int64
