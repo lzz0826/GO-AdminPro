@@ -220,9 +220,10 @@ func TestInsertIgnoringNullList(t *testing.T) {
 
 func TestUpdates(t *testing.T) {
 	uid := 66
-	typet := 6
+	//不用指针0会被UPDATE排除
+	typet := 0
 	description := "test77"
-	status := 6
+	status := 0
 	checkID := 6
 	timeAdmin := time.Now()
 
