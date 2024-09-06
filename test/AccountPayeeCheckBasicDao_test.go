@@ -162,9 +162,10 @@ func TestInsertReturnLastId(t *testing.T) {
 	ap := adminDao.AccountPayeeCheck{
 		//ID:          &i,
 		UID: i,
-		//Type: typeValue, 注解会默认type 0
+		//Type: typeValue, int注解会默认type 0
 		Type: typeValue,
 		//Description: nil,
+		//Status:      &status, 指针注解默认NULL
 		Status:      &status,
 		CheckID:     i,
 		CheckTime:   time,
