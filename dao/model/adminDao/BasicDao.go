@@ -53,7 +53,6 @@ func Select(db *gorm.DB, out interface{}) error {
 	return nil
 }
 
-// customizeSQL
 func SelectPage(db *gorm.DB, out interface{}, page *model.Pagination) (int64, error) {
 	var total int64
 	CheckGormDb(db)
@@ -73,7 +72,7 @@ func SelectPage(db *gorm.DB, out interface{}, page *model.Pagination) (int64, er
 	return total, nil
 }
 
-// 返回受影响(删除的比数)
+// 返回受影响
 func DeleteByPrimaryKey(id int, table interface{}) (int64, error) {
 	db := mysql.GormDb
 	result := db.Debug().Model(table).Delete(table, "id = ?", id)
@@ -83,7 +82,7 @@ func DeleteByPrimaryKey(id int, table interface{}) (int64, error) {
 	return result.RowsAffected, nil
 }
 
-// 返回受影响(删除的比数)
+// 返回受影响
 func DeleteByList(columnName string, list []int, table interface{}) (int64, error) {
 	db := mysql.GormDb
 	// 使用 fmt.Sprintf 确保正确插入列名
@@ -138,7 +137,7 @@ func InsertReturnLastId(db *gorm.DB, insetCondition interface{}) (int64, error) 
 	return lastInsertID, nil
 }
 
-// InsertReturnLastIds 批量插入
+// InsertReturnLastIds 批量插入 返回ID List
 func InsertsReturnLastIds[T any](db *gorm.DB, insetCondition []T) ([]int64, error) {
 	CheckGormDb(db)
 	var idList []int64
