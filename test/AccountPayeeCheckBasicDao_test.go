@@ -142,16 +142,16 @@ func TestCount(t *testing.T) {
 	fmt.Printf("%+v\n", i)
 }
 
-func TestDelete(t *testing.T) {
-	uid := 4
-	db := mysql.GormDb
-	db = db.Where("uid = ?", uid)
-	i, err := adminDao.Delete(db, &adminDao.AccountPayeeCheck{})
-	if err != nil {
-		t.Fatalf("TestDelete 失敗：%v", err)
-	}
-	fmt.Printf("%+v\n", i)
-}
+//func TestDelete(t *testing.T) {
+//	uid := 4
+//	db := mysql.GormDb
+//	db = db.Where("uid = ?", uid)
+//	i, err := adminDao.Delete(db, &adminDao.AccountPayeeCheck{})
+//	if err != nil {
+//		t.Fatalf("TestDelete 失敗：%v", err)
+//	}
+//	fmt.Printf("%+v\n", i)
+//}
 
 func TestInsertReturnLastId(t *testing.T) {
 	i := 4

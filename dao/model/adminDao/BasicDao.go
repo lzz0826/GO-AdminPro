@@ -99,15 +99,15 @@ func DeleteByList(columnName string, list []int, table interface{}) (int64, erro
 	return result.RowsAffected, nil
 }
 
-// 返回受影响
-func Delete(db *gorm.DB, table interface{}) (int64, error) {
-	CheckGormDb(db)
-	result := db.Debug().Model(table).Delete(table)
-	if result.Error != nil {
-		return 0, result.Error
-	}
-	return result.RowsAffected, nil
-}
+//// **必须加上WHERE 返回受影响
+//func Delete(db *gorm.DB, table interface{}) (int64, error) {
+//	CheckGormDb(db)
+//	result := db.Debug().Model(table).Delete(table)
+//	if result.Error != nil {
+//		return 0, result.Error
+//	}
+//	return result.RowsAffected, nil
+//}
 
 func Count(db *gorm.DB, table interface{}) (int64, error) {
 	CheckGormDb(db)
