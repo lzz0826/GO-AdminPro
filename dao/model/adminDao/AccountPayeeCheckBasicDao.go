@@ -116,7 +116,7 @@ func ListAccountPayeeChecksPage(userRandomId *string, status *enum.EAccountPayee
 	var results []AccountPayeeCheck
 	db := mysql.GormDb
 	if userRandomId != nil {
-		db = db.Select("description")
+		//db = db.Select("description")
 		db = db.Where("uid = ?", userRandomId)
 	}
 	if status != nil {

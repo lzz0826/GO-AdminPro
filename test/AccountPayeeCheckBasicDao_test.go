@@ -35,6 +35,34 @@ func TestListAccountPayeeChecks(t *testing.T) {
 	}
 }
 
+func TestListAccountPayeeChecksPage(t *testing.T) {
+
+	userRandomId := "1"
+	status := enum.REJECT
+
+	pagination := model.Pagination{Page: 2, Size: 2}
+	page, checks, err := adminDao.ListAccountPayeeChecksPage(&userRandomId, &status, &pagination)
+	fmt.Println("----------------------------")
+	fmt.Printf("page: %+v\n", page)
+	fmt.Println("----------------------------")
+	if err != nil {
+		t.Fatalf("TestListAccountPayeeChecksPage 失敗：%v", err)
+	}
+	for _, result := range checks {
+		fmt.Println("----------------------------")
+		fmt.Printf("%+v\n", result.ID)
+		fmt.Printf("%+v\n", result.UID)
+		fmt.Printf("%+v\n", result.Type)
+		fmt.Printf("%+v\n", result.Description)
+		fmt.Printf("%+v\n", *result.Status)
+		fmt.Printf("%+v\n", result.CheckID)
+		fmt.Printf("%+v\n", result.CheckTime)
+		fmt.Printf("%+v\n", result.UpdateTime)
+		fmt.Printf("%+v\n", result.CreatedTime)
+		fmt.Println("----------------------------")
+	}
+}
+
 func TestSelectCheckPageTest(t *testing.T) {
 
 	userRandomId := "1"

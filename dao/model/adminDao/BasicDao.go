@@ -72,6 +72,11 @@ func SelectPage(db *gorm.DB, out interface{}, page *model.Pagination) (int64, er
 	return total, nil
 }
 
+func SelectByPrimaryKey(data, id interface{}) error {
+	db := mysql.GormDb
+	return db.First(data, id).Error
+}
+
 // 返回受影响
 func DeleteByPrimaryKey(id int, table interface{}) (int64, error) {
 	db := mysql.GormDb
