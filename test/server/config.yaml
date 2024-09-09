@@ -23,3 +23,13 @@ redis:
 
 mongodb:
   url: "mongodb://localhost:27017"
+
+
+glog:
+  logConfLevel: INFO #日志级别 紀錄設定級別以上的日誌
+  logPath: /var/log/myapp/ #日志文件路径
+  logType: file #日志输出类型
+
+http:
+  headerTrace: Some-Request-Id #自訂請求頭
+

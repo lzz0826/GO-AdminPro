@@ -2,10 +2,15 @@ package admin
 
 import (
 	"AdminPro/admin/service"
+	"AdminPro/common/enum"
+	"AdminPro/common/model"
 	"AdminPro/common/tool"
 	"AdminPro/common/utils"
 	"AdminPro/dao/service/admin"
+	"AdminPro/internal/context"
+	"AdminPro/server/controller/base"
 	"AdminPro/vo/model/adminVo"
+	"fmt"
 	"github.com/gin-gonic/gin"
 	"net/http"
 )
@@ -49,4 +54,39 @@ func GetAllAdminList(ctx *gin.Context) {
 		AdminList: admins,
 	}
 	ctx.JSON(http.StatusOK, tool.RespOk(vo))
+}
+
+func GetAllAdminCommonResponse(c *gin.Context) {
+	ctx := context.Background(c)
+
+	var pagination model.Pagination
+
+	if err := ctx.ShouldBind(&pagination); err != nil {
+		fmt.Printf("参数绑定错误:%s\n", err)
+	}
+
+	//測試解析Token GetTokenDataByGinContext
+	//response := new(model.CommonResponse[jwt.Claims])
+	//
+	//ginContext, err := base.GetTokenDataByGinContext(ctx)
+	//if err != nil {
+	//	//ctx.JSON(http.StatusOK, tool.RespFail(tool.SelectFail.Code, tool.SelectFail.Msg, nil))
+	//	fromError := response.FailureFromError(err.Error())
+	//	base.WebRespFromCommonResp(ctx, *fromError)
+	//}
+	//from := response.SuccessFrom(enum.GetResponseMsg(enum.SUCCESS), *ginContext)
+
+	response := new(model.CommonResponse[adminVo.AdminListVO])
+
+	admins, err := admin.GetAllAdminList(&pagination)
+	if err != nil {
+		//ctx.JSON(http.StatusOK, tool.RespFail(tool.SelectFail.Code, tool.SelectFail.Msg, nil))
+		fromError := response.FailureFromError(err.Error())
+		base.WebRespFromCommonResp(ctx, *fromError)
+	}
+	vo := adminVo.AdminListVO{
+		AdminList: admins,
+	}
+	from := response.SuccessFrom(enum.GetResponseMsg(enum.SUCCESS), vo)
+	base.WebRespFromCommonResp(ctx, *from)
 }

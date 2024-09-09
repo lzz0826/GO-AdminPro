@@ -25,6 +25,10 @@ func RegisterRoutes(router *gin.Engine) {
 		protected.GET("/GetAllRoleList", admin.GetAllRoleList)
 		protected.GET("/GetAllPermitList", admin.GetAllPermitList)
 		protected.GET("/GetAllAdminList", admin.GetAllAdminList)
+
+		//CommonResponse
+		protected.GET("/GetAllAdminCommonResponse", admin.GetAllAdminCommonResponse)
+
 		protected.GET("/GetAdminRole", admin.GetAdminRole)
 		protected.GET("/GetAdminExtraPermits", admin.GetAdminExtraPermits)
 		protected.GET("/GetAdminAllPermits", admin.GetAdminAllPermits)

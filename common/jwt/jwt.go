@@ -13,18 +13,16 @@ import (
 )
 
 var jwtKey = []byte(viper.GetString("jwt.jwt_key"))
-
 var tokenTimeOut = viper.GetInt32("jwt.token_timeOut")
+var authHeader = viper.GetString("jwt.jwt_auth")
 
 // Claims 是JWT 的內容，可以自定義需要的欄位
-
 type Claims struct {
 	Username  string `json:"username"`
 	AdminName string `json:"adminName"`
 	Nickname  string `json:"nickname"`
 	AdminId   string `json:"adminId"`
 	ChannelID string `json:"channelID"`
-
 	jwt.StandardClaims
 }
 
@@ -53,28 +51,24 @@ func LoginHandler(adminDao adminDao.AdminDAO) (tokenStr string, err error) {
 
 func JwtAuthMiddleware() gin.HandlerFunc {
 	return func(c *gin.Context) {
-		authHeader := c.GetHeader("Authorization")
 		if authHeader == "" {
 			c.JSON(http.StatusUnauthorized, gin.H{"error": "Authorization header is missing"})
 			c.Abort()
 			return
 		}
-
-		tokenString := strings.Replace(authHeader, "Bearer ", "", 1)
-
+		tokenString := c.GetHeader(authHeader)
+		tokenString = strings.Replace(tokenString, "Bearer ", "", 1)
 		token, err := jwt.Parse(tokenString, func(token *jwt.Token) (interface{}, error) {
 
 			// 驗證簽名算法是否為HS256
 			if _, ok := token.Method.(*jwt.SigningMethodHMAC); !ok {
 				return nil, fmt.Errorf("Unexpected signing method: %v", token.Header["alg"])
 			}
-
 			// 驗證必要的參數
 			claims, ok := token.Claims.(jwt.MapClaims)
 			if !ok {
 				return nil, fmt.Errorf("Invalid token claims")
 			}
-
 			username, ok := claims["username"].(string)
 			if !ok || username == "" {
 				return nil, fmt.Errorf("Missing required parameter: username")
@@ -122,3 +116,26 @@ func JwtAuthMiddleware() gin.HandlerFunc {
 //	}
 //	return adminId
 //}
+
+func GetTokenData(tokenString string) (*Claims, error) {
+	token, err := jwt.Parse(tokenString, func(token *jwt.Token) (interface{}, error) {
+		// 驗證簽名算法是否為HS256
+		if _, ok := token.Method.(*jwt.SigningMethodHMAC); !ok {
+			return nil, fmt.Errorf("Unexpected signing method: %v", token.Header["alg"])
+		}
+		return jwtKey, nil
+	})
+	if err != nil || !token.Valid {
+		return nil, err
+	}
+	claims := token.Claims.(jwt.MapClaims)
+
+	result := Claims{
+		Username:  claims["username"].(string),
+		AdminName: claims["adminName"].(string),
+		Nickname:  claims["nickname"].(string),
+		AdminId:   claims["adminId"].(string),
+		ChannelID: claims["channelID"].(string),
+	}
+	return &result, nil
+}

@@ -4,6 +4,7 @@ server:
   ENV: "debug"    # 环境模式 release/debug/test
 
 jwt:
+  jwt_auth: Authorization #Http請求頭
   jwt_key: "your_secret_key" #jwtKey
   token_timeOut : 60 # token失效時間(分)
 
@@ -34,4 +35,11 @@ redis:
 mongodb:
   url: "mongodb://localhost:27017"
 
+glog:
+  logConfLevel: INFO #日志级别 紀錄設定級別以上的日誌
+  logPath: /var/log/myapp/ #日志文件路径
+  logType: file #日志输出类型
+
+http:
+  headerTrace: Some-Request-Id
 
