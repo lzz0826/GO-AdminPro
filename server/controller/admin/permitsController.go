@@ -74,7 +74,7 @@ func AddAdminPermits(ctx *gin.Context) {
 		PermitsIds []string `json:"permitsIds" binding:"required"`
 	}
 	if err := ctx.ShouldBindJSON(&request); err != nil {
-		ctx.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
+		ctx.JSON(http.StatusBadRequest, gin.H{"errors": err.Error()})
 		return
 	}
 
@@ -100,7 +100,7 @@ func RemoveAdminPermits(ctx *gin.Context) {
 		PermitsIds []string `json:"permitsIds" binding:"required"`
 	}
 	if err := ctx.ShouldBindJSON(&request); err != nil {
-		ctx.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
+		ctx.JSON(http.StatusBadRequest, gin.H{"errors": err.Error()})
 		return
 	}
 	adminId := request.AdminId

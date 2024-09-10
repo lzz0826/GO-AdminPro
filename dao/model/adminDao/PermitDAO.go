@@ -28,7 +28,7 @@ func (p *PermitDAO) TableName() string {
 func (p *PermitDAO) InsertPermit() (err error) {
 	err = mysql.GormDb.Table(p.TableName()).Create(p).Error
 	if err != nil {
-		log.Println("InsertPermit error:", err.Error())
+		log.Println("InsertPermit errors:", err.Error())
 		return
 	}
 	return
@@ -38,7 +38,7 @@ func (p *PermitDAO) InsertPermit() (err error) {
 func (p *PermitDAO) GetPermitByID(id string) (permit PermitDAO, err error) {
 	err = mysql.GormDb.Table(p.TableName()).Where("id = ?", id).First(&permit).Error
 	if err != nil {
-		log.Println("GetPermitByID error:", err.Error())
+		log.Println("GetPermitByID errors:", err.Error())
 		return
 	}
 	return
@@ -48,7 +48,7 @@ func (p *PermitDAO) GetPermitByID(id string) (permit PermitDAO, err error) {
 func (p *PermitDAO) GetPermitByPermitKey(permitKey string) (permit PermitDAO, err error) {
 	err = mysql.GormDb.Table(p.TableName()).Where("permit_key = ?", permitKey).First(&permit).Error
 	if err != nil {
-		log.Println("GetPermitByPermitKey error:", err.Error())
+		log.Println("GetPermitByPermitKey errors:", err.Error())
 		return
 	}
 	return

@@ -20,11 +20,11 @@ func Init() {
 	viper.AddConfigPath("server/.") // 设置配置文件和可执行二进制文件在用一个目录
 	if err := viper.ReadInConfig(); err != nil {
 		if _, ok := err.(viper.ConfigFileNotFoundError); ok {
-			// Config file not found; ignore error if desired
+			// Config file not found; ignore errors if desired
 			log.Println("no such config file")
 		} else {
-			// Config file was found but another error was produced
-			log.Println("read config error")
+			// Config file was found but another errors was produced
+			log.Println("read config errors")
 		}
 		log.Fatal(err) // 读取配置文件失败致命错误
 	}

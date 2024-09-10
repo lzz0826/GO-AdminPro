@@ -58,7 +58,7 @@ func init() {
 	sqlDB.SetConnMaxLifetime(time.Duration(dbMaxLifetimeConns))
 
 	// check db connection at once to avoid connect failed
-	// else error will be reported until the first SQL operation
+	// else errors will be reported until the first SQL operation
 	if err := sqlDB.Ping(); err != nil {
 		panic("database connect failed: " + err.Error())
 	}

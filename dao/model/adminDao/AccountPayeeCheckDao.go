@@ -360,7 +360,7 @@ func CustomizeSQL(db *gorm.DB, clubIdLst []int64) ([]ClubOnUserStatistics, error
 }
 
 // 包含了QueryComplaintList 和 CountComplaintList
-//func (dao *CheatComplaintDao) QueryComplaintListAndCount(typeVal *int, startTime, endTime *time.Time, start, size int, status *int) ([]CheatComplaintDao, int64, error) {
+//func (dao *CheatComplaintDao) QueryComplaintListAndCount(typeVal *int, startTime, endTime *time.Time, start, size int, status *int) ([]CheatComplaintDao, int64, errors) {
 //	var count int64
 //	var results []CheatComplaintDao
 //	db := sqldb.GetSqlDB().GameTidb
@@ -394,7 +394,7 @@ func CustomizeSQL(db *gorm.DB, clubIdLst []int64) ([]ClubOnUserStatistics, error
 //	return results, count, nil
 //}
 
-//func (dao *CheatComplaintDao) SelectCheatComplaint(idList []int, typeVal, status *int) ([]CheatComplaint, error) {
+//func (dao *CheatComplaintDao) SelectCheatComplaint(idList []int, typeVal, status *int) ([]CheatComplaint, errors) {
 //	var results []CheatComplaint
 //	db := sqldb.GetSqlDB().GameTidb
 //
@@ -413,7 +413,7 @@ func CustomizeSQL(db *gorm.DB, clubIdLst []int64) ([]ClubOnUserStatistics, error
 //	return results, nil
 //}
 
-//func (dao *CheatComplaintDao) UpdateUnDealMsgListComplaint(idList []int, localDateTime *time.Time, operatorId, status *int) error {
+//func (dao *CheatComplaintDao) UpdateUnDealMsgListComplaint(idList []int, localDateTime *time.Time, operatorId, status *int) errors {
 //	db := sqldb.GetSqlDB().GameTidb
 //
 //	// 创建一个 map 存储需要更新的字段和值

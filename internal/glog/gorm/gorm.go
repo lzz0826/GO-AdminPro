@@ -20,7 +20,7 @@ func NewGormLogger(writer Writer, config logger.Config) logger.Interface {
 	var (
 		infoStr      = "%s\n[info] "
 		warnStr      = "%s\n[warn] "
-		errStr       = "%s\n[error] "
+		errStr       = "%s\n[errors] "
 		traceStr     = "%s\n[%.3fms] [rows:%v] %s"
 		traceWarnStr = "%s %s\n[%.3fms] [rows:%v] %s"
 		traceErrStr  = "%s %s\n[%.3fms] [rows:%v] %s"
@@ -59,7 +59,7 @@ func (l GormLogger) Warn(ctx context.Context, msg string, data ...interface{}) {
 	}
 }
 
-// Error print error messages
+// Error print errors messages
 func (l GormLogger) Error(ctx context.Context, msg string, data ...interface{}) {
 	if l.LogLevel >= logger.Error {
 		l.Printf(ctx, l.errStr+msg, append([]interface{}{utils.FileWithLineNum()}, data...)...)

@@ -30,7 +30,7 @@ func WithTransaction(txFunc func(*gorm.DB) error) (err error) {
 //)
 //
 //// 定義一個用於處理事務的函數
-//func processTransaction(tx *gorm.DB) error {
+//func processTransaction(tx *gorm.DB) errors {
 //	// 在這裡執行事務內的操作
 //
 //	// 查询操作
@@ -79,7 +79,7 @@ func WithTransaction(txFunc func(*gorm.DB) error) (err error) {
 //	if err != nil {
 //		// 發生錯誤，回滾事務
 //		tx.Rollback()
-//		fmt.Println("Transaction rolled back due to error:", err)
+//		fmt.Println("Transaction rolled back due to errors:", err)
 //	} else {
 //		// 沒有錯誤，提交事務
 //		tx.Commit()

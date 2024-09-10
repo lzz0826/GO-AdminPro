@@ -33,7 +33,7 @@ func TestInsertRolePermits(t *testing.T) {
 
 	// 驗證測試結果
 	if err != nil {
-		t.Errorf("Expected no error, got %v", err)
+		t.Errorf("Expected no errors, got %v", err)
 	}
 
 }

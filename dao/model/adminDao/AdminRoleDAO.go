@@ -25,7 +25,7 @@ func (ar *AdminRoleDAO) TableName() string {
 func (ar *AdminRoleDAO) InsertAdminRole() (err error) {
 	err = mysql.GormDb.Table(ar.TableName()).Create(ar).Error
 	if err != nil {
-		log.Println("InsertAdminRole error:", err.Error())
+		log.Println("InsertAdminRole errors:", err.Error())
 		return
 	}
 	return
@@ -34,7 +34,7 @@ func (ar *AdminRoleDAO) InsertAdminRole() (err error) {
 func (ar *AdminRoleDAO) InsertAdminRoles(adminRoles []AdminRoleDAO) (err error) {
 	err = mysql.GormDb.Table(adminRoles[0].TableName()).Omit("id").Create(&adminRoles).Error
 	if err != nil {
-		log.Println("InsertAdminRoles error:", err.Error())
+		log.Println("InsertAdminRoles errors:", err.Error())
 		return
 	}
 	return
@@ -43,7 +43,7 @@ func (ar *AdminRoleDAO) InsertAdminRoles(adminRoles []AdminRoleDAO) (err error) 
 func (ar *AdminRoleDAO) GetAllAdminRole() (adminRole []AdminRoleDAO, err error) {
 	err = mysql.GormDb.Table(ar.TableName()).Find(&adminRole).Error
 	if err != nil {
-		log.Println("GetAdminRoleByID error:", err.Error())
+		log.Println("GetAdminRoleByID errors:", err.Error())
 		return
 	}
 	return
@@ -53,7 +53,7 @@ func (ar *AdminRoleDAO) GetAllAdminRole() (adminRole []AdminRoleDAO, err error) 
 func (ar *AdminRoleDAO) GetAdminRoleByID(id string) (adminRole AdminRoleDAO, err error) {
 	err = mysql.GormDb.Table(ar.TableName()).Where("id = ?", id).First(&adminRole).Error
 	if err != nil {
-		log.Println("GetAdminRoleByID error:", err.Error())
+		log.Println("GetAdminRoleByID errors:", err.Error())
 		return
 	}
 	return
@@ -62,7 +62,7 @@ func (ar *AdminRoleDAO) GetAdminRoleByID(id string) (adminRole AdminRoleDAO, err
 func (ar *AdminRoleDAO) GetAdminRoleByAdminId(adminId string) (adminRoles []AdminRoleDAO, err error) {
 	err = mysql.GormDb.Table(ar.TableName()).Where("admin_id IN (?)", adminId).Find(&adminRoles).Error
 	if err != nil {
-		log.Println("GetAdminRoleByID error:", err.Error())
+		log.Println("GetAdminRoleByID errors:", err.Error())
 		return
 	}
 	return
@@ -71,7 +71,7 @@ func (ar *AdminRoleDAO) GetAdminRoleByAdminId(adminId string) (adminRoles []Admi
 func (ar *AdminRoleDAO) GetAdminRoleByAdminIdAndRoleIds(admins string, roleIds []string) (adminRoles []AdminRoleDAO, err error) {
 	err = mysql.GormDb.Table(ar.TableName()).Where("admin_id = ? AND role_id IN (?)", admins, roleIds).Find(&adminRoles).Error
 	if err != nil {
-		log.Println("GetAdminRoleByAdminIdAndRoleIds error:", err.Error())
+		log.Println("GetAdminRoleByAdminIdAndRoleIds errors:", err.Error())
 		return
 	}
 	return
@@ -80,7 +80,7 @@ func (ar *AdminRoleDAO) GetAdminRoleByAdminIdAndRoleIds(admins string, roleIds [
 func (ar *AdminRoleDAO) DeleteAdminRoleByIds(ids []string) (err error) {
 	err = mysql.GormDb.Table(ar.TableName()).Where("id IN (?)", ids).Delete(&AdminRoleDAO{}).Error
 	if err != nil {
-		log.Println("DeleteAdminRoleByIds error:", err.Error())
+		log.Println("DeleteAdminRoleByIds errors:", err.Error())
 		return err
 	}
 	return nil

@@ -85,7 +85,7 @@ func (ap *AdminPermitDAO) DeleteAdminPermit(ids []string) (err error) {
 	}
 	err = mysql.GormDb.Table(ap.TableName()).Where("id IN (?)", ids).Delete(&AdminPermitDAO{}).Error
 	if err != nil {
-		log.Println("DeleteAdminPermit error:", err.Error())
+		log.Println("DeleteAdminPermit errors:", err.Error())
 		return err
 	}
 	return nil

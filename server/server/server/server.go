@@ -25,6 +25,6 @@ func Run(httpServer *gin.Engine) {
 	err := httpServer.Run(serverAddr)
 
 	if nil != err {
-		panic("server run error: " + err.Error())
+		panic("server run errors: " + err.Error())
 	}
 }

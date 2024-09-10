@@ -18,9 +18,14 @@ const (
 	HEALTH_STATUS_OK //健康狀態
 )
 
+// IO 500
+const (
+	IO_ERROR ResponseCodeEnum = iota + 501
+)
+
 // 登入 1000
 const (
-	PARAM_VALID_FAILED            ResponseCodeEnum = iota + 1001 // 参数较验失败
+	PARAM_VALID_FAILED            ResponseCodeEnum = iota + 1000 // 参数较验失败
 	TOKEN_OUT                                                    // 登入凭证无效
 	USERNAME_OR_PASSWORD_ERROR                                   // 用户名或密码错误
 	PERMISSION_ACCESS_DENIED                                     // 权限不足请联系管理员
@@ -68,6 +73,9 @@ var ResponseCode = map[ResponseCodeEnum]string{
 	PARAM_ERROR:      "参数错误",
 	RECORD_NOT_EXIST: "纪录不存在",
 	HEALTH_STATUS_OK: "服務健康狀態正常",
+
+	// IO 500
+	IO_ERROR: "IO失敗",
 
 	// 登入 1000
 	PARAM_VALID_FAILED:            "参数较验失败",

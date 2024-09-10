@@ -31,7 +31,7 @@ func (at *AdminTokenDAO) InsertAdminToken(tx *gorm.DB) error {
 func (at *AdminTokenDAO) GetAdminTokenByID(id string) (adminToken AdminTokenDAO, err error) {
 	err = mysql.GormDb.Table(at.TableName()).Where("id = ?", id).First(&adminToken).Error
 	if err != nil {
-		log.Println("GetAdminTokenByID error:", err.Error())
+		log.Println("GetAdminTokenByID errors:", err.Error())
 		return
 	}
 	return
@@ -40,7 +40,7 @@ func (at *AdminTokenDAO) GetAdminTokenByID(id string) (adminToken AdminTokenDAO,
 func (at *AdminTokenDAO) GetAdminTokenByAdminID(adminID string) (adminToken AdminTokenDAO, err error) {
 	err = mysql.GormDb.Table(at.TableName()).Where("admin_id = ?", adminID).First(&adminToken).Error
 	if err != nil {
-		log.Println("GetAdminTokenByID error:", err.Error())
+		log.Println("GetAdminTokenByID errors:", err.Error())
 		return
 	}
 	return
@@ -50,7 +50,7 @@ func (at *AdminTokenDAO) GetAdminTokenByAdminID(adminID string) (adminToken Admi
 func (at *AdminTokenDAO) GetAdminTokensByAdminID(adminID string) (adminTokens []AdminTokenDAO, err error) {
 	err = mysql.GormDb.Table(at.TableName()).Where("admin_id = ?", adminID).Find(&adminTokens).Error
 	if err != nil {
-		log.Println("GetAdminTokensByAdminID error:", err.Error())
+		log.Println("GetAdminTokensByAdminID errors:", err.Error())
 		return
 	}
 	return

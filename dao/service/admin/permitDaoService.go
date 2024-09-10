@@ -41,7 +41,7 @@ func Convert() []adminDao.PermitDAO {
 	}
 	permits, err := GetAllPermitList(&page)
 	if err != nil {
-		log.Println("GetAllPermitList error:", err.Error())
+		log.Println("GetAllPermitList errors:", err.Error())
 	}
 
 	return permits

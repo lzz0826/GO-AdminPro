@@ -27,7 +27,7 @@ func (rp *RolePermitDAO) TableName() string {
 func (rp *RolePermitDAO) InsertRolePermit() (err error) {
 	err = mysql.GormDb.Table(rp.TableName()).Omit("id").Create(rp).Error
 	if err != nil {
-		log.Println("InsertRolePermit error:", err.Error())
+		log.Println("InsertRolePermit errors:", err.Error())
 		return
 	}
 	return nil
@@ -37,7 +37,7 @@ func (rp *RolePermitDAO) InsertRolePermit() (err error) {
 func (rp *RolePermitDAO) InsertRolePermits(rolePermits []RolePermitDAO) error {
 	err := mysql.GormDb.Table(rolePermits[0].TableName()).Omit("id").Create(&rolePermits).Error
 	if err != nil {
-		log.Println("InsertRolePermits error:", err.Error())
+		log.Println("InsertRolePermits errors:", err.Error())
 		return err
 	}
 	return nil
@@ -47,7 +47,7 @@ func (rp *RolePermitDAO) InsertRolePermits(rolePermits []RolePermitDAO) error {
 func (rp *RolePermitDAO) GetRolePermitByID(id string) (rolePermit RolePermitDAO, err error) {
 	err = mysql.GormDb.Table(rp.TableName()).Where("id = ?", id).First(&rolePermit).Error
 	if err != nil {
-		log.Println("GetRolePermitByID error:", err.Error())
+		log.Println("GetRolePermitByID errors:", err.Error())
 		return
 	}
 	return rolePermit, nil
@@ -59,7 +59,7 @@ func (rp *RolePermitDAO) GetRolePermitByRoleIDAndPermitID(roleID, permitID strin
 		Where("role_id = ? AND permit_id = ?", roleID, permitID).
 		First(&rolePermit).Error
 	if err != nil {
-		log.Println("GetRolePermitByRoleIDAndPermitID error:", err.Error())
+		log.Println("GetRolePermitByRoleIDAndPermitID errors:", err.Error())
 		return
 	}
 	return rolePermit, nil
@@ -68,7 +68,7 @@ func (rp *RolePermitDAO) GetRolePermitByRoleIDAndPermitID(roleID, permitID strin
 func (rp *RolePermitDAO) GetRolePermitByRoleId(roleId string) (rolePermits []RolePermitDAO, err error) {
 	err = mysql.GormDb.Table(rp.TableName()).Where("role_id = ?", roleId).Find(&rolePermits).Error
 	if err != nil {
-		log.Println("GetRolePermitByID error:", err.Error())
+		log.Println("GetRolePermitByID errors:", err.Error())
 		return
 	}
 	return rolePermits, nil
@@ -77,7 +77,7 @@ func (rp *RolePermitDAO) GetRolePermitByRoleId(roleId string) (rolePermits []Rol
 func (rp *RolePermitDAO) GetRolePermitByRoleIds(roleIds []string) (rolePermits []RolePermitDAO, err error) {
 	err = mysql.GormDb.Table(rp.TableName()).Where("role_id IN (?)", roleIds).Find(&rolePermits).Error
 	if err != nil {
-		log.Println("GetRolePermitByID error:", err.Error())
+		log.Println("GetRolePermitByID errors:", err.Error())
 		return
 	}
 	return rolePermits, nil
@@ -86,7 +86,7 @@ func (rp *RolePermitDAO) GetRolePermitByRoleIds(roleIds []string) (rolePermits [
 func (rp *RolePermitDAO) GetRolePermitByRoleIdAndPermitIds(roleIds string, permitIds []string) (rolePermits []RolePermitDAO, err error) {
 	err = mysql.GormDb.Table(rp.TableName()).Where("role_id = ? AND permit_id IN (?)", roleIds, permitIds).Find(&rolePermits).Error
 	if err != nil {
-		log.Println("GetRolePermitByRoleIdAndPermitIds error:", err.Error())
+		log.Println("GetRolePermitByRoleIdAndPermitIds errors:", err.Error())
 		return
 	}
 	return rolePermits, nil
@@ -98,7 +98,7 @@ func (rp *RolePermitDAO) DeleteRolePermitByIds(ids []string) (err error) {
 	}
 	err = mysql.GormDb.Table(rp.TableName()).Where("id IN (?)", ids).Delete(&RolePermitDAO{}).Error
 	if err != nil {
-		log.Println("deleteIds error:", err.Error())
+		log.Println("deleteIds errors:", err.Error())
 		return err
 	}
 	return nil

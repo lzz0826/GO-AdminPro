@@ -8,7 +8,6 @@ import (
 	"AdminPro/common/utils"
 	"AdminPro/dao/service/admin"
 	"AdminPro/internal/context"
-	"AdminPro/internal/glog"
 	"AdminPro/server/controller/base"
 	"AdminPro/vo/model/adminVo"
 	"fmt"
@@ -25,7 +24,7 @@ func AddAdmin(ctx *gin.Context) {
 		NickName  string `json:"nickName" binding:"required"`
 	}
 	if err := ctx.ShouldBindJSON(&request); err != nil {
-		ctx.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
+		ctx.JSON(http.StatusBadRequest, gin.H{"errors": err.Error()})
 		return
 	}
 	username := request.Username
@@ -75,15 +74,16 @@ func GetAllAdminCommonResponse(c *gin.Context) {
 	//from := response.SuccessFrom(enum.GetResponseMsg(enum.SUCCESS), *ginContext)
 	response := new(model.CommonResponse[adminVo.AdminListVO])
 	admins, err := admin.GetAllAdminList(&pagination)
+
 	if err != nil {
 		//ctx.JSON(http.StatusOK, tool.RespFail(tool.SelectFail.Code, tool.SelectFail.Msg, nil))
 		fromError := response.FailureFromError(err.Error())
 		base.WebRespFromCommonResp(ctx, *fromError)
+		return
 	}
 	vo := adminVo.AdminListVO{
 		AdminList: admins,
 	}
-	glog.Infof("xXX ", vo)
 
 	from := response.SuccessFrom(enum.GetResponseMsg(enum.SUCCESS), vo)
 	base.WebRespFromCommonResp(ctx, *from)

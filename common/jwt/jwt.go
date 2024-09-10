@@ -52,7 +52,7 @@ func LoginHandler(adminDao adminDao.AdminDAO) (tokenStr string, err error) {
 func JwtAuthMiddleware() gin.HandlerFunc {
 	return func(c *gin.Context) {
 		if authHeader == "" {
-			c.JSON(http.StatusUnauthorized, gin.H{"error": "Authorization header is missing"})
+			c.JSON(http.StatusUnauthorized, gin.H{"errors": "Authorization header is missing"})
 			c.Abort()
 			return
 		}
@@ -82,7 +82,7 @@ func JwtAuthMiddleware() gin.HandlerFunc {
 		})
 
 		if err != nil || !token.Valid {
-			c.JSON(http.StatusUnauthorized, gin.H{"error": "Invalid token"})
+			c.JSON(http.StatusUnauthorized, gin.H{"errors": "Invalid token"})
 			c.Abort()
 			return
 		}

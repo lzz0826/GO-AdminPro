@@ -29,7 +29,7 @@ func (r *RoleDAO) TableName() string {
 func (r *RoleDAO) InsertRole() (err error) {
 	err = mysql.GormDb.Table(r.TableName()).Omit("id").Create(r).Error
 	if err != nil {
-		log.Println("InsertRole error:", err.Error())
+		log.Println("InsertRole errors:", err.Error())
 		return
 	}
 	return
@@ -40,7 +40,7 @@ func (r *RoleDAO) GetAllRoleList(pagination *model.Pagination) (roles []RoleDAO,
 	offset := (pagination.Page - 1) * pagination.Size
 	err = mysql.GormDb.Table(r.TableName()).Limit(pagination.Size).Offset(offset).Order(pagination.Sort).Find(&roles).Error
 	if err != nil {
-		log.Println("GetRoleByIDs error:", err.Error())
+		log.Println("GetRoleByIDs errors:", err.Error())
 		return
 	}
 	return
@@ -50,7 +50,7 @@ func (r *RoleDAO) GetAllRoleList(pagination *model.Pagination) (roles []RoleDAO,
 func (r *RoleDAO) GetRoleByID(id string) (role RoleDAO, err error) {
 	err = mysql.GormDb.Table(r.TableName()).Where("id = ?", id).First(&role).Error
 	if err != nil {
-		log.Println("GetRoleByID error:", err.Error())
+		log.Println("GetRoleByID errors:", err.Error())
 		return
 	}
 	return
@@ -60,7 +60,7 @@ func (r *RoleDAO) GetRoleByID(id string) (role RoleDAO, err error) {
 func (r *RoleDAO) GetRoleByRoleKey(roleKey string) (role RoleDAO, err error) {
 	err = mysql.GormDb.Table(r.TableName()).Where("role_key = ?", roleKey).First(&role).Error
 	if err != nil {
-		log.Println("GetRoleByRoleKey error:", err.Error())
+		log.Println("GetRoleByRoleKey errors:", err.Error())
 		return
 	}
 	return
@@ -70,7 +70,7 @@ func (r *RoleDAO) GetRoleByIDs(ids []string) (roles []RoleDAO, err error) {
 	err = mysql.GormDb.Table(r.TableName()).Where("id IN (?)", ids).Find(&roles).Error
 
 	if err != nil {
-		log.Println("GetRoleByIDs error:", err.Error())
+		log.Println("GetRoleByIDs errors:", err.Error())
 		return
 	}
 	return

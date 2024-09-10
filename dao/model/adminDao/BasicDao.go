@@ -100,7 +100,7 @@ func DeleteByList(columnName string, list []int, table interface{}) (int64, erro
 }
 
 //// **必须加上WHERE 返回受影响
-//func Delete(db *gorm.DB, table interface{}) (int64, error) {
+//func Delete(db *gorm.DB, table interface{}) (int64, errors) {
 //	CheckGormDb(db)
 //	result := db.Debug().Model(table).Delete(table)
 //	if result.Error != nil {

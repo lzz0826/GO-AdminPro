@@ -23,7 +23,7 @@ func TestGetById(t *testing.T) {
 		t.Run(tt.name, func(t *testing.T) {
 			gotUser, err := GetById(tt.args.id)
 			if (err != nil) != tt.wantErr {
-				t.Errorf("GetById() error = %v, wantErr %v", err, tt.wantErr)
+				t.Errorf("GetById() errors = %v, wantErr %v", err, tt.wantErr)
 				return
 			}
 			if !reflect.DeepEqual(gotUser, tt.wantUser) {

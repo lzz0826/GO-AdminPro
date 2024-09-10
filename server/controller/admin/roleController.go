@@ -74,7 +74,7 @@ func AddRole(ctx *gin.Context) {
 	// 綁定JSON參數到結構體
 	if err := ctx.BindJSON(&role); err != nil {
 		// 如果解析JSON失敗，返回錯誤
-		ctx.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
+		ctx.JSON(http.StatusBadRequest, gin.H{"errors": err.Error()})
 		return
 	}
 
@@ -103,7 +103,7 @@ func AddRolePermits(ctx *gin.Context) {
 	// 使用 ShouldBindJSON 方法綁定 JSON 資料到結構體
 	if err := ctx.ShouldBindJSON(&request); err != nil {
 		// 如果綁定失敗，回應錯誤信息
-		ctx.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
+		ctx.JSON(http.StatusBadRequest, gin.H{"errors": err.Error()})
 		return
 	}
 
@@ -131,7 +131,7 @@ func AddAdminRoles(ctx *gin.Context) {
 	}
 
 	if err := ctx.ShouldBindJSON(&request); err != nil {
-		ctx.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
+		ctx.JSON(http.StatusBadRequest, gin.H{"errors": err.Error()})
 		return
 	}
 
@@ -158,7 +158,7 @@ func RemoveRolePermits(ctx *gin.Context) {
 	}
 
 	if err := ctx.ShouldBindJSON(&request); err != nil {
-		ctx.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
+		ctx.JSON(http.StatusBadRequest, gin.H{"errors": err.Error()})
 		return
 	}
 
@@ -184,7 +184,7 @@ func RemoveAdminRoles(ctx *gin.Context) {
 	}
 
 	if err := ctx.ShouldBindJSON(&request); err != nil {
-		ctx.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
+		ctx.JSON(http.StatusBadRequest, gin.H{"errors": err.Error()})
 		return
 	}
 	adminId := request.AdminId
