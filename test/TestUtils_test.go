@@ -8,3 +8,7 @@ import (
 func TestTestAes(t *testing.T) {
 	utils.TestAes()
 }
+
+func TestTestBytes(t *testing.T) {
+	utils.TestBytes()
+}

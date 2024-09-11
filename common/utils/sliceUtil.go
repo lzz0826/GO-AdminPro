@@ -66,3 +66,19 @@ func Contains[T comparable](slice []T, element T) bool {
 	}
 	return false
 }
+
+func ContainsAny[T comparable](a []T, x T) bool {
+	for _, n := range a {
+		if x == n {
+			return true
+		}
+	}
+	return false
+}
+
+func IsEmptyArray[T any](arr []T) bool {
+	if arr == nil || len(arr) == 0 {
+		return true
+	}
+	return false
+}
