@@ -9,7 +9,6 @@ import (
 var HttpServer *gin.Engine
 
 func main() {
-
 	// 服务停止时清理数据库链接
 	defer func() {
 		if mysql.GormDb != nil {
@@ -20,7 +19,7 @@ func main() {
 			_ = sqlDB.Close()
 		}
 	}()
-
-	// 启动服务
+	//HTTP 启动服务
 	server.Run(HttpServer)
+
 }

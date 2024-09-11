@@ -27,7 +27,6 @@ type Claims struct {
 }
 
 func LoginHandler(adminDao adminDao.AdminDAO) (tokenStr string, err error) {
-	//TODO  設置過期時間 待移致配置文件
 	expirationTime := time.Now().Add(time.Duration(tokenTimeOut) * time.Minute)
 
 	claims := &Claims{
@@ -51,6 +50,9 @@ func LoginHandler(adminDao adminDao.AdminDAO) (tokenStr string, err error) {
 
 func JwtAuthMiddleware() gin.HandlerFunc {
 	return func(c *gin.Context) {
+		//使用自訂的 myContext
+		//ctx := &myContext.MyContext{Context: c, Trace: c.GetHeader(viper.GetString("http.headerTrace"))}
+
 		if authHeader == "" {
 			c.JSON(http.StatusUnauthorized, gin.H{"errors": "Authorization header is missing"})
 			c.Abort()
@@ -117,6 +119,7 @@ func JwtAuthMiddleware() gin.HandlerFunc {
 //	return adminId
 //}
 
+// GetTokenData 解析Token Data
 func GetTokenData(tokenString string) (*Claims, error) {
 	token, err := jwt.Parse(tokenString, func(token *jwt.Token) (interface{}, error) {
 		// 驗證簽名算法是否為HS256
