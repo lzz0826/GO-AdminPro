@@ -1,8 +1,8 @@
 package glog
 
 import (
-	context2 "AdminPro/internal/context"
 	"AdminPro/internal/glog/log"
+	context2 "AdminPro/internal/myContext"
 	"context"
 	"fmt"
 	"path"
@@ -63,9 +63,9 @@ func InfofWithContext(ctx context.Context, template string, args ...interface{})
 
 func getTraceID(ctx context.Context) string {
 	var traceID string
-	if c, ok := ctx.(context2.Context); ok {
+	if c, ok := ctx.(context2.MyContext); ok {
 		traceID = c.Trace
-	} else if c, ok := ctx.(*context2.Context); ok {
+	} else if c, ok := ctx.(*context2.MyContext); ok {
 		traceID = c.Trace
 	} else {
 		if traceID, ok = ctx.Value("Trace").(string); !ok {

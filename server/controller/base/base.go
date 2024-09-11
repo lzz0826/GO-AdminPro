@@ -5,15 +5,15 @@ import (
 	"AdminPro/common/jwt"
 	"AdminPro/common/model"
 	"AdminPro/common/utils"
-	"AdminPro/internal/context"
 	"AdminPro/internal/glog"
+	"AdminPro/internal/myContext"
 	"github.com/gin-gonic/gin"
 	"github.com/spf13/viper"
 )
 
 var headerTrace = viper.GetString("http.headerTrace")
 
-func WebResp(c *context.Context, errCode enum.ResponseCodeEnum, data interface{}, Msg string) {
+func WebResp(c *myContext.MyContext, errCode enum.ResponseCodeEnum, data interface{}, Msg string) {
 	if data == nil {
 		data = struct{}{}
 	}
@@ -22,14 +22,14 @@ func WebResp(c *context.Context, errCode enum.ResponseCodeEnum, data interface{}
 	c.JSON(200, respMap)
 }
 
-func WebRespFromCommonResp[T any](c *context.Context, data model.CommonResponse[T]) {
+func WebRespFromCommonResp[T any](c *myContext.MyContext, data model.CommonResponse[T]) {
 	// respMap := map[string]interface{}{"code": data.Code, "data": data.Data, "message": data.Msg}
 	c.Header(headerTrace, c.Trace)
 	c.JSON(200, data)
 }
 
 // 健康狀態
-func Health(c *context.Context) {
+func Health(c *myContext.MyContext) {
 	WebResp(c, enum.HEALTH_STATUS_OK, nil, enum.GetResponseMsg(enum.HEALTH_STATUS_OK))
 }
 
@@ -47,7 +47,7 @@ func TraceLoggerMiddleware() gin.HandlerFunc {
 	}
 }
 
-func GetAdminIdByGinContext(c *context.Context) (string, error) {
+func GetAdminIdByGinContext(c *myContext.MyContext) (string, error) {
 	tokenData, err := GetTokenDataByGinContext(c, "Authorization")
 	if err != nil {
 		return "", err
@@ -55,7 +55,7 @@ func GetAdminIdByGinContext(c *context.Context) (string, error) {
 	return tokenData.AdminId, nil
 }
 
-func GetTokenDataByGinContext(c *context.Context, tokenKey string) (*jwt.Claims, error) {
+func GetTokenDataByGinContext(c *myContext.MyContext, tokenKey string) (*jwt.Claims, error) {
 	tokenData, err := ParseToken(c.GetHeader(tokenKey))
 	if err != nil {
 		return nil, err

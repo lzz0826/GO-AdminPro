@@ -13,7 +13,7 @@ package utils
 //}
 //
 //// Get 取得的資訊
-//func (repo *repository) Get(ctx context.Context, tx *gorm.DB, model iface.Model, opt iface.WhereOption, scopes ...func(*gorm.DB) *gorm.DB) errors {
+//func (repo *repository) Get(ctx myContext.Context, tx *gorm.DB, model iface.Model, opt iface.WhereOption, scopes ...func(*gorm.DB) *gorm.DB) errors {
 //	if tx == nil {
 //		tx = repo.readDB.WithContext(ctx)
 //	}

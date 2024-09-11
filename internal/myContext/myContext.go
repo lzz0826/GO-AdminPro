@@ -1,4 +1,4 @@
-package context
+package myContext
 
 import (
 	"AdminPro/internal/glog/log"
@@ -8,38 +8,38 @@ import (
 	"runtime"
 )
 
-type Handler func(ctx *Context)
+type Handler func(ctx *MyContext)
 
-type Context struct {
+type MyContext struct {
 	*gin.Context
 	Trace string //可添加自訂 Header
 }
 
-func Background(c *gin.Context) *Context {
-	return &Context{c, c.GetHeader(viper.GetString("http.headerTrace"))}
+func Background(c *gin.Context) *MyContext {
+	return &MyContext{c, c.GetHeader(viper.GetString("http.headerTrace"))}
 }
 
-func (c *Context) Info(args ...interface{}) {
+func (c *MyContext) Info(args ...interface{}) {
 	log.ZapLog.Named(funcName(c.Trace)).Info(args...)
 }
 
-func (c *Context) Infof(template string, args ...interface{}) {
+func (c *MyContext) Infof(template string, args ...interface{}) {
 	log.ZapLog.Named(funcName(c.Trace)).Infof(template, args...)
 }
 
-func (c *Context) Warn(args ...interface{}) {
+func (c *MyContext) Warn(args ...interface{}) {
 	log.ZapLog.Named(funcName(c.Trace)).Warn(args...)
 }
 
-func (c *Context) Warnf(template string, args ...interface{}) {
+func (c *MyContext) Warnf(template string, args ...interface{}) {
 	log.ZapLog.Named(funcName(c.Trace)).Warnf(template, args...)
 }
 
-func (c *Context) Error(args ...interface{}) {
+func (c *MyContext) Error(args ...interface{}) {
 	log.ZapLog.Named(funcName(c.Trace)).Error(args...)
 }
 
-func (c *Context) Errorf(template string, args ...interface{}) {
+func (c *MyContext) Errorf(template string, args ...interface{}) {
 	log.ZapLog.Named(funcName(c.Trace)).Errorf(template, args...)
 }
 

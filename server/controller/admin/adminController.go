@@ -7,7 +7,7 @@ import (
 	"AdminPro/common/tool"
 	"AdminPro/common/utils"
 	"AdminPro/dao/service/admin"
-	"AdminPro/internal/context"
+	"AdminPro/internal/myContext"
 	"AdminPro/server/controller/base"
 	"AdminPro/vo/model/adminVo"
 	"fmt"
@@ -43,7 +43,17 @@ func AddAdmin(ctx *gin.Context) {
 
 }
 
+//type GetAllAdminListParams struct {
+//	TestStr string `form:"testStr" json:"testStr" binding:"required"`
+//}
+
 func GetAllAdminList(ctx *gin.Context) {
+	//s := new(GetAllAdminListParams)
+	////檢查參數
+	//if !controller.CheckParams(ctx, s) {
+	//	return
+	//}
+	//fmt.Println("testStr : ", s.TestStr)
 	pagination := utils.GeneratePaginationFromRequest(ctx)
 	admins, err := admin.GetAllAdminList(&pagination)
 	if err != nil {
@@ -56,8 +66,9 @@ func GetAllAdminList(ctx *gin.Context) {
 	ctx.JSON(http.StatusOK, tool.RespOk(vo))
 }
 
+// TODO 使用自訂的 MyContext
 func GetAllAdminCommonResponse(c *gin.Context) {
-	ctx := context.Background(c)
+	ctx := myContext.Background(c)
 	var pagination model.Pagination
 	if err := ctx.ShouldBind(&pagination); err != nil {
 		fmt.Printf("参数绑定错误:%s\n", err)
