@@ -2,7 +2,6 @@ package utils
 
 import (
 	"encoding/binary"
-	"fmt"
 	"golang.org/x/text/encoding/unicode"
 	"golang.org/x/text/transform"
 	"log"
@@ -69,31 +68,4 @@ func Int2Bytes(bytes int, length int) []byte {
 
 	}
 	return frame
-}
-
-func TestBytes() {
-	// 示例 1: UTF-8 到 UTF-16 转换
-	utf8Data := []byte("Hello, 世界") // UTF-8 编码的字节数据
-	utf16Data, _, err := Utf82Utf16(utf8Data)
-	if err != nil {
-		log.Fatalf("Error converting UTF-8 to UTF-16: %v", err)
-	}
-	fmt.Printf("UTF-8 to UTF-16: %v\n", utf16Data)
-
-	// 示例 2: UTF-16 到 UTF-8 转换
-	utf16Back, _, err := Utf162Utf8(utf16Data)
-	if err != nil {
-		log.Fatalf("Error converting UTF-16 to UTF-8: %v", err)
-	}
-	fmt.Printf("UTF-16 back to UTF-8: %s\n", string(utf16Back))
-
-	// 示例 3: 字节到整数转换
-	bytesData := []byte{0x00, 0x01} // 2 字节数据
-	intValue := Bytes2Int(2, bytesData)
-	fmt.Printf("Bytes to Int (2 bytes): %d\n", intValue)
-
-	// 示例 4: 整数到字节转换
-	intValue = 258                     // 示例整数值
-	bytesData = Int2Bytes(2, intValue) // 转换为 2 字节
-	fmt.Printf("Int to Bytes (2 bytes): %v\n", bytesData)
 }

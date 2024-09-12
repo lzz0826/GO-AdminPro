@@ -9,7 +9,6 @@ import (
 	"encoding/base64"
 	"encoding/hex"
 	"errors"
-	"fmt"
 	"io"
 )
 
@@ -166,27 +165,4 @@ func GenerateRandomIV() ([]byte, error) {
 		return nil, err
 	}
 	return iv, nil
-}
-
-func TestAes() {
-	//key := []byte("1234567890abcdef") // 16 字節密钥
-	//key := []byte("1234567890abcdef12345678") // 24 字節密钥
-	//key := []byte("1234567890abcdef1234567890abcdef")  // 32 字節密钥
-	key := []byte("your_32_byte_key")
-	iv := []byte("your_16_byte_key")
-	plainText := []byte("This is a secret message!")
-	encrypted, err := AesCBCPk7EncryptBase64(plainText, key, iv)
-	if err != nil {
-		fmt.Println("Encryption failed:", err)
-	} else {
-		fmt.Println("Encrypted (Base64):", encrypted)
-	}
-
-	encryptedText := encrypted
-	decrypted, err := AesCBCPk7DecryptBase64(encryptedText, key, iv)
-	if err != nil {
-		fmt.Println("Decryption failed:", err)
-	} else {
-		fmt.Println("Decrypted message:", string(decrypted))
-	}
 }
