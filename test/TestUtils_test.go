@@ -75,3 +75,15 @@ func TestVerify(t *testing.T) {
 		fmt.Printf("字段 %s 验证失败\n", field)
 	}
 }
+
+func TestRand(t *testing.T) {
+	//realRandNumber := utils.RealRandNumber(20)
+	//fmt.Println("realRandNumber : ", realRandNumber)
+	//
+	//realRand := utils.RealRand(20)
+	//fmt.Println("realRand : ", realRand)
+
+	num := utils.RandNum(6, 8)
+	fmt.Println("num : ", num)
+
+}
