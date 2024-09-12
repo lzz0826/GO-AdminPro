@@ -77,13 +77,34 @@ func TestVerify(t *testing.T) {
 }
 
 func TestRand(t *testing.T) {
-	//realRandNumber := utils.RealRandNumber(20)
-	//fmt.Println("realRandNumber : ", realRandNumber)
-	//
-	//realRand := utils.RealRand(20)
-	//fmt.Println("realRand : ", realRand)
+	realRandNumber := utils.RealRandNumber(20)
+	fmt.Println("realRandNumber : ", realRandNumber)
+
+	realRand := utils.RealRand(20)
+	fmt.Println("realRand : ", realRand)
 
 	num := utils.RandNum(6, 8)
 	fmt.Println("num : ", num)
+
+}
+
+func TestPath(t *testing.T) {
+
+	host := utils.IsValidHost("http://www.youtube.com/watch?v=I5iBi1kcGfI/")
+	fmt.Println("host : ", host)
+
+	hostname := "https://example.com"
+	relativePath := "api/v1/users"
+	relativePath2 := "test/v6/order"
+	// 拼接域名和相对路径
+	fullUrl := utils.BindUrl(hostname, relativePath, relativePath2)
+	fmt.Println(fullUrl) // 输出: https://example.com/api/v1/users
+
+	originalUrl := "https://oldsite.com/api/v1/resource"
+	newHost := "https://newsite.com"
+
+	// 替换资源的域名
+	newUrl := utils.ReplaceHost(originalUrl, newHost)
+	fmt.Println(newUrl) // 输出: https://newsite.com/api/v1/resource
 
 }
