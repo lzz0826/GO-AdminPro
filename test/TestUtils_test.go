@@ -108,3 +108,26 @@ func TestPath(t *testing.T) {
 	fmt.Println(newUrl) // 输出: https://newsite.com/api/v1/resource
 
 }
+
+func TestMd5(t *testing.T) {
+	salt := []byte("random_salt")
+	value := []byte("my_password")
+	// 使用盐值加密
+	md5SaltEncrypt := utils.Md5SaltEncrypt(salt, value)
+	fmt.Println("Md5SaltEncrypt:", md5SaltEncrypt)
+
+	// 使用普通 MD5 加密
+	md5Encrypt := utils.Md5Encrypt(value)
+	fmt.Println("Md5Encrypt:", md5Encrypt)
+
+	value2 := "my_password"
+	// 将字符串加密为 MD5
+	md5EncodeToString := utils.Md5EncodeToString(value2)
+	fmt.Println("Md5EncodeToString:", md5EncodeToString)
+
+	phone := "1234567890"
+	// 手机号相关的 MD5 加密
+	phoneMd5 := utils.PhoneMd5(phone)
+	fmt.Println("PhoneMd5:", phoneMd5)
+
+}

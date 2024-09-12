@@ -4,7 +4,6 @@ import (
 	"bytes"
 	"crypto/aes"
 	"crypto/cipher"
-	"crypto/md5"
 	"crypto/rand"
 	"encoding/base64"
 	"encoding/hex"
@@ -109,10 +108,6 @@ func getIv(key string) []byte {
 		panic("error secret key")
 	}
 	return []byte(key[4:9] + key[16:23] + key[25:29])
-}
-func Md5EncodeToString(s string) string {
-	hexCode := md5.Sum([]byte(s))
-	return hex.EncodeToString(hexCode[:])
 }
 
 // Aes cbc 解密, pkcs7 填充
