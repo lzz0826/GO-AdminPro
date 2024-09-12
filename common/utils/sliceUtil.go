@@ -1,5 +1,67 @@
 package utils
 
+// 从切片获取某个元素的下标index
+func GetSliceAntIndex[T comparable](slice []T, item T) int {
+	for i, v := range slice {
+		if v == item {
+			return i
+		}
+	}
+	return -1
+}
+
+// 判断切片中是否包含某个元素(T any)
+func SliceContainsAny[T comparable](slice []T, item T) bool {
+	for _, a := range slice {
+		if a == item {
+			return true
+		}
+	}
+	return false
+}
+
+// 判断int切片中是否包含某个int元素
+func SliceContainsInt(ids []int, id int) bool {
+	for _, v := range ids {
+		if v == id {
+			return true
+		}
+	}
+	return false
+}
+
+// 判断字符串切片中是否包含某个字符串
+func SliceContainsString(arr []string, e string) bool {
+	for _, v := range arr {
+		if v == e {
+			return true
+		}
+	}
+	return false
+}
+
+// 切片中删除某个int元素并返回修改后的切片
+func SliceDelInt(arr []int, e int) []int {
+	for i := 0; i < len(arr); i++ {
+		if arr[i] == e {
+			arr = append(arr[:i], arr[i+1:]...)
+			i--
+		}
+	}
+	return arr
+}
+
+// 切片中删除某个string元素并返回修改后的切片
+func SliceDelString(arr []string, e string) []string {
+	for i := 0; i < len(arr); i++ {
+		if arr[i] == e {
+			arr = append(arr[:i], arr[i+1:]...)
+			i--
+		}
+	}
+	return arr
+}
+
 // RemoveDuplicates 去重切片的通用方法，并直接修改原切片
 func RemoveDuplicatesPort[T comparable](slice *[]T) {
 	seen := make(map[T]struct{})
