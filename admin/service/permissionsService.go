@@ -5,20 +5,26 @@ import (
 	_ "fmt"
 )
 
-// key = adminId
+// key = adminId , key = permitKey
 var permissionMap = make(map[string]map[string]adminDao.PermitDAO)
 
-// SetPermissionByAdminId key = permitKey
+// SetPermissionByAdminId
 func SetPermissionByAdminId(adminId string) {
 	var permissionSet = make(map[string]adminDao.PermitDAO)
 	permits, _ := GetAllPermitByAdminId(adminId)
 	if permits != nil {
 		for _, permit := range permits {
+			//key = permitKey
 			permissionSet[permit.PermitKey] = permit
 		}
 	}
 	//key = adminId
 	permissionMap[adminId] = permissionSet
+}
+
+// RemovePermissionByAdminId key = adminId
+func RemovePermissionByAdminId(adminId string) {
+	delete(permissionMap, adminId)
 }
 
 // GetPermitKeyListByAdminId key = adminId
