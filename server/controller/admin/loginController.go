@@ -12,7 +12,7 @@ func Login(ctx *gin.Context) {
 	password := ctx.PostForm("password")
 	vo, err := service.CheckUserAndPassword(username, password)
 	if err != nil {
-		ctx.JSON(http.StatusOK, tool.RespFail(tool.LoginError.Code, tool.LoginError.Msg, nil))
+		ctx.JSON(http.StatusOK, tool.RespFail(err.Code(), err.Msg(), nil))
 		return
 	}
 

@@ -5,6 +5,7 @@ import (
 	"gorm.io/gorm"
 )
 
+// 這裡的 Token 是加密後的密碼
 func InsertAdminToken(dao adminDao.AdminTokenDAO, tx *gorm.DB) (err error) {
 	err = dao.InsertAdminToken(tx)
 	if err != nil {

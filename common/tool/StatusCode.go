@@ -1,8 +1,8 @@
 package tool
 
 type Status struct {
-	Code int
-	Msg  string
+	Code int    `json:"code"`
+	Msg  string `json:"msg"`
 }
 
 var statusList = []Status{
