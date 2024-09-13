@@ -105,20 +105,6 @@ func JwtAuthMiddleware() gin.HandlerFunc {
 	}
 }
 
-//
-//func GetCurrentAdminId(c *gin.Context) string {
-//	// 從上下文中獲取管理員ID
-//	adminIdInterface, ok := c.Get("adminId")
-//	if !ok {
-//		return ""
-//	}
-//	adminId, ok := adminIdInterface.(string)
-//	if !ok {
-//		return ""
-//	}
-//	return adminId
-//}
-
 // GetTokenData 解析Token Data
 func GetTokenData(tokenString string) (*Claims, error) {
 	token, err := jwt.Parse(tokenString, func(token *jwt.Token) (interface{}, error) {

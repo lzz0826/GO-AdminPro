@@ -32,7 +32,7 @@ func CheckUserAndPassword(username string, password string) (vo adminVo.AdminLog
 		return adminVo.AdminLoginVO{}, utils.NewGlobalError(err, &tool.PasswordError)
 	}
 
-	//TODO 記錄管理員權限 登出要刪
+	//記錄管理員權限 登出要刪
 	SetPermissionByAdminId(usr.ID)
 
 	adminVo := adminVo.AdminLoginVO{

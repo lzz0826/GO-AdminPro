@@ -19,6 +19,9 @@ func RegisterRoutes(router *gin.Engine) {
 
 	protected := router.Group("/")
 	protected.Use(jwt.JwtAuthMiddleware())
+
+	protected.GET("/Logout", admin.Logout)
+	
 	protected.Use(middleware.CheckPermission())
 	{
 		protected.GET("/user/:id", user.GetById)

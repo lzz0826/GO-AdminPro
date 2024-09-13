@@ -3,8 +3,17 @@ package controller
 import (
 	"AdminPro/common/enum"
 	"AdminPro/common/model"
+	"AdminPro/common/utils"
 	"github.com/gin-gonic/gin"
 )
+
+// GetCurrentAdminId 从上下文中获取管理员ID
+func GetCurrentAdminId(c *gin.Context) string {
+	if adminId, ok := utils.GetGinContextKey(c, "adminId").(string); ok {
+		return adminId
+	}
+	return ""
+}
 
 func WebResp(c *gin.Context, errCode enum.ResponseCodeEnum, data interface{}, Msg string) {
 	if data == nil {
