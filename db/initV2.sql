@@ -170,7 +170,9 @@ VALUES('8', 'GetAllRoleList', 'GetAllRoleList', 'Query all roles', 'Query all ro
 INSERT INTO admin.admin_permit
 (id, permit_key, permit_name, memo, permit_desc, sort, creator_id, updater_id, update_time, create_time)
 VALUES('9', 'GetAllPermitList', 'GetAllPermitList', 'Query all permissions', 'Query all permissions', 1, '999', '999', '2024-01-12 10:32:21', '2024-01-12 10:32:21');
-
+INSERT INTO admin.admin_permit
+(id, permit_key, permit_name, memo, permit_desc, sort, creator_id, updater_id, update_time, create_time)
+VALUES('16', 'GetAllAdminCommonResponse', 'GetAllAdminCommonResponse', 'GetAllAdminCommonResponse', 'GetAllAdminCommonResponse', 1, '999', '999', '2024-01-14 14:51:43', '2024-01-14 14:51:43');
 
 
 
@@ -336,7 +338,9 @@ VALUES(35, '3', '8', '1', '1', '2024-01-24 13:39:35', '2024-01-24 13:39:35');
 INSERT INTO admin.admin_role_permit
 (id, role_id, permit_id, creator_id, updater_id, create_time, update_time)
 VALUES(36, '3', '9', '1', '1', '2024-01-24 13:39:35', '2024-01-24 13:39:35');
-
+INSERT INTO admin.admin_role_permit
+(id, role_id, permit_id, creator_id, updater_id, create_time, update_time)
+VALUES(37, '1', '16', '999', '999', '2024-01-12 10:42:33', '2024-01-12 10:42:33');
 
 
 CREATE TABLE IF NOT EXISTS `account_payee_check` (
