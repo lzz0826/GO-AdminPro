@@ -5,6 +5,7 @@ import (
 	"AdminPro/common/model"
 	"AdminPro/common/mysql"
 	"AdminPro/dao/model/adminDao"
+	"AdminPro/server/server/impTest"
 	"fmt"
 	"strconv"
 	"testing"
@@ -412,4 +413,15 @@ func TestUpdateByExampleSelectivePoint(t *testing.T) {
 		t.Fatalf("TestUpdateByExampleSelectivePoint 失敗：%v", err)
 	}
 	fmt.Printf("%+v\n", total)
+}
+
+func TestSS(t *testing.T) {
+
+	server := impTest.SomeServer
+
+	thing := server.DoSomeThing(2)
+	name := server.GetName()
+
+	fmt.Printf("%+v\n", thing)
+	fmt.Printf("%+v\n", name)
 }

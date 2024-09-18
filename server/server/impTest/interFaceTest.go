@@ -11,6 +11,7 @@ var once sync.Once
 // SomeInterFace 接口定义，它有一个方法 DoSomeThing，接受一个整型参数并返回一个整型结果
 type SomeInterFace interface {
 	DoSomeThing(somInt int) int
+	GetName() string
 }
 
 // SomeImp 是实现 SomeInterFace 接口的结构体类型
@@ -21,6 +22,10 @@ type SomeImp struct {
 func (s *SomeImp) DoSomeThing(someInt int) int {
 	s.Name = "tony"    // 修改 Name 字段
 	return someInt + 1 // 返回传入整数的加 1 结果
+}
+
+func (s *SomeImp) GetName() string {
+	return s.Name
 }
 
 // init 函数会在包初始化时自动执行，它使用 sync.Once 确保 SomeImp 对象只被初始化一次
