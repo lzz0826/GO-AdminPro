@@ -415,7 +415,7 @@ func TestUpdateByExampleSelectivePoint(t *testing.T) {
 	fmt.Printf("%+v\n", total)
 }
 
-func TestSS(t *testing.T) {
+func TestSomeServer(t *testing.T) {
 
 	server := impTest.SomeServer
 
