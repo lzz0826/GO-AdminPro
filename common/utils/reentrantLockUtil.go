@@ -1,4 +1,4 @@
-package lockTest
+package utils
 
 import (
 	"bytes"

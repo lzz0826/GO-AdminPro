@@ -1,6 +1,7 @@
 package lockTest
 
 import (
+	"AdminPro/common/utils"
 	"fmt"
 	"sync"
 	"time"
@@ -8,14 +9,14 @@ import (
 
 // 使用 ReentrantMutex 的对象
 type MyObject struct {
-	mutex *ReentrantMutex // 使用可重入锁
-	data  int             // 模拟一些共享资源
+	mutex *utils.ReentrantMutex // 使用可重入锁
+	data  int                   // 模拟一些共享资源
 }
 
 // 构造函数，初始化 MyObject，并使用可重入锁
 func NewMyObject() *MyObject {
 	return &MyObject{
-		mutex: &ReentrantMutex{}, // 初始化可重入锁
+		mutex: &utils.ReentrantMutex{}, // 初始化可重入锁
 		data:  0,
 	}
 }

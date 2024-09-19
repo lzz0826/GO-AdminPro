@@ -1,6 +1,7 @@
 package test
 
 import (
+	"AdminPro/common/utils"
 	"AdminPro/server/server/lockTest"
 	"fmt"
 	"sync"
@@ -9,12 +10,12 @@ import (
 )
 
 func TestTestReentrantLock(t *testing.T) {
-	lockTest.TestReentrantLock()
+	utils.TestReentrantLock()
 
 }
 
 func TestNewReentrantLock(t *testing.T) {
-	lock := lockTest.NewReentrantLock()
+	lock := utils.NewReentrantLock()
 	var wg sync.WaitGroup
 	numGoroutines := 3
 
@@ -39,7 +40,7 @@ func TestNewReentrantLock(t *testing.T) {
 // 模拟多个 Goroutine 竞争 ReentrantMutex 的测试
 func TestReentrantMutexConcurrent(t *testing.T) {
 	var wg sync.WaitGroup
-	mutex := &lockTest.ReentrantMutex{}
+	mutex := &utils.ReentrantMutex{}
 
 	goroutineCount := 5
 	wg.Add(goroutineCount)
@@ -63,6 +64,7 @@ func TestReentrantMutexConcurrent(t *testing.T) {
 	fmt.Println("All Goroutines have finished.")
 }
 
+// 模拟多个 Goroutine 并发访问同一对象
 func TestSomeLockObj_ReentrantLockDD(t *testing.T) {
 	lockTest.TestMyObjectWithReentrantLock()
 }
