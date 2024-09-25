@@ -7,6 +7,63 @@ import (
 	"testing"
 )
 
+/*
+测试 functionUtil
+*/
+func TestByteToInt(t *testing.T) {
+	// 示例字节数组
+	byteArray := []byte{
+		0x44, 0x5A, 0x50, 0x4B, // 协议头 'DZPK'
+		//0x01, 0x00, // short int 示例 等同 1, 0
+		1, 0, // short int 示例
+		0x00, 0x00, 0x00, 0x0F, // int 示例
+	}
+	result := byteArray[1:5]
+	protocolHeader := string(result)
+	fmt.Printf("协议头: %s\n", protocolHeader)
+
+	// 从字节数组中提取 short int (2个字节)
+	shortValue := utils.ByteArrayToShortInt(byteArray, 4)
+	fmt.Printf("Extracted short int: %d\n", shortValue)
+
+	// 从字节数组中提取 int (4个字节)
+	intValue := utils.ByteArrayToInt(byteArray, 6)
+	fmt.Printf("Extracted int: %d\n", intValue)
+}
+
+func TestIntToBytes(t *testing.T) {
+	// 示例 int 数据
+	intValue := 1025
+	shortValue := 513
+
+	// 将 int 转换为 4 字节数组
+	intBytes := utils.IntToByteArray(intValue)
+	fmt.Printf("Int %d 转换为字节数组: %v\n", intValue, intBytes)
+
+	// 将 short int 转换为 2 字节数组
+	shortBytes := utils.ShortToByteArray(shortValue)
+	fmt.Printf("Short int %d 转换为字节数组: %v\n", shortValue, shortBytes)
+
+	// 打印字节数组的十六进制表示
+	fmt.Printf("Int 转换为字节数组的十六进制表示: %X\n", intBytes)
+	fmt.Printf("Short 转换为字节数组的十六进制表示: %X\n", shortBytes)
+}
+
+func TestStringToBytes(t *testing.T) {
+	// 字符串转换为 UTF-16 编码的字节数组
+	str := "Hello, World!"
+	utf16Bytes := utils.StringToBytesUNICODE(str)
+	fmt.Printf("UTF-16 encoded bytes: %v\n", utf16Bytes)
+
+	bytes := utils.BytesTOStringUNICODE(utf16Bytes)
+	// 将 UTF-16 字节数组转换回字符串（
+	fmt.Printf("Recovered string: %s\n", bytes)
+
+}
+
+/*
+测试 aesUtil
+*/
 func TestTestAes(t *testing.T) {
 	//key := []byte("1234567890abcdef") // 16 字節密钥
 	//key := []byte("1234567890abcdef12345678") // 24 字節密钥
@@ -30,6 +87,9 @@ func TestTestAes(t *testing.T) {
 	}
 }
 
+/*
+测试 bytesUtil
+*/
 func TestTestBytes(t *testing.T) {
 	// 示例 1: UTF-8 到 UTF-16 转换
 	utf8Data := []byte("Hello, 世界") // UTF-8 编码的字节数据
@@ -57,6 +117,9 @@ func TestTestBytes(t *testing.T) {
 	fmt.Printf("Int to Bytes (2 bytes): %v\n", bytesData)
 }
 
+/*
+测试 validateUtil
+*/
 func TestVerify(t *testing.T) {
 	// 定义一组需要验证的字段规则
 	rules := []utils.Validator{
@@ -76,6 +139,10 @@ func TestVerify(t *testing.T) {
 	}
 }
 
+/*
+ 测试 randUtil
+*/
+
 func TestRand(t *testing.T) {
 	realRandNumber := utils.RealRandNumber(20)
 	fmt.Println("realRandNumber : ", realRandNumber)
@@ -87,6 +154,10 @@ func TestRand(t *testing.T) {
 	fmt.Println("num : ", num)
 
 }
+
+/*
+ 测试 pathUtil
+*/
 
 func TestPath(t *testing.T) {
 
@@ -108,6 +179,10 @@ func TestPath(t *testing.T) {
 	fmt.Println(newUrl) // 输出: https://newsite.com/api/v1/resource
 
 }
+
+/*
+ 测试 Md5Util
+*/
 
 func TestMd5(t *testing.T) {
 	salt := []byte("random_salt")

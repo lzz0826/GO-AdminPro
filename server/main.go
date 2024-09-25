@@ -22,4 +22,31 @@ func main() {
 	//HTTP 启动服务
 	server.Run(HttpServer)
 
+	//listenUrl := fmt.Sprintf("0.0.0.0:%s", config.GetConfig().Room.SocketPort)
+	//listener, err := net.Listen("tcp", listenUrl)
+	//if err != nil {
+	//	glog.Infof("Error starting TCP server: %v", err)
+	//	os.Exit(1)
+	//}
+	//defer listener.Close()
+	//glog.Infof("tcp %s", listenUrl)
+	//
+	//ctx, cancel := context.WithCancel(context.Background()) //cancel
+	//
+	//for {
+	//	select {
+	//	case <-ctx.Done():
+	//		return
+	//	default:
+	//		conn, err := listener.Accept()
+	//		if err != nil {
+	//			glog.Errorf("Connection accept error:%s", err)
+	//			continue
+	//		}
+	//		utils.GoSafe(func() {
+	//			processor.TcpHandleConnection(ctx, conn)
+	//		})
+	//	}
+	//}
+
 }

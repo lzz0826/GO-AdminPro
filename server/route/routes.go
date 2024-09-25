@@ -6,6 +6,7 @@ import (
 	"AdminPro/server/controller/admin"
 	"AdminPro/server/controller/index"
 	"AdminPro/server/controller/user"
+	"AdminPro/server/task/http/handler"
 	"github.com/gin-gonic/gin"
 )
 
@@ -21,7 +22,9 @@ func RegisterRoutes(router *gin.Engine) {
 	protected.Use(jwt.JwtAuthMiddleware())
 
 	protected.GET("/Logout", admin.Logout)
-	
+
+	protected.POST("/TaskHttpHandler", handler.TaskHttpHandler)
+
 	protected.Use(middleware.CheckPermission())
 	{
 		protected.GET("/user/:id", user.GetById)
@@ -45,6 +48,8 @@ func RegisterRoutes(router *gin.Engine) {
 		protected.POST("/RemoveRolePermits", admin.RemoveRolePermits)
 		protected.POST("/RemoveAdminPermits", admin.RemoveAdminPermits)
 		protected.POST("/RemoveAdminRoles", admin.RemoveAdminRoles)
+		//任务
+		//protected.POST("/TaskHttpHandler", handler.TaskHttpHandler)
 
 	}
 
