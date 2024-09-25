@@ -5,7 +5,7 @@ import (
 	"AdminPro/common/model"
 	"AdminPro/common/mysql"
 	"AdminPro/dao/model/adminDao"
-	"AdminPro/server/server/impTest"
+	"AdminPro/server/impTest"
 	"fmt"
 	"strconv"
 	"testing"

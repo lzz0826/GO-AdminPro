@@ -1,8 +1,7 @@
 package test
 
 import (
-	"AdminPro/admin/service"
-	_ "AdminPro/admin/service"
+	"AdminPro/server/admin"
 	"fmt"
 	"testing"
 	_ "testing"
@@ -11,7 +10,7 @@ import (
 
 func TestGetPermitByAdminId(t *testing.T) {
 
-	permits, err := service.GetPermitsByAdminId("0")
+	permits, err := admin.GetPermitsByAdminId("0")
 	if err != nil {
 		t.Fatalf("GetPermitByAdminId失敗：%v", err)
 	}
@@ -23,7 +22,7 @@ func TestGetPermitByAdminId(t *testing.T) {
 
 func TestGetPermitsByRoleId(t *testing.T) {
 	roleIds := []string{"0", "1"}
-	permits, err := service.GetPermitsByRoleIds(roleIds)
+	permits, err := admin.GetPermitsByRoleIds(roleIds)
 	if err != nil {
 		t.Fatalf("GetPermitsByRoleIds：%v", err)
 	}
@@ -35,7 +34,7 @@ func TestGetPermitsByRoleId(t *testing.T) {
 
 func TestGetRoleByAdminId(t *testing.T) {
 
-	roles, err := service.GetRoleByAdminId("0")
+	roles, err := admin.GetRoleByAdminId("0")
 	if err != nil {
 		t.Fatalf("GetRoleByAdminId失敗：%v", err)
 	}
@@ -46,7 +45,7 @@ func TestGetRoleByAdminId(t *testing.T) {
 }
 
 func TestGetAllPermitByAdminId(t *testing.T) {
-	permits, err := service.GetAllPermitByAdminId("0")
+	permits, err := admin.GetAllPermitByAdminId("0")
 	if err != nil {
 		t.Fatalf("GetAllPermitByAdminId失敗：%v", err)
 	}
@@ -57,8 +56,8 @@ func TestGetAllPermitByAdminId(t *testing.T) {
 }
 
 func TestSetPermissionByAdminIdAndGetPermissionListByAdminId(t *testing.T) {
-	service.SetPermissionByAdminId("0")
-	ids := service.GetPermitKeyListByAdminId("0")
+	admin.SetPermissionByAdminId("0")
+	ids := admin.GetPermitKeyListByAdminId("0")
 	for _, id := range ids {
 		fmt.Printf("%+v\n", id)
 	}
@@ -66,7 +65,7 @@ func TestSetPermissionByAdminIdAndGetPermissionListByAdminId(t *testing.T) {
 
 func TestCheckPermission(t *testing.T) {
 	TestSetPermissionByAdminIdAndGetPermissionListByAdminId(t)
-	permission := service.CheckPermission("0", "example_key2")
+	permission := admin.CheckPermission("0", "example_key2")
 	fmt.Printf("Permission exists: %t\n", permission)
 
 }

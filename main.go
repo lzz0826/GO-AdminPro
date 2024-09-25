@@ -2,7 +2,8 @@ package main
 
 import (
 	"AdminPro/common/mysql"
-	"AdminPro/server/server/server"
+	"AdminPro/config"
+	routes "AdminPro/route"
 	"github.com/gin-gonic/gin"
 )
 
@@ -20,7 +21,7 @@ func main() {
 		}
 	}()
 	//HTTP 启动服务
-	server.Run(HttpServer)
+	Run(HttpServer)
 
 	//listenUrl := fmt.Sprintf("0.0.0.0:%s", config.GetConfig().Room.SocketPort)
 	//listener, err := net.Listen("tcp", listenUrl)
@@ -49,4 +50,27 @@ func main() {
 	//	}
 	//}
 
+}
+
+// Run 配置并启动服务
+func Run(httpServer *gin.Engine) {
+	// 服务配置
+	serverConfig := config.GetServerConfig()
+
+	// gin 运行时 release debug test
+	gin.SetMode(serverConfig["ENV"])
+
+	httpServer = gin.Default()
+
+	// 注册路由
+	routes.RegisterRoutes(httpServer)
+
+	serverAddr := serverConfig["HOST"] + ":" + serverConfig["PORT"]
+
+	// 启动服务
+	err := httpServer.Run(serverAddr)
+
+	if nil != err {
+		panic("server run errors: " + err.Error())
+	}
 }

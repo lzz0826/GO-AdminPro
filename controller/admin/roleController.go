@@ -1,11 +1,11 @@
 package admin
 
 import (
-	"AdminPro/admin/service"
 	"AdminPro/common/tool"
 	"AdminPro/common/utils"
 	"AdminPro/dao/model/adminDao"
 	"AdminPro/dao/service/admin"
+	admin2 "AdminPro/server/admin"
 	"AdminPro/vo/model/adminVo"
 	"github.com/gin-gonic/gin"
 	"net/http"
@@ -35,7 +35,7 @@ func GetAdminRole(ctx *gin.Context) {
 		return
 	}
 
-	roles, err := service.GetRoleByAdminId(adminId)
+	roles, err := admin2.GetRoleByAdminId(adminId)
 	if err != nil {
 		ctx.JSON(http.StatusOK, tool.GetResponseForError(err))
 		return
@@ -55,7 +55,7 @@ func GetRolePermits(ctx *gin.Context) {
 		ctx.JSON(http.StatusOK, tool.RespFail(tool.MissingParameters.Code, tool.MissingParameters.Msg, nil))
 		return
 	}
-	permits, err := service.GetRolePermits(roleId)
+	permits, err := admin2.GetRolePermits(roleId)
 	if err != nil {
 		ctx.JSON(http.StatusOK, tool.GetResponseForError(err))
 		return
@@ -80,8 +80,8 @@ func AddRole(ctx *gin.Context) {
 
 	role.CreateTime = time.Now()
 	role.UpdateTime = time.Now()
-	role.CreatorID = service.GetCurrentAdminId(ctx)
-	role.UpdaterID = service.GetCurrentAdminId(ctx)
+	role.CreatorID = admin2.GetCurrentAdminId(ctx)
+	role.UpdaterID = admin2.GetCurrentAdminId(ctx)
 
 	// 调用 InsertRole 函数插入 Role 数据
 	err := admin.InsertRole(role)
@@ -110,9 +110,9 @@ func AddRolePermits(ctx *gin.Context) {
 	// 獲取結構體中的值
 	roleId := request.RoleId
 	permitIds := request.PermitIds
-	adminId := service.GetCurrentAdminId(ctx)
+	adminId := admin2.GetCurrentAdminId(ctx)
 
-	err := service.AddRolePermits(roleId, permitIds, adminId)
+	err := admin2.AddRolePermits(roleId, permitIds, adminId)
 
 	if err != nil {
 
@@ -138,9 +138,9 @@ func AddAdminRoles(ctx *gin.Context) {
 	adminId := request.AdminId
 	roleIds := request.RoleIds
 
-	currentAdminId := service.GetCurrentAdminId(ctx)
+	currentAdminId := admin2.GetCurrentAdminId(ctx)
 
-	err := service.AddAdminRoles(adminId, roleIds, currentAdminId)
+	err := admin2.AddAdminRoles(adminId, roleIds, currentAdminId)
 
 	if err != nil {
 		ctx.JSON(http.StatusOK, tool.GetResponseForError(err))
@@ -166,7 +166,7 @@ func RemoveRolePermits(ctx *gin.Context) {
 	roleId := request.RoleId
 	permitIds := request.PermitsIds
 
-	err := service.RemoveRolePermits(roleId, permitIds)
+	err := admin2.RemoveRolePermits(roleId, permitIds)
 
 	if err != nil {
 		ctx.JSON(http.StatusOK, tool.GetResponseForError(err))
@@ -190,7 +190,7 @@ func RemoveAdminRoles(ctx *gin.Context) {
 	adminId := request.AdminId
 	roleIds := request.RoleIds
 
-	err := service.RemoveAdminRoles(adminId, roleIds)
+	err := admin2.RemoveAdminRoles(adminId, roleIds)
 	if err != nil {
 		ctx.JSON(http.StatusOK, tool.GetResponseForError(err))
 		return

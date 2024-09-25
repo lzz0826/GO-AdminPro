@@ -2,8 +2,8 @@ package handler
 
 import (
 	"AdminPro/common/enum"
+	"AdminPro/controller"
 	"AdminPro/internal/glog"
-	"AdminPro/server/controller"
 	_map "AdminPro/server/task/http/map"
 	"AdminPro/server/task/http/request"
 	"fmt"

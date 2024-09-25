@@ -1,9 +1,9 @@
 package admin
 
 import (
-	"AdminPro/admin/service"
 	"AdminPro/common/tool"
-	"AdminPro/server/controller"
+	"AdminPro/controller"
+	"AdminPro/server/admin"
 	"fmt"
 	"github.com/gin-gonic/gin"
 	"net/http"
@@ -13,7 +13,7 @@ import (
 func Login(ctx *gin.Context) {
 	username := ctx.PostForm("username")
 	password := ctx.PostForm("password")
-	vo, err := service.CheckUserAndPassword(username, password)
+	vo, err := admin.CheckUserAndPassword(username, password)
 	if err != nil {
 		ctx.JSON(http.StatusOK, tool.RespFail(err.Code(), err.Msg(), nil))
 		return
@@ -27,7 +27,7 @@ func Logout(c *gin.Context) {
 
 	fmt.Printf("%+v\n", adminId)
 
-	service.RemovePermissionByAdminId(adminId)
+	admin.RemovePermissionByAdminId(adminId)
 
 	// 1. 使 JWT Token 失效，可以將 token 加入失效列表
 	// ...

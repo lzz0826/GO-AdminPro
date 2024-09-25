@@ -1,10 +1,10 @@
 package admin
 
 import (
-	"AdminPro/admin/service"
 	"AdminPro/common/tool"
 	"AdminPro/common/utils"
 	"AdminPro/dao/service/admin"
+	admin2 "AdminPro/server/admin"
 	"AdminPro/vo/model/adminVo"
 	"github.com/gin-gonic/gin"
 	"net/http"
@@ -31,14 +31,14 @@ func GetAdminAllPermits(ctx *gin.Context) {
 		ctx.JSON(http.StatusOK, tool.RespFail(tool.MissingParameters.Code, tool.MissingParameters.Msg, nil))
 		return
 	}
-	permits, err := service.GetAllPermitByAdminId(adminId)
+	permits, err := admin2.GetAllPermitByAdminId(adminId)
 
 	if err != nil {
 		ctx.JSON(http.StatusOK, tool.GetResponseForError(err))
 		return
 	}
 
-	newPermits := service.RemoveDuplicatesPermits(permits)
+	newPermits := admin2.RemoveDuplicatesPermits(permits)
 
 	vo := adminVo.PermitListVO{
 		PermitList: newPermits,
@@ -54,7 +54,7 @@ func GetAdminExtraPermits(ctx *gin.Context) {
 		ctx.JSON(http.StatusOK, tool.RespFail(tool.MissingParameters.Code, tool.MissingParameters.Msg, nil))
 		return
 	}
-	permits, err := service.GetPermitsByAdminId(adminId)
+	permits, err := admin2.GetPermitsByAdminId(adminId)
 
 	if err != nil {
 		ctx.JSON(http.StatusOK, tool.GetResponseForError(err))
@@ -81,9 +81,9 @@ func AddAdminPermits(ctx *gin.Context) {
 	adminId := request.AdminId
 	permitsIds := request.PermitsIds
 
-	currentAdminId := service.GetCurrentAdminId(ctx)
+	currentAdminId := admin2.GetCurrentAdminId(ctx)
 
-	err := service.AddAdminPermits(adminId, permitsIds, currentAdminId)
+	err := admin2.AddAdminPermits(adminId, permitsIds, currentAdminId)
 
 	if err != nil {
 		ctx.JSON(http.StatusOK, tool.GetResponseForError(err))
@@ -105,7 +105,7 @@ func RemoveAdminPermits(ctx *gin.Context) {
 	}
 	adminId := request.AdminId
 	permitsIds := request.PermitsIds
-	err := service.RemoveAdminPermits(adminId, permitsIds)
+	err := admin2.RemoveAdminPermits(adminId, permitsIds)
 	if err != nil {
 		ctx.JSON(http.StatusOK, tool.GetResponseForError(err))
 		return

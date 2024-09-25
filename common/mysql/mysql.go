@@ -2,7 +2,7 @@
 package mysql
 
 import (
-	"AdminPro/server/config"
+	"AdminPro/config"
 	"fmt"
 	"github.com/spf13/viper"
 	"gorm.io/driver/mysql"

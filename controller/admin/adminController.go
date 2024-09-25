@@ -1,14 +1,14 @@
 package admin
 
 import (
-	"AdminPro/admin/service"
 	"AdminPro/common/enum"
 	"AdminPro/common/model"
 	"AdminPro/common/tool"
 	"AdminPro/common/utils"
+	"AdminPro/controller/base"
 	"AdminPro/dao/service/admin"
 	"AdminPro/internal/myContext"
-	"AdminPro/server/controller/base"
+	admin2 "AdminPro/server/admin"
 	"AdminPro/vo/model/adminVo"
 	"fmt"
 	"github.com/gin-gonic/gin"
@@ -32,9 +32,9 @@ func AddAdmin(ctx *gin.Context) {
 	adminName := request.AdminName
 	nickName := request.NickName
 
-	currentAdminId := service.GetCurrentAdminId(ctx)
+	currentAdminId := admin2.GetCurrentAdminId(ctx)
 
-	err := service.AddAdmin(username, password, adminName, nickName, currentAdminId)
+	err := admin2.AddAdmin(username, password, adminName, nickName, currentAdminId)
 	if err != nil {
 		ctx.JSON(http.StatusOK, tool.GetResponseForError(err))
 		return

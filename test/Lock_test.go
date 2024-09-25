@@ -2,7 +2,7 @@ package test
 
 import (
 	"AdminPro/common/utils"
-	"AdminPro/server/server/lockTest"
+	"AdminPro/server/lockTest"
 	"fmt"
 	"sync"
 	"testing"

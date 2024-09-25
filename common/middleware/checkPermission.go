@@ -1,8 +1,8 @@
 package middleware
 
 import (
-	"AdminPro/admin/service"
 	"AdminPro/common/tool"
+	"AdminPro/server/admin"
 	"github.com/gin-gonic/gin"
 	"net/http"
 	"reflect"
@@ -17,9 +17,9 @@ func CheckPermission() gin.HandlerFunc {
 
 		// 获取处理当前请求的 handler 函数的信息
 		methodName := getMethodName(c.Handler())
-		adminId := service.GetCurrentAdminId(c)
+		adminId := admin.GetCurrentAdminId(c)
 
-		bool := service.CheckPermission(adminId, methodName)
+		bool := admin.CheckPermission(adminId, methodName)
 
 		if bool == false {
 			c.JSON(http.StatusOK, tool.RespFail(tool.NotPermissions.Code, tool.NotPermissions.Msg, nil))

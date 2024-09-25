@@ -1,8 +1,7 @@
 package test
 
 import (
-	"AdminPro/admin/service"
-	_ "AdminPro/admin/service"
+	"AdminPro/server/admin"
 	"fmt"
 	_ "fmt"
 	"testing"
@@ -12,7 +11,7 @@ import (
 
 func TestCheckUserAndPassword(t *testing.T) {
 
-	vo, err := service.CheckUserAndPassword("admin", "12345678")
+	vo, err := admin.CheckUserAndPassword("admin", "12345678")
 	fmt.Println("vo")
 	fmt.Println(vo.Token)
 
