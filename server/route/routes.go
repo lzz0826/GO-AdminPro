@@ -23,6 +23,7 @@ func RegisterRoutes(router *gin.Engine) {
 
 	protected.GET("/Logout", admin.Logout)
 
+	//TODO
 	protected.POST("/TaskHttpHandler", handler.TaskHttpHandler)
 
 	protected.Use(middleware.CheckPermission())

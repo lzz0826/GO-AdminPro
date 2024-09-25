@@ -25,6 +25,10 @@ func Http_Processor_100_Do_Some(p *request.HttpTaskRequest) bool {
 
 	requsetCode := p.RequestCode
 	task := tasks.NewTask(requsetCode, p.RequestParameter, p, int(roomId2))
+
+	//配置延迟时间
+	task.LeftTime = 5.00
+
 	// 提交任务 Submit MAP
 	err := submit.Submit(task)
 	if err != nil {

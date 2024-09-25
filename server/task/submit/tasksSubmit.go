@@ -26,7 +26,11 @@ func Submit(task *tasks.Task) (err error) {
 
 	//使用HTTP协议
 	case taskEnum.HTTP_PROCESSOR_100_DO_SOME:
-		err = antsPool.Submit(tasks.Request_1_do_some(task))
+		//err = antsPool.Submit(tasks.Request_1_do_some(task))
+		//延迟任务
+		timinWheel.AfterFunc(time.Duration(task.LeftTime)*time.Second, func() {
+			err = antsPool.Submit(tasks.Request_1_do_some(task))
+		})
 
 	//case processor2.TCP_PROCESSOR_1_DO_SOME: //使用TCP协议
 	//	err = antsPool.Submit(tasks.Request_1_do_some(taskController))
