@@ -2,7 +2,7 @@ package task
 
 var (
 
-	//验政前四
+	//验证前四
 	//Data: []byte{0x44, 0x5A, 0x50, 0x4B,}
 	HEADER_INDICATER_0 byte = 'D'
 	HEADER_INDICATER_1 byte = 'Z'

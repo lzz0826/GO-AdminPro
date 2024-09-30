@@ -32,8 +32,8 @@ func Submit(task *tasks.Task) (err error) {
 			err = antsPool.Submit(tasks.Request_1_do_some(task))
 		})
 
-	//case processor2.TCP_PROCESSOR_1_DO_SOME: //使用TCP协议
-	//	err = antsPool.Submit(tasks.Request_1_do_some(taskController))
+	case taskEnum.TCP_PROCESSOR_1_DO_SOME: //使用TCP协议
+		err = antsPool.Submit(tasks.Request_1_do_some(task))
 
 	//case mdata.TASK_END_INSURANCE://延迟任务
 	//	timinWheel.AfterFunc(time.Duration(taskController.LeftTime)*time.Second, func() {

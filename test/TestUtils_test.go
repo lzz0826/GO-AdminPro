@@ -7,6 +7,43 @@ import (
 	"testing"
 )
 
+func TestPickAll(t *testing.T) {
+	// 模拟的字节数组（实际使用中应从数据源获取）
+	bt2 := []byte{0x01, 0x02, 0x03, 0x04, 0x05, 0x06, 0x07, 0x08}
+
+	// 模拟的int2二维数组，itemId 和 数据类型的对应关系
+	int2 := [][]int{
+		{1, utils.TYPE_INT_1},        // itemId 1，类型是1字节整数
+		{2, utils.TYPE_INT_4},        // itemId 2，类型是4字节整数
+		{3, utils.TYPE_STRING_UTF16}, // itemId 3，类型是UTF-16字符串
+	}
+
+	// 调用PickAll函数
+	result := utils.PickAll(bt2, int2)
+	fmt.Printf("PickAll结果:%d", result[2])
+
+	// 输出解析结果
+	fmt.Printf("PickAll结果: %+v\n", result)
+}
+
+func TestPickAll2(t *testing.T) {
+	// 模拟的int2二维数组，包含itemId、值和类型
+	int2 := [][]interface{}{
+		{1, 10, utils.TYPE_INT_1},            // itemId 1，值为10，类型是1字节整数
+		{2, 123456, utils.TYPE_INT_4},        // itemId 2，值为123456，类型是4字节整数
+		{3, "示例文本", utils.TYPE_STRING_UTF16}, // itemId 3，值为"示例文本"，类型是UTF-16字符串
+	}
+
+	// 请求码（随意设定）
+	requestCode := 100
+
+	// 调用PackAll函数
+	packedData := utils.PackAll(int2, requestCode)
+
+	// 输出打包后的字节数组
+	fmt.Printf("PackAll结果: %+v\n", packedData)
+}
+
 /*
 测试 functionUtil
 */
@@ -39,7 +76,6 @@ func TestIntToBytes(t *testing.T) {
 	// 将 int 转换为 4 字节数组
 	intBytes := utils.IntToByteArray(intValue)
 	fmt.Printf("Int %d 转换为字节数组: %v\n", intValue, intBytes)
-
 	// 将 short int 转换为 2 字节数组
 	shortBytes := utils.ShortToByteArray(shortValue)
 	fmt.Printf("Short int %d 转换为字节数组: %v\n", shortValue, shortBytes)
