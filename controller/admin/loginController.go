@@ -4,6 +4,7 @@ import (
 	"AdminPro/common/tool"
 	"AdminPro/controller"
 	"AdminPro/server/admin"
+	"AdminPro/server/tonke"
 	"fmt"
 	"github.com/gin-gonic/gin"
 	"net/http"
@@ -13,12 +14,11 @@ import (
 func Login(ctx *gin.Context) {
 	username := ctx.PostForm("username")
 	password := ctx.PostForm("password")
-	vo, err := admin.CheckUserAndPassword(username, password)
+	vo, err := admin.CheckUserAndPassword(ctx, username, password)
 	if err != nil {
 		ctx.JSON(http.StatusOK, tool.RespFail(err.Code(), err.Msg(), nil))
 		return
 	}
-
 	ctx.JSON(http.StatusOK, tool.RespOk(vo))
 }
 
@@ -27,17 +27,15 @@ func Logout(c *gin.Context) {
 
 	fmt.Printf("%+v\n", adminId)
 
-	admin.RemovePermissionByAdminId(adminId)
-
 	// 1. 使 JWT Token 失效，可以將 token 加入失效列表
 	// ...
 
 	// 2. 清理用戶相關的會話信息
-	//service.RemovePermissionByAdminId(adminId)
+	admin.RemovePermissionByAdminId(adminId)
 	// ...
 
 	// 3. 清理客戶端存儲的 Token，比如清除 cookie 或者 localStorage
-	// ...
+	tonke.RemoveTokenToRides(c, adminId)
 
 	// 返回登出成功的消息
 	c.JSON(http.StatusOK, gin.H{"message": "Logout successful"})

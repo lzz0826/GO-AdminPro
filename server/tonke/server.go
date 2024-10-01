@@ -6,34 +6,32 @@ import (
 	"time"
 )
 
-//TODO Redis
-
-// SetTokenToRides Key token Value adminId
+// SetTokenToRides Key adminId Value token
 func SetTokenToRides(c *gin.Context, adminId, token string) error {
 	redis := redis.AdminRedisDb
-	// 设置过期时间为 30 分 待拉到配置文件
+	//TODO 设置过期时间为 30 分 待拉到配置文件
 	expire := 30 * time.Minute
-	err := redis.SetExpireKV(c, token, adminId, expire)
+	err := redis.SetExpireKV(c, adminId, token, expire)
 	if err != nil {
 		return err
 	}
 	return nil
 }
 
-// GetTokenToRides Key token
-func GetTokenToRides(c *gin.Context, token string) (string, error) {
+// GetTokenToRides Key adminId
+func GetTokenToRides(c *gin.Context, adminId string) (string, error) {
 	redis := redis.AdminRedisDb
-	v, err := redis.GetKey(c, token)
+	v, err := redis.GetKey(c, adminId)
 	if err != nil {
 		return "", nil
 	}
 	return v, nil
 }
 
-// RemoveTokenToRides Key token
-func RemoveTokenToRides(c *gin.Context, token string) error {
+// RemoveTokenToRides Key adminId
+func RemoveTokenToRides(c *gin.Context, adminId string) error {
 	redis := redis.AdminRedisDb
-	err := redis.DelKey(c, token)
+	err := redis.DelKey(c, adminId)
 	if err != nil {
 		return err
 	}

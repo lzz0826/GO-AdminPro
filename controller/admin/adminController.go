@@ -66,7 +66,7 @@ func GetAllAdminList(ctx *gin.Context) {
 	ctx.JSON(http.StatusOK, tool.RespOk(vo))
 }
 
-// TODO 使用自訂的 MyContext
+// 使用自訂的 MyContext
 func GetAllAdminCommonResponse(c *gin.Context) {
 	ctx := myContext.Background(c)
 	var pagination model.Pagination

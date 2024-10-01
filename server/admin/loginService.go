@@ -5,19 +5,21 @@ import (
 	"AdminPro/common/tool"
 	"AdminPro/common/utils"
 	"AdminPro/dao/service/admin"
+	"AdminPro/server/tonke"
 	"AdminPro/vo/model/adminVo"
+	"github.com/gin-gonic/gin"
 	"golang.org/x/crypto/bcrypt"
 )
 
-func CheckUserAndPassword(username string, password string) (vo adminVo.AdminLoginVO, globalErr *utils.GlobalError) {
+func CheckUserAndPassword(ctx *gin.Context, username string, password string) (vo adminVo.AdminLoginVO, globalErr *utils.GlobalError) {
 
-	usr, err := admin.GetAdminByUsername(username)
+	adm, err := admin.GetAdminByUsername(username)
 
 	if err != nil {
 		return adminVo.AdminLoginVO{}, utils.NewGlobalError(err, &tool.NotFindAdmin)
 	}
 
-	pass, err := admin.GetAdminTokenByAdminID(usr.ID)
+	pass, err := admin.GetAdminTokenByAdminID(adm.ID)
 	if err != nil {
 		return adminVo.AdminLoginVO{}, utils.NewGlobalError(err, &tool.PasswordError)
 	}
@@ -27,21 +29,23 @@ func CheckUserAndPassword(username string, password string) (vo adminVo.AdminLog
 		return adminVo.AdminLoginVO{}, utils.NewGlobalError(err, &tool.PasswordError)
 	}
 
-	tokenStr, err := jwt.LoginHandler(usr)
+	tokenStr, err := jwt.LoginHandler(adm)
 	if err != nil {
 		return adminVo.AdminLoginVO{}, utils.NewGlobalError(err, &tool.PasswordError)
 	}
 
 	//記錄管理員權限 登出要刪
-	SetPermissionByAdminId(usr.ID)
+	SetPermissionByAdminId(adm.ID)
+	//Redis Token 登出要刪
+	tonke.SetTokenToRides(ctx, adm.ID, tokenStr)
 
 	adminVo := adminVo.AdminLoginVO{
-		Username:   usr.Username,
-		AdminName:  usr.AdminName,
-		Nickname:   usr.Nickname,
+		Username:   adm.Username,
+		AdminName:  adm.AdminName,
+		Nickname:   adm.Nickname,
 		Token:      tokenStr,
-		UpdateTime: usr.CreateTime,
-		CreateTime: usr.CreateTime,
+		UpdateTime: adm.CreateTime,
+		CreateTime: adm.CreateTime,
 	}
 
 	return adminVo, nil

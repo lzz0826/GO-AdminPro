@@ -36,7 +36,7 @@ func main() {
 	listenUrl := fmt.Sprintf("0.0.0.0:%s", "8040")
 	listener, err := net.Listen("tcp", listenUrl)
 	if err != nil {
-		glog.Infof("Error starting TCP server: %v", err)
+		glog.Infof("Error starting TCP config: %v", err)
 		os.Exit(1)
 	}
 	defer listener.Close()
@@ -86,7 +86,7 @@ func RunHttp() {
 	err := HttpServer.Run(serverAddr)
 
 	if nil != err {
-		panic("server run errors: " + err.Error())
+		panic("config run errors: " + err.Error())
 	}
 }
 
