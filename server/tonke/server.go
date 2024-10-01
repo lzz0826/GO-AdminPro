@@ -2,6 +2,7 @@ package tonke
 
 import (
 	"AdminPro/common/redis"
+	"AdminPro/internal/glog"
 	"github.com/gin-gonic/gin"
 	"time"
 )
@@ -36,4 +37,14 @@ func RemoveTokenToRides(c *gin.Context, adminId string) error {
 		return err
 	}
 	return nil
+}
+
+// 驗證前端和登入後的Token是否一致
+func VerifyOnlineToken(c *gin.Context, adminId, token string) bool {
+	ridesToken, err := GetTokenToRides(c, adminId)
+	if ridesToken == "" || err != nil || token != ridesToken {
+		glog.Errorf("token驗證錯誤 緩存Token:%d 驗證Token:%d", ridesToken, token)
+		return false
+	}
+	return true
 }

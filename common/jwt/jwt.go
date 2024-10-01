@@ -2,6 +2,7 @@ package jwt
 
 import (
 	"AdminPro/dao/model/adminDao"
+	"AdminPro/server/tonke"
 	"fmt"
 	"github.com/dgrijalva/jwt-go"
 	"github.com/gin-gonic/gin"
@@ -94,6 +95,13 @@ func JwtAuthMiddleware() gin.HandlerFunc {
 		nickname := claims["nickname"].(string)
 		adminId := claims["adminId"].(string)
 		channelID := claims["channelID"].(string)
+
+		//驗證token是否有效 Redis
+		if !tonke.VerifyOnlineToken(c, adminId, tokenString) {
+			c.JSON(http.StatusUnauthorized, gin.H{"errors": "token is Expired or Invalid"})
+			c.Abort()
+			return
+		}
 
 		// 将用户信息保存到上下文中，供后续处理函数使用
 		c.Set("username", username)

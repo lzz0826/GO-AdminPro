@@ -11,6 +11,7 @@ var statusList = []Status{
 	LoginError,
 	UserError,
 	PasswordError,
+	TokenError,
 	NotPermissions,
 	SelectFail,
 	AddRolePermitsFail,
@@ -37,6 +38,7 @@ var (
 	LoginError    = Status{Code: 1000, Msg: "登入失敗"}
 	UserError     = Status{Code: 1001, Msg: "帳號錯誤"}
 	PasswordError = Status{Code: 1002, Msg: "密碼錯誤"}
+	TokenError    = Status{Code: 1003, Msg: "Token無效"}
 
 	//權限 2000
 	NotPermissions = Status{Code: 2000, Msg: "沒有權限"}
