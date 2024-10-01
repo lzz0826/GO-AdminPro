@@ -1,12 +1,14 @@
 package admin
 
 import (
+	"AdminPro/common/jwt"
 	"AdminPro/common/tool"
 	"AdminPro/controller"
 	"AdminPro/server/admin"
 	"AdminPro/server/tonke"
 	"fmt"
 	"github.com/gin-gonic/gin"
+	"github.com/spf13/viper"
 	"net/http"
 )
 
@@ -39,4 +41,14 @@ func Logout(c *gin.Context) {
 
 	// 返回登出成功的消息
 	c.JSON(http.StatusOK, gin.H{"message": "Logout successful"})
+}
+
+func RefreshToken(ctx *gin.Context) {
+	tokenString := ctx.GetHeader(viper.GetString("jwt.jwt_auth"))
+	str, err := jwt.RefreshToken(ctx, tokenString)
+	if err != nil {
+		controller.WebRespStatus(ctx, err.Status, str)
+	}
+	controller.WebRespSuccess(ctx, str)
+
 }

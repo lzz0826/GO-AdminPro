@@ -3,7 +3,6 @@ package admin
 import (
 	"AdminPro/common/model"
 	"AdminPro/dao/model/adminDao"
-	_ "AdminPro/dao/model/adminDao"
 	"gorm.io/gorm"
 )
 

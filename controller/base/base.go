@@ -65,7 +65,7 @@ func GetTokenDataByGinContext(c *myContext.MyContext, tokenKey string) (*jwt.Cla
 
 // 解析Token
 func ParseToken(tokenStr string) (*jwt.Claims, error) {
-	tokendata, err := jwt.GetTokenData(tokenStr)
+	tokendata, err := jwt.GetJwtTokenData(tokenStr)
 	if err != nil {
 		return nil, err
 	}

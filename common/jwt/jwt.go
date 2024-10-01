@@ -1,8 +1,13 @@
 package jwt
 
 import (
+	"AdminPro/common/tool"
+	"AdminPro/common/utils"
+	"AdminPro/controller"
 	"AdminPro/dao/model/adminDao"
+	adminServerDao "AdminPro/dao/service/admin"
 	"AdminPro/server/tonke"
+	"errors"
 	"fmt"
 	"github.com/dgrijalva/jwt-go"
 	"github.com/gin-gonic/gin"
@@ -113,8 +118,8 @@ func JwtAuthMiddleware() gin.HandlerFunc {
 	}
 }
 
-// GetTokenData 解析Token Data
-func GetTokenData(tokenString string) (*Claims, error) {
+// GetJwtTokenData 解析Token Data
+func GetJwtTokenData(tokenString string) (*Claims, error) {
 	token, err := jwt.Parse(tokenString, func(token *jwt.Token) (interface{}, error) {
 		// 驗證簽名算法是否為HS256
 		if _, ok := token.Method.(*jwt.SigningMethodHMAC); !ok {
@@ -135,4 +140,29 @@ func GetTokenData(tokenString string) (*Claims, error) {
 		ChannelID: claims["channelID"].(string),
 	}
 	return &result, nil
+}
+
+// 刷新Token
+func RefreshToken(c *gin.Context, token string) (tokenStr string, globalError *utils.GlobalError) {
+	adminId := controller.GetCurrentAdminId(c)
+	if !tonke.VerifyOnlineToken(c, adminId, token) {
+		tokenError := tool.TokenError
+		return "", utils.NewGlobalError(errors.New(tokenError.Msg), &tokenError)
+	}
+	adminDAO, err := adminServerDao.GetAdminById(adminId)
+	if err != nil {
+		notFindAdmin := tool.NotFindAdmin
+		return "", utils.NewGlobalError(err, &notFindAdmin)
+	}
+	str, err := LoginHandler(adminDAO)
+	if err != nil {
+		createTokenError := tool.CreateTokenError
+		return "", utils.NewGlobalError(err, &createTokenError)
+	}
+	err = tonke.SetTokenToRides(c, adminId, str)
+	if err != nil {
+		setRedisKeyError := tool.SetRedisKeyError
+		return "", utils.NewGlobalError(err, &setRedisKeyError)
+	}
+	return str, nil
 }

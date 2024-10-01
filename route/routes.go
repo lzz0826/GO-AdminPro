@@ -23,8 +23,9 @@ func RegisterRoutes(router *gin.Engine) {
 
 	protected.GET("/Logout", admin2.Logout)
 
-	//測試任務
+	//TODO 待加到登入後的權限
 	protected.POST("/TaskHttpHandler", handler.TaskHttpHandler)
+	protected.POST("/RefreshToken", admin2.RefreshToken)
 
 	protected.Use(middleware.CheckPermission())
 	{

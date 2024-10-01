@@ -3,6 +3,7 @@ package controller
 import (
 	"AdminPro/common/enum"
 	"AdminPro/common/model"
+	"AdminPro/common/tool"
 	"AdminPro/common/utils"
 	"github.com/gin-gonic/gin"
 )
@@ -49,3 +50,19 @@ func CheckParams[T any](c *gin.Context, params *T) bool {
 //	isEnable := sqldb.IpIsEnable(ip)
 //	return isEnable
 //}
+
+func WebRespStatus(c *gin.Context, status *tool.Status, data interface{}) {
+	if data == nil {
+		data = struct{}{}
+	}
+	respMap := map[string]interface{}{"code": status.Code, "data": data, "message": status.Msg}
+	c.JSON(200, respMap)
+}
+
+func WebRespSuccess(c *gin.Context, data interface{}) {
+	if data == nil {
+		data = struct{}{}
+	}
+	respMap := map[string]interface{}{"code": tool.Success.Code, "data": data, "message": tool.Success.Msg}
+	c.JSON(200, respMap)
+}
