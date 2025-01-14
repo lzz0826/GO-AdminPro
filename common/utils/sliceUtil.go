@@ -1,5 +1,26 @@
 package utils
 
+// 向切片前添加
+func SliceAddFrontAny[T comparable](slice *[]T, item T) {
+	newSlice := make([]T, len(*slice)+1)
+	newSlice[0] = item
+	copy(newSlice[1:], *slice)
+	*slice = newSlice
+}
+
+// 向切片任意位置添加
+func SliceAddAnyPoint[T comparable](slice *[]T, item T, index int) {
+	if index < 0 || index > len(*slice) {
+		print("index out of range")
+		return
+	}
+	newSlice := make([]T, len(*slice)+1)
+	copy(newSlice, (*slice)[:index])
+	newSlice[index] = item
+	copy(newSlice[index+1:], (*slice)[index:])
+	*slice = newSlice
+}
+
 // 从切片获取某个元素的下标index
 func GetSliceAntIndex[T comparable](slice []T, item T) int {
 	for i, v := range slice {
