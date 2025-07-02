@@ -37,7 +37,7 @@ mongodb:
 
 glog:
   logConfLevel: INFO #日志级别 紀錄設定級別以上的日誌
-  logPath: /Users/admin/Desktop/ #日志文件路径
+  logPath: /Users/sai/Desktop/ #日志文件路径
   logType: file #日志输出类型
 
 http:

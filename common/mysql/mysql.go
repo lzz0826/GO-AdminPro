@@ -3,14 +3,23 @@ package mysql
 
 import (
 	"AdminPro/config"
+	myGorm "AdminPro/internal/glog/gorm"
 	"fmt"
 	"github.com/spf13/viper"
 	"gorm.io/driver/mysql"
 	"gorm.io/gorm"
+	"gorm.io/gorm/logger"
 	"gorm.io/gorm/schema"
 	"strconv"
 	"time"
 )
+
+//可以在這裡封裝所有DB 在下面分別init
+//type AllGormDB struct {
+//	GormDb01 *gorm.DB //主
+//	GormDb02 *gorm.DB //從
+//
+//}
 
 var GormDb *gorm.DB
 var GormDbErr error
@@ -27,10 +36,22 @@ func init() {
 		viper.GetString("mysql.charset"),
 	)
 
+	// 使用你自定義的 GormWriter（不需要 logFile）
+	myWriter := &myGorm.GormWriter{}
+
+	// 初始化 GORM logger
+	myLogger := myGorm.NewGormLogger(myWriter, logger.Config{
+		SlowThreshold:             time.Millisecond * 200, // 超過這時間標示 SLOW SQL
+		LogLevel:                  logger.Info,            // 你想記錄的層級
+		IgnoreRecordNotFoundError: true,                   // 忽略 ErrRecordNotFound
+		Colorful:                  false,                  // 關閉顏色，寫檔建議 false
+	})
+
 	// open GORM connection
 	GormDb, GormDbErr = gorm.Open(mysql.Open(dbDSN),
 		//GORM配置
 		&gorm.Config{
+			Logger: myLogger, //GORM 自訂日誌
 			NamingStrategy: schema.NamingStrategy{
 				SingularTable: true, //表名保持与模型名一致而不进行复数化
 			},
