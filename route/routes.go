@@ -5,6 +5,7 @@ import (
 	"AdminPro/common/middleware"
 	admin2 "AdminPro/controller/admin"
 	"AdminPro/controller/index"
+	"AdminPro/controller/mq"
 	"AdminPro/controller/user"
 	"AdminPro/server/task/http/handler"
 	"github.com/gin-gonic/gin"
@@ -26,6 +27,8 @@ func RegisterRoutes(router *gin.Engine) {
 	//TODO 待加到登入後的權限
 	protected.POST("/TaskHttpHandler", handler.TaskHttpHandler)
 	protected.POST("/RefreshToken", admin2.RefreshToken)
+	//測試 Rabbitmq 發消息
+	protected.GET("/SetupRabbitmqController", mq.SetupRabbitmqController)
 
 	protected.Use(middleware.CheckPermission())
 	{
@@ -50,6 +53,7 @@ func RegisterRoutes(router *gin.Engine) {
 		protected.POST("/RemoveRolePermits", admin2.RemoveRolePermits)
 		protected.POST("/RemoveAdminPermits", admin2.RemoveAdminPermits)
 		protected.POST("/RemoveAdminRoles", admin2.RemoveAdminRoles)
+
 		//任务
 		//protected.POST("/TaskHttpHandler", handler.TaskHttpHandler)
 

@@ -61,7 +61,6 @@ func InitLog(logConfLevel, logPath, logType string) error {
 		consoleEncoder := zapcore.NewConsoleEncoder(zap.NewDevelopmentEncoderConfig())
 		core = zapcore.NewCore(consoleEncoder, zapcore.Lock(os.Stdout), logLevel)
 	}
-
 	logger := zap.New(core, zap.AddCaller(), zap.AddCallerSkip(1))
 	ZapLog = logger.Sugar()
 

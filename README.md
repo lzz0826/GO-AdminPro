@@ -117,3 +117,7 @@ Mysql 初始 : GO-AdminPro/db/initV1.sql
 ## 管理員對應權限關係圖：
 ### 一位管理員可以對應多個權限(相當於可以開額外給予權限)
 ![image](https://github.com/lzz0826/GO-AdminPro/blob/main/img/004.png)
+
+
+額外
+https://github.com/gin-gonic/contrib
