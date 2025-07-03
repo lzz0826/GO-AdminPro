@@ -48,6 +48,7 @@ func NewMQClient(cfg MQConfig) (*MQClient, error) {
 	return client, nil
 }
 
+// 生產者發消息
 func (c *MQClient) PublishToExchange(exchange, routingKey string, body []byte) error {
 	return c.channel.Publish(exchange, routingKey, false, false, amqp.Publishing{
 		ContentType: "text/plain",
@@ -69,10 +70,20 @@ func (c *MQClient) PublishToQueue(queueName string, body []byte) error {
 	)
 }
 
+// 消費者持續監聽
 func (c *MQClient) StartConsumers() {
 	for _, bind := range c.config.Bindings {
 		// 開始消費指定隊列的訊息
-		msgs, err := c.channel.Consume(bind.QueueName, "", true, false, false, false, nil)
+		msgs, err := c.channel.Consume(
+			bind.QueueName, // queue：要消費的隊列名稱
+			"",             // consumer：消費者的名稱（留空表示由 RabbitMQ 自動產生）
+			true,           // autoAck：是否自動 ACK（true = 收到即視為成功，不建議，應設為 false 手動 ack）
+			false,          // exclusive：是否為排他性消費者（true = 其他 consumer 無法同時監聽此隊列）
+			false,          // noLocal：如果設為 true，自己發送的消息自己不會收到（一般為 false，AMQP 通常不支援）
+			false,          // noWait：是否不等待 server 回應就立即返回（false = 等待確認）
+			nil,            // args：其他額外參數（例如 AMQP extension，可為 nil）
+		)
+
 		if err != nil {
 			log.Printf("Failed to consume %s: %v", bind.QueueName, err)
 			continue

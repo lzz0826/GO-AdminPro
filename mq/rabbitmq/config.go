@@ -15,6 +15,11 @@ const (
 	WIN_BETSLIP_ROUTING_KEY = "win_betslip-routing-key"
 )
 
+type MqMessage struct {
+	Type string      `json:"type"` //用於區分業務邏輯的 type
+	Data interface{} `json:"data"`
+}
+
 type ExchangeConfig struct {
 	Name string
 	Kind string // topic, fanout, direct
