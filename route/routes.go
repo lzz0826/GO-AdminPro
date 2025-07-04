@@ -30,6 +30,9 @@ func RegisterRoutes(router *gin.Engine) {
 	//測試 Rabbitmq 發消息
 	protected.GET("/SetupRabbitmqController", mq.SetupRabbitmqController)
 
+	//測試 KafKa 收消息
+	protected.POST("/SendMessageToKafka", mq.SendMessageToKafka)
+
 	protected.Use(middleware.CheckPermission())
 	{
 		protected.GET("/user/:id", user.GetById)
