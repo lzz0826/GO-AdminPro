@@ -4,6 +4,7 @@ import (
 	"errors"
 	"fmt"
 	"reflect"
+	"strconv"
 	"strings"
 	"time"
 )
@@ -49,6 +50,23 @@ func GetNowTimeV2(format string) string {
 // 返回13位时间戳 字符串
 func GetMicroSecond() string {
 	return fmt.Sprintf("%v", time.Now().UnixNano()/1e6)
+}
+
+// 接收一個 time.Time，返回 13 位時間戳（毫秒）字串
+func GetMilliTimestamp(t time.Time) string {
+	return fmt.Sprintf("%d", t.UnixNano()/1e6)
+}
+
+// 接收一個 13 位毫秒時間戳的字串，返回 time.Time 和錯誤
+func ParseMilliTimestamp(millisStr string) (time.Time, error) {
+	millis, err := strconv.ParseInt(millisStr, 10, 64)
+	if err != nil {
+		return time.Time{}, err
+	}
+
+	seconds := millis / 1000
+	nanoseconds := (millis % 1000) * 1e6
+	return time.Unix(seconds, nanoseconds), nil
 }
 
 // 当前时间增加 n 小时
